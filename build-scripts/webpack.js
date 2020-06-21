@@ -2,7 +2,9 @@ const webpack = require("webpack");
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
-const WorkerPlugin = require("worker-plugin");
+// For Webpack 5 compat requires
+// https://github.com/GoogleChromeLabs/worker-plugin/pull/78
+// const WorkerPlugin = require("worker-plugin");
 const paths = require("./paths.js");
 const bundle = require("./bundle");
 
@@ -55,7 +57,7 @@ const createWebpackConfig = ({
       ],
     },
     plugins: [
-      new WorkerPlugin(),
+      // new WorkerPlugin(),
       new ManifestPlugin({
         // Only include the JS of entrypoints
         filter: (file) => file.isInitial && !file.name.endsWith(".map"),
@@ -104,6 +106,7 @@ const createWebpackConfig = ({
       extensions: [".ts", ".js", ".json"],
     },
     output: {
+      ecmaVersion: latestBuild ? 2015 : 5,
       filename: ({ chunk }) => {
         if (!isProdBuild || dontHash.has(chunk.name)) {
           return `${chunk.name}.js`;
