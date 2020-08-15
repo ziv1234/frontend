@@ -335,6 +335,13 @@ class HaPanelConfig extends HassRouterPage {
             /* webpackChunkName: "panel-config-mqtt" */ "./integrations/integration-panels/mqtt/mqtt-config-panel"
           ),
       },
+      dynalite: {
+        tag: "dynalite-config-panel",
+        load: () =>
+          import(
+            /* webpackChunkName: "panel-config-dynalite" */ "./integrations/integration-panels/dynalite/dynalite-config-panel"
+          ),
+      },
     },
   };
 
