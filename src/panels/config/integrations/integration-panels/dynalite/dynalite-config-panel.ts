@@ -215,7 +215,7 @@ class HaPanelDevDynalite extends LitElement {
   }
 
   private _handleChange(ev: PolymerChangedEvent<string>) {
-    const target = ev.currentTarget as PaperInputElement;
+    const target = ev.currentTarget as HTMLInputElement;
     this[`_${target.name}`] = target.value;
   }
 
@@ -224,10 +224,10 @@ class HaPanelDevDynalite extends LitElement {
   }
 
   private _handleAutoDiscoverChange(ev: CustomEvent) {
-    this._auto_discover = ev.target.checked;
+    this._auto_discover = (ev.currentTarget as any).checked;
   }
 
-  private async _publish(): void {
+  private async _publish(): Promise<void> {
     if (!this.hass) {
       return;
     }
