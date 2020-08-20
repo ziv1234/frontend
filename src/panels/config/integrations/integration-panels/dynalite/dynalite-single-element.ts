@@ -121,31 +121,6 @@ class HaDynaliteSingleElement extends LitElement {
     this.value = (ev.currentTarget as any).checked;
     if (this.handleThisChange) this.handleThisChange(this.id, this.value);
   }
-
-  static get styles(): CSSResultArray {
-    return [
-      haStyle,
-      css`
-        :host {
-          -ms-user-select: initial;
-          -webkit-user-select: initial;
-          -moz-user-select: initial;
-        }
-
-        .content {
-          display: block;
-          max-width: 600px;
-          margin: 0 auto;
-          padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        .content > * {
-          display: block;
-          margin: 24px 0;
-        }
-      `,
-    ];
-  }
 }
 
 declare global {
