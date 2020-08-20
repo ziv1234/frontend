@@ -28,7 +28,7 @@ class HaDynaliteSingleElement extends LitElement {
 
   @property() public value = "";
 
-  @property() public options: Array<Array<string>> = [[]];
+  @property() public options: Array<Array<string>> = [];
 
   @property({ attribute: false }) public handleThisChange = function (
     _id: string,
