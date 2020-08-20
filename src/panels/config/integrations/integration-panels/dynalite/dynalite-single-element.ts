@@ -1,27 +1,17 @@
-import "@material/mwc-button";
-import "@polymer/app-layout/app-header/app-header";
-import "@polymer/app-layout/app-toolbar/app-toolbar";
-import "@polymer/paper-input/paper-input";
 import "@polymer/paper-listbox/paper-listbox";
 import "@polymer/paper-item/paper-item";
 import type { PaperInputElement } from "@polymer/paper-input/paper-input";
 import type { PolymerChangedEvent } from "../../../../../polymer-types";
 import {
-  css,
-  CSSResultArray,
   customElement,
   html,
   LitElement,
   property,
   TemplateResult,
 } from "lit-element";
-import "../../../../../components/ha-card";
-import "../../../../../components/ha-menu-button";
-import "../../../../../layouts/ha-app-layout";
 import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-switch";
-import { haStyle } from "../../../../../resources/styles";
 import { HomeAssistant } from "../../../../../types";
 
 @customElement("dynalite-single-element")

@@ -2,8 +2,6 @@ import "@material/mwc-button";
 import "@polymer/app-layout/app-header/app-header";
 import "@polymer/app-layout/app-toolbar/app-toolbar";
 import "@polymer/paper-input/paper-input";
-import "@polymer/paper-listbox/paper-listbox";
-import "@polymer/paper-item/paper-item";
 import {
   css,
   CSSResultArray,
@@ -17,9 +15,6 @@ import {
 import "../../../../../components/ha-card";
 import "../../../../../components/ha-menu-button";
 import "../../../../../layouts/ha-app-layout";
-import "../../../../../components/ha-settings-row";
-import "../../../../../components/ha-paper-dropdown-menu";
-import "../../../../../components/ha-switch";
 import { haStyle } from "../../../../../resources/styles";
 import { HomeAssistant } from "../../../../../types";
 import "./dynalite-single-element";
@@ -188,7 +183,7 @@ class HaPanelConfigDynalite extends LitElement {
     return searchParams.get("config_entry") as string;
   }
 
-  private _handleChange(id, value) {
+  private _handleChange(id: string, value: any) {
     this["_" + id.substr(4)] = value;
   }
 
