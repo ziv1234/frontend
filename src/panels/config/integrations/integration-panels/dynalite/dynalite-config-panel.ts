@@ -156,9 +156,9 @@ class HaPanelConfigDynalite extends LitElement {
     this._name = this._entryData.name;
     this._host = this._entryData.host;
     this._port = this._entryData.port;
-    if (this._entryData.default) {
-      this._fade = this._entryData.default.fade;
-    }
+    if (!this._entryData.default) this._entryData.default = {};
+    const defaults = this._entryData.default;
+    this._fade = "fade" in defaults ? defaults.fade : "";
     const activeMap = {
       on: "on",
       true: "on",
@@ -199,7 +199,8 @@ class HaPanelConfigDynalite extends LitElement {
     this._entryData.name = this._name;
     this._entryData.host = this._host;
     this._entryData.port = this._port;
-    this._entryData.default.fade = this._fade;
+    if (this._fade !== "") this._entryData.default.fade = this._fade;
+    else delete this._entryData.default.fade;
     this._entryData.active = this._active;
     this._entryData.autodiscover = this._autodiscover;
     this._entryData.polltimer = this._polltimer;
