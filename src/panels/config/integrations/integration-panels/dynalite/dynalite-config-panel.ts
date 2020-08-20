@@ -4,8 +4,6 @@ import "@polymer/app-layout/app-toolbar/app-toolbar";
 import "@polymer/paper-input/paper-input";
 import "@polymer/paper-listbox/paper-listbox";
 import "@polymer/paper-item/paper-item";
-import type { PaperInputElement } from "@polymer/paper-input/paper-input";
-import type { PolymerChangedEvent } from "../../../../../polymer-types";
 import {
   css,
   CSSResultArray,
@@ -24,6 +22,7 @@ import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-switch";
 import { haStyle } from "../../../../../resources/styles";
 import { HomeAssistant } from "../../../../../types";
+import "./dynalite-single-element";
 
 @customElement("dynalite-config-panel")
 class HaPanelConfigDynalite extends LitElement {
@@ -41,15 +40,13 @@ class HaPanelConfigDynalite extends LitElement {
 
   @internalProperty() private _active = "";
 
-  @internalProperty() private _auto_discover = "";
+  @internalProperty() private _autodiscover = "";
 
-  @internalProperty() private _poll_timer = "";
+  @internalProperty() private _polltimer = "";
 
   private _entryData;
 
-  private _activeOptions = ["on", "init", "off"];
-
-  private _activeIndex = 0;
+  private _activeOptions: Array<Array<string>> = [];
 
   protected render(): TemplateResult {
     return html`
@@ -60,122 +57,86 @@ class HaPanelConfigDynalite extends LitElement {
               .hass=${this.hass}
               .narrow=${this.narrow}
             ></ha-menu-button>
-            <div main-title>${this.localStr("description_settings")}</div>
+            <div main-title>${this._localStr("description_settings")}</div>
           </app-toolbar>
         </app-header>
 
         <div class="content">
-          <ha-card .header=${this.localStr("description_system")}>
+          <ha-card .header=${this._localStr("description_system")}>
             <div class="card-content">
-              <ha-settings-row .narrow=${this.narrow}>
-                <span slot="heading">${this.localStr("name")}</span>
-                <span slot="description">${this.localStr("name_long")}</span>
-                <paper-input
-                  class="flex"
-                  .label=${this.localStr("name")}
-                  name="name"
-                  type="string"
-                  .value=${this._name}
-                  @value-changed=${this._handleChange}
-                ></paper-input>
-              </ha-settings-row>
+              <dynalite-single-element
+                id="dyn-name"
+                inputType="string"
+                shortDesc=${this._localStr("name")}
+                longDesc=${this._localStr("name_long")}
+                .value=${this._name}
+                .handleThisChange="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
             </div>
             <div class="card-content">
-              <ha-settings-row .narrow=${this.narrow}>
-                <span slot="heading">${this.localStr("host")}</span>
-                <span slot="description">${this.localStr("host_long")}</span>
-                <paper-input
-                  class="flex"
-                  .label=${this.localStr("host")}
-                  name="host"
-                  type="string"
-                  .value=${this._host}
-                  @value-changed=${this._handleChange}
-                ></paper-input>
-              </ha-settings-row>
+              <dynalite-single-element
+                id="dyn-host"
+                inputType="string"
+                shortDesc=${this._localStr("host")}
+                longDesc=${this._localStr("host_long")}
+                .value=${this._host}
+                .handleThisChange="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
             </div>
             <div class="card-content">
-              <ha-settings-row .narrow=${this.narrow}>
-                <span slot="heading">${this.localStr("port")}</span>
-                <span slot="description">${this.localStr("port_long")}</span>
-                <paper-input
-                  class="flex"
-                  .label=${this.localStr("port")}
-                  name="port"
-                  type="number"
-                  .value=${this._port}
-                  @value-changed=${this._handleChange}
-                ></paper-input>
-              </ha-settings-row>
+              <dynalite-single-element
+                id="dyn-port"
+                inputType="number"
+                shortDesc=${this._localStr("port")}
+                longDesc=${this._localStr("port_long")}
+                .value=${this._port}
+                .handleThisChange="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
             </div>
             <div class="card-content">
-              <ha-settings-row .narrow=${this.narrow}>
-                <span slot="heading">${this.localStr("fade")}</span>
-                <span slot="description">${this.localStr("fade_long")}</span>
-                <paper-input
-                  class="flex"
-                  .label=${this.localStr("fade")}
-                  name="fade"
-                  type="number"
-                  .value=${this._fade}
-                  @value-changed=${this._handleChange}
-                ></paper-input>
-              </ha-settings-row>
+              <dynalite-single-element
+                id="dyn-fade"
+                inputType="number"
+                shortDesc=${this._localStr("fade")}
+                longDesc=${this._localStr("fade_long")}
+                .value=${this._fade}
+                .handleThisChange="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
             </div>
             <div class="card-content">
-              <ha-settings-row .narrow=${this.narrow}>
-                <span slot="heading">${this.localStr("active")}</span>
-                <span slot="description">${this.localStr("active_long")}</span>
-                <ha-paper-dropdown-menu
-                  label=${this.localStr("active")}
-                  dynamic-align
-                >
-                  <paper-listbox
-                    slot="dropdown-content"
-                    .selected=${this._activeIndex}
-                    @iron-select=${this._handleActiveSelection}
-                  >
-                    ${this._activeOptions.map(
-                      (option) =>
-                        html`<paper-item .active_config=${option}
-                          >${this.localStr("active_" + option)}</paper-item
-                        >`
-                    )}
-                  </paper-listbox>
-                </ha-paper-dropdown-menu>
-              </ha-settings-row>
+              <dynalite-single-element
+                id="dyn-active"
+                inputType="list"
+                shortDesc=${this._localStr("active")}
+                longDesc=${this._localStr("active_long")}
+                .options=${this._activeOptions}
+                .value=${this._active}
+                .handleThisChange="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
             </div>
             <div class="card-content">
-              <ha-settings-row .narrow=${this.narrow}>
-                <span slot="heading">${this.localStr("auto_discover")}</span>
-                <span slot="description"
-                  >${this.localStr("auto_discover_long")}</span
-                >
-                <ha-switch
-                  .checked=${this._auto_discover}
-                  @change=${this._handleAutoDiscoverChange}
-                ></ha-switch>
-              </ha-settings-row>
+              <dynalite-single-element
+                id="dyn-autodiscover"
+                inputType="boolean"
+                shortDesc=${this._localStr("auto_discover")}
+                longDesc=${this._localStr("auto_discover_long")}
+                .value=${this._autodiscover}
+                .handleThisChange="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
             </div>
             <div class="card-content">
-              <ha-settings-row .narrow=${this.narrow}>
-                <span slot="heading">${this.localStr("poll_timer")}</span>
-                <span slot="description"
-                  >${this.localStr("poll_timer_long")}</span
-                >
-                <paper-input
-                  class="flex"
-                  .label=${this.localStr("poll_timer")}
-                  name="poll_timer"
-                  type="number"
-                  .value=${this._poll_timer}
-                  @value-changed=${this._handleChange}
-                ></paper-input>
-              </ha-settings-row>
+              <dynalite-single-element
+                id="dyn-polltimer"
+                inputType="number"
+                shortDesc=${this._localStr("poll_timer")}
+                longDesc=${this._localStr("poll_timer_long")}
+                .value=${this._polltimer}
+                .handleThisChange="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
             </div>
             <div class="card-actions">
               <mwc-button @click=${this._publish}>
-                ${this.localStr("publish")}
+                ${this._localStr("publish")}
               </mwc-button>
             </div>
           </ha-card>
@@ -199,19 +160,23 @@ class HaPanelConfigDynalite extends LitElement {
       this._fade = this._entryData.default.fade;
     }
     const activeMap = {
-      on: 0,
-      true: 0,
-      init: 1,
-      false: 2,
-      off: 2,
+      on: "on",
+      true: "on",
+      init: "init",
+      false: "off",
+      off: "off",
     };
-    this._activeIndex = activeMap[this._entryData.active];
-    this._active = this._activeOptions[this._activeIndex];
-    this._auto_discover = this._entryData.autodiscover;
-    this._poll_timer = this._entryData.polltimer;
+    this._active = activeMap[this._entryData.active];
+    this._activeOptions = [
+      ["on", this._localStr("active_on")],
+      ["init", this._localStr("active_init")],
+      ["off", this._localStr("active_off")],
+    ];
+    this._autodiscover = this._entryData.autodiscover;
+    this._polltimer = this._entryData.polltimer;
   }
 
-  private localStr(item) {
+  private _localStr(item: string) {
     return this.hass.localize("ui.panel.config.dynalite." + item);
   }
 
@@ -223,17 +188,8 @@ class HaPanelConfigDynalite extends LitElement {
     return searchParams.get("config_entry") as string;
   }
 
-  private _handleChange(ev: PolymerChangedEvent<string>) {
-    const target = ev.currentTarget as PaperInputElement;
-    this[`_${target.name}`] = target.value;
-  }
-
-  private _handleActiveSelection(ev: CustomEvent) {
-    this._active = ev.detail.item.active_config;
-  }
-
-  private _handleAutoDiscoverChange(ev: CustomEvent) {
-    this._auto_discover = (ev.currentTarget as any).checked;
+  private _handleChange(id, value) {
+    this["_" + id.substr(4)] = value;
   }
 
   private async _publish(): Promise<void> {
@@ -245,8 +201,8 @@ class HaPanelConfigDynalite extends LitElement {
     this._entryData.port = this._port;
     this._entryData.default.fade = this._fade;
     this._entryData.active = this._active;
-    this._entryData.autodiscover = this._auto_discover;
-    this._entryData.polltimer = this._poll_timer;
+    this._entryData.autodiscover = this._autodiscover;
+    this._entryData.polltimer = this._polltimer;
     const configEntryId = this._getConfigEntry();
     if (!configEntryId) return;
     await this.hass.callWS({
