@@ -229,11 +229,6 @@ class HaPanelConfigDynalite extends LitElement {
           margin: 0 auto;
           padding-bottom: env(safe-area-inset-bottom);
         }
-
-        .content > * {
-          display: block;
-          margin: 24px 0;
-        }
       `,
     ];
   }
