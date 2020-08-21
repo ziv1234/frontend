@@ -17,6 +17,7 @@ import "../../../../../components/ha-menu-button";
 import "../../../../../layouts/ha-app-layout";
 import { haStyle } from "../../../../../resources/styles";
 import { HomeAssistant } from "../../../../../types";
+import "./dynalite-presets-table";
 import "./dynalite-single-element";
 
 @customElement("dynalite-config-panel")
@@ -39,11 +40,20 @@ class HaPanelConfigDynalite extends LitElement {
 
   @internalProperty() private _polltimer = "";
 
+  @internalProperty() private _globalPresets: any = {};
+
+  @internalProperty() private _globalPresetsRenderCounter = 2;
+
   private _entryData;
 
   private _activeOptions: Array<Array<string>> = [];
 
   protected render(): TemplateResult {
+    console.log(
+      "xxx render preset=%s counter=%s",
+      JSON.stringify(this._globalPresets),
+      this._globalPresetsRenderCounter
+    );
     return html`
       <ha-app-layout>
         <app-header slot="header" fixed>
@@ -129,6 +139,13 @@ class HaPanelConfigDynalite extends LitElement {
                 .handleThisChange="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
             </div>
+            <div class="card-content">
+              <dynalite-presets-table
+                id="dyn-globalPresets"
+                .presets=${this._globalPresets}
+                .handleThisChange="${this._handleChange.bind(this)}"
+              ></dynalite-presets-table>
+            </div>
             <div class="card-actions">
               <mwc-button @click=${this._publish}>
                 ${this._localStr("publish")}
@@ -169,6 +186,11 @@ class HaPanelConfigDynalite extends LitElement {
     ];
     this._autodiscover = this._entryData.autodiscover;
     this._polltimer = this._entryData.polltimer;
+    if ("preset" in this._entryData) {
+      this._globalPresets = this._entryData.preset;
+    } else {
+      this._globalPresets = {};
+    }
   }
 
   private _localStr(item: string) {
@@ -184,6 +206,7 @@ class HaPanelConfigDynalite extends LitElement {
   }
 
   private _handleChange(id: string, value: any) {
+    console.log("xxx sss id=%s value=%s", id, JSON.stringify(value));
     this["_" + id.substr(4)] = value;
   }
 
@@ -201,6 +224,8 @@ class HaPanelConfigDynalite extends LitElement {
     this._entryData.polltimer = this._polltimer;
     const configEntryId = this._getConfigEntry();
     if (!configEntryId) return;
+    console.log("xxx entry=%s", JSON.stringify(this._entryData));
+    return;
     await this.hass.callWS({
       type: "dynalite/update_entry",
       entry_id: configEntryId,
