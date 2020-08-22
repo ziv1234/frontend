@@ -138,6 +138,15 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._polltimer}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
+            </div>
+            <div class="card-actions">
+              <mwc-button @click=${this._publish}>
+                ${this._localStr("publish")}
+              </mwc-button>
+            </div>
+          </ha-card>
+          <ha-card .header=${this._localStr("description_presets")}>
+            <div class="card-content">
               <dynalite-single-element
                 id="dyn-overrideGlobalPresets"
                 inputType="boolean"
@@ -156,6 +165,10 @@ class HaPanelConfigDynalite extends LitElement {
                     ></dynalite-presets-table>
                   `
                 : ""}
+            </div>
+          </ha-card>
+          <ha-card .header=${this._localStr("temp_overrides")}>
+            <div class="card-content">
               <dynalite-single-element
                 id="dyn-overrideTemplates"
                 inputType="boolean"
@@ -174,11 +187,6 @@ class HaPanelConfigDynalite extends LitElement {
                     ></dynalite-templates>
                   `
                 : ""}
-            </div>
-            <div class="card-actions">
-              <mwc-button @click=${this._publish}>
-                ${this._localStr("publish")}
-              </mwc-button>
             </div>
           </ha-card>
         </div>
@@ -227,6 +235,9 @@ class HaPanelConfigDynalite extends LitElement {
     }
     if ("template" in this._entryData) {
       this._templates = JSON.parse(JSON.stringify(this._entryData.template));
+      Object.keys(this._defaultTemplates).forEach((template) => {
+        if (!(template in this._templates)) this._templates[template] = {};
+      });
       this._overrideTemplates = "true";
     } else {
       this._templates = this._defaultTemplates;
@@ -316,6 +327,10 @@ class HaPanelConfigDynalite extends LitElement {
           max-width: 600px;
           margin: 0 auto;
           padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        ha-card {
+          margin-bottom: 16px;
         }
       `,
     ];

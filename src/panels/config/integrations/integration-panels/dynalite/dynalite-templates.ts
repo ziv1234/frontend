@@ -31,8 +31,11 @@ class HaDynaliteTemplates extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
+    console.log("xxx render templates =%s", JSON.stringify(this.templates));
     if (!this.templates) return html``;
     return html`
+      <h3>${this._localStr("temp_overrides")}</h3>
+      <h4>${this._localStr("temp_room")}</h4>
       <dynalite-single-element
         id="${`${this.id}-room-room_off`}"
         inputType="number"
@@ -47,6 +50,55 @@ class HaDynaliteTemplates extends LitElement {
         shortDesc=${this._localStr("temp_room_on")}
         longDesc=${this._localStr("temp_room_on_long")}
         .value=${this.templates.room.room_on || ""}
+        .changeCallback="${this._handleChange.bind(this)}"
+      ></dynalite-single-element>
+      <h4>${this._localStr("temp_cover")}</h4>
+      <dynalite-single-element
+        id="${`${this.id}-time_cover-open`}"
+        inputType="number"
+        shortDesc=${this._localStr("temp_cover_open")}
+        longDesc=${this._localStr("temp_cover_open_long")}
+        .value=${this.templates.time_cover.open || ""}
+        .changeCallback="${this._handleChange.bind(this)}"
+      ></dynalite-single-element>
+      <dynalite-single-element
+        id="${`${this.id}-time_cover-close`}"
+        inputType="number"
+        shortDesc=${this._localStr("temp_cover_close")}
+        longDesc=${this._localStr("temp_cover_close_long")}
+        .value=${this.templates.time_cover.close || ""}
+        .changeCallback="${this._handleChange.bind(this)}"
+      ></dynalite-single-element>
+      <dynalite-single-element
+        id="${`${this.id}-time_cover-stop`}"
+        inputType="number"
+        shortDesc=${this._localStr("temp_cover_stop")}
+        longDesc=${this._localStr("temp_cover_stop_long")}
+        .value=${this.templates.time_cover.stop || ""}
+        .changeCallback="${this._handleChange.bind(this)}"
+      ></dynalite-single-element>
+      <dynalite-single-element
+        id="${`${this.id}-time_cover-channel_cover`}"
+        inputType="number"
+        shortDesc=${this._localStr("temp_cover_channel")}
+        longDesc=${this._localStr("temp_cover_channel_long")}
+        .value=${this.templates.time_cover.channel_cover || ""}
+        .changeCallback="${this._handleChange.bind(this)}"
+      ></dynalite-single-element>
+      <dynalite-single-element
+        id="${`${this.id}-time_cover-duration`}"
+        inputType="number"
+        shortDesc=${this._localStr("temp_cover_duration")}
+        longDesc=${this._localStr("temp_cover_duration_long")}
+        .value=${this.templates.time_cover.duration || ""}
+        .changeCallback="${this._handleChange.bind(this)}"
+      ></dynalite-single-element>
+      <dynalite-single-element
+        id="${`${this.id}-time_cover-tilt`}"
+        inputType="number"
+        shortDesc=${this._localStr("temp_cover_tilt")}
+        longDesc=${this._localStr("temp_cover_tilt_long")}
+        .value=${this.templates.time_cover.tilt || ""}
         .changeCallback="${this._handleChange.bind(this)}"
       ></dynalite-single-element>
     `;
