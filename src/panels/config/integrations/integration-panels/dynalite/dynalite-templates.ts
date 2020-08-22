@@ -1,8 +1,6 @@
 import "@polymer/paper-listbox/paper-listbox";
 import "@polymer/paper-item/paper-item";
 import "@polymer/paper-input/paper-input";
-import type { PaperInputElement } from "@polymer/paper-input/paper-input";
-import type { PolymerChangedEvent } from "../../../../../polymer-types";
 import {
   customElement,
   html,
@@ -17,6 +15,7 @@ import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-icon-button";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
+import "./dynalite-single-element";
 
 @customElement("dynalite-templates")
 class HaDynaliteTemplates extends LitElement {
@@ -24,7 +23,7 @@ class HaDynaliteTemplates extends LitElement {
 
   @property() public narrow!: boolean;
 
-  @property() public templates = {};
+  @property() public templates: any;
 
   @property({ attribute: false }) public changeCallback = function (
     _id: string,
@@ -32,23 +31,44 @@ class HaDynaliteTemplates extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
-    return html``;
+    if (!this.templates) return html``;
+    return html`
+      <dynalite-single-element
+        id="${`${this.id}-room-room_off`}"
+        inputType="number"
+        shortDesc=${this._localStr("temp_room_off")}
+        longDesc=${this._localStr("temp_room_off_long")}
+        .value=${this.templates.room.room_off || ""}
+        .changeCallback="${this._handleChange.bind(this)}"
+      ></dynalite-single-element>
+      <dynalite-single-element
+        id="${`${this.id}-room-room_on`}"
+        inputType="number"
+        shortDesc=${this._localStr("temp_room_on")}
+        longDesc=${this._localStr("temp_room_on_long")}
+        .value=${this.templates.room.room_on || ""}
+        .changeCallback="${this._handleChange.bind(this)}"
+      ></dynalite-single-element>
+    `;
   }
 
   private _localStr(item: string) {
     return this.hass.localize("ui.panel.config.dynalite." + item);
   }
 
-  private _handleInputChange(ev: PolymerChangedEvent<string>) {
-    const target = ev.currentTarget as PaperInputElement;
-    const newValue = target.value as string;
-    const targetId = (ev.currentTarget as any).id;
+  private _handleChange(id: string, value: any) {
     const myRegEx = new RegExp(`${this.id}-(.*)-(.*)`);
-    const extracted = myRegEx.exec(targetId);
-    const targetKey = extracted![1];
-    const targetPreset = extracted![2];
-    if (newValue) this.presets[targetPreset][targetKey] = newValue;
-    else delete this.presets[targetPreset][targetKey];
+    const extracted = myRegEx.exec(id);
+    const targetTemplate = extracted![1];
+    const targetKey = extracted![2];
+    console.log(
+      "handleChange target=%s key=%s value=%s",
+      targetTemplate,
+      targetKey,
+      value
+    );
+    if (value) this.templates[targetTemplate][targetKey] = value;
+    else delete this.templates[targetTemplate][targetKey];
     if (this.changeCallback) this.changeCallback(this.id, this.templates);
   }
 

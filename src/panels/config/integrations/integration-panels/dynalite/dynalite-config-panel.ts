@@ -17,8 +17,9 @@ import "../../../../../components/ha-menu-button";
 import "../../../../../layouts/ha-app-layout";
 import { haStyle } from "../../../../../resources/styles";
 import { HomeAssistant } from "../../../../../types";
-import "./dynalite-presets-table";
 import "./dynalite-single-element";
+import "./dynalite-presets-table";
+import "./dynalite-templates";
 
 @customElement("dynalite-config-panel")
 class HaPanelConfigDynalite extends LitElement {
@@ -52,6 +53,18 @@ class HaPanelConfigDynalite extends LitElement {
 
   private _activeOptions: Array<Array<string>> = [];
 
+  private _defaultTemplates = {
+    room: { room_on: "1", room_off: "4" },
+    time_cover: {
+      open: "1",
+      close: "2",
+      stop: "4",
+      channel_cover: "2",
+      duration: 60.0,
+      tilt: 0,
+    },
+  };
+
   protected render(): TemplateResult {
     return html`
       <ha-app-layout>
@@ -76,8 +89,6 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._name}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
-            </div>
-            <div class="card-content">
               <dynalite-single-element
                 id="dyn-host"
                 inputType="string"
@@ -86,8 +97,6 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._host}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
-            </div>
-            <div class="card-content">
               <dynalite-single-element
                 id="dyn-port"
                 inputType="number"
@@ -96,8 +105,6 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._port}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
-            </div>
-            <div class="card-content">
               <dynalite-single-element
                 id="dyn-fade"
                 inputType="number"
@@ -106,8 +113,6 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._fade}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
-            </div>
-            <div class="card-content">
               <dynalite-single-element
                 id="dyn-active"
                 inputType="list"
@@ -117,8 +122,6 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._active}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
-            </div>
-            <div class="card-content">
               <dynalite-single-element
                 id="dyn-autodiscover"
                 inputType="boolean"
@@ -127,8 +130,6 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._autodiscover}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
-            </div>
-            <div class="card-content">
               <dynalite-single-element
                 id="dyn-polltimer"
                 inputType="number"
@@ -137,8 +138,6 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._polltimer}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
-            </div>
-            <div class="card-content">
               <dynalite-single-element
                 id="dyn-overrideGlobalPresets"
                 inputType="boolean"
@@ -147,17 +146,33 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._overrideGlobalPresets}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
-            </div>
-            <div class="card-content">
               ${this._overrideGlobalPresets
-                ? html`<div class="card-content">
+                ? html`
                     <dynalite-presets-table
                       .hass=${this.hass}
                       id="dyn-globalPresets"
                       .presets=${this._globalPresets}
                       .changeCallback="${this._handleChange.bind(this)}"
                     ></dynalite-presets-table>
-                  </div>`
+                  `
+                : ""}
+              <dynalite-single-element
+                id="dyn-overrideTemplates"
+                inputType="boolean"
+                shortDesc=${this._localStr("override_templates")}
+                longDesc=${this._localStr("override_templates_long")}
+                .value=${this._overrideTemplates}
+                .changeCallback="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
+              ${this._overrideTemplates
+                ? html`
+                    <dynalite-templates
+                      .hass=${this.hass}
+                      id="dyn-templates"
+                      .templates=${this._templates}
+                      .changeCallback="${this._handleChange.bind(this)}"
+                    ></dynalite-templates>
+                  `
                 : ""}
             </div>
             <div class="card-actions">
@@ -204,15 +219,18 @@ class HaPanelConfigDynalite extends LitElement {
       this._globalPresets = JSON.parse(JSON.stringify(this._entryData.preset));
       this._overrideGlobalPresets = "true";
     } else {
-      this._globalPresets = {};
-      this._overrideGlobalPresets = "false";
+      this._globalPresets = {
+        "1": { name: "On", level: 1.0 },
+        "4": { name: "Off", level: 0.0 },
+      };
+      this._overrideGlobalPresets = "";
     }
     if ("template" in this._entryData) {
-      this._templates = JSON.parse(JSON.stringify(this._entryData.preset));
-      this._overrideGlobalPresets = "true";
+      this._templates = JSON.parse(JSON.stringify(this._entryData.template));
+      this._overrideTemplates = "true";
     } else {
-      this._globalPresets = {};
-      this._overrideGlobalPresets = "false";
+      this._templates = this._defaultTemplates;
+      this._overrideTemplates = "";
     }
   }
 
@@ -246,18 +264,32 @@ class HaPanelConfigDynalite extends LitElement {
     this._entryData.polltimer = this._polltimer;
     if (this._overrideGlobalPresets) {
       const globalPresets = {};
-      for (const preset in this._globalPresets) {
-        if ({}.hasOwnProperty.call(this._globalPresets, preset)) {
-          globalPresets[preset] = {};
-          if (this._globalPresets[preset].name)
-            globalPresets[preset].name = this._globalPresets[preset].name;
-          if (this._globalPresets[preset].level)
-            globalPresets[preset].level = this._globalPresets[preset].level;
-        }
-      }
+      Object.keys(this._globalPresets).forEach((preset) => {
+        globalPresets[preset] = {};
+        if (this._globalPresets[preset].name)
+          globalPresets[preset].name = this._globalPresets[preset].name;
+        if (this._globalPresets[preset].level)
+          globalPresets[preset].level = this._globalPresets[preset].level;
+      });
       this._entryData.preset = globalPresets;
     } else {
       delete this._entryData.preset;
+    }
+    if (this._overrideTemplates) {
+      const templates = {};
+      Object.keys(this._defaultTemplates).forEach((template) => {
+        if (template in this._templates) {
+          templates[template] = {};
+          Object.keys(this._defaultTemplates[template]).forEach((key) => {
+            if (key in this._templates[template]) {
+              templates[template][key] = this._templates[template][key];
+            }
+          });
+        }
+      });
+      this._entryData.template = templates;
+    } else {
+      delete this._entryData.template;
     }
     const configEntryId = this._getConfigEntry();
     if (!configEntryId) return;
