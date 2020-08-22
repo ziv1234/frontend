@@ -41,9 +41,9 @@ class HaDynalitePresetsTable extends LitElement {
       <div>
         <table>
           <tr>
-            <th>Preset</th>
-            <th>Name</th>
-            <th>Level</th>
+            <th>${this._localStr("preset_number")}</th>
+            <th>${this._localStr("preset_name")}</th>
+            <th>${this._localStr("preset_level")}</th>
             <th></th>
             <th></th>
           </tr>
@@ -54,7 +54,7 @@ class HaDynalitePresetsTable extends LitElement {
                 <td>
                   <paper-input
                     class="flex"
-                    label="Name"
+                    label=${this._localStr("preset_name")}
                     id="${`${this.id}-name-${preset}`}"
                     type="string"
                     value=${this.presets[preset].name || ""}
@@ -64,7 +64,7 @@ class HaDynalitePresetsTable extends LitElement {
                 <td>
                   <paper-input
                     class="flex"
-                    label="Level"
+                    label=${this._localStr("preset_level")}
                     id="${`${this.id}-level-${preset}`}"
                     type="number"
                     value=${this.presets[preset].level || ""}
@@ -99,6 +99,10 @@ class HaDynalitePresetsTable extends LitElement {
     `;
   }
 
+  private _localStr(item: string) {
+    return this.hass.localize("ui.panel.config.dynalite." + item);
+  }
+
   private _handleInputChange(ev: PolymerChangedEvent<string>) {
     const target = ev.currentTarget as PaperInputElement;
     const newValue = target.value as string;
@@ -116,10 +120,10 @@ class HaDynalitePresetsTable extends LitElement {
     const buttonBase = this.id + "-button-preset-";
     const targetPreset = (ev.currentTarget as any).id.substr(buttonBase.length);
     showConfirmationDialog(this, {
-      title: "Delete Preset",
-      text: "Are you sure that you want to delete this preset",
-      confirmText: "Confirm",
-      dismissText: "Cancel",
+      title: this._localStr("delete_preset_title"),
+      text: this._localStr("delete_preset_text"),
+      confirmText: this._localStr("confirm"),
+      dismissText: this._localStr("cancel"),
       confirm: () => {
         delete this.presets[targetPreset];
         this.requestUpdate();
@@ -130,18 +134,18 @@ class HaDynalitePresetsTable extends LitElement {
 
   private async _handleAddButton(_ev: CustomEvent) {
     const newPreset = await showPromptDialog(this, {
-      title: "Add New Preset",
-      inputLabel: "Dynalite Preset Number",
+      title: this._localStr("add_preset_title"),
+      inputLabel: this._localStr("add_preset_label"),
       inputType: "number",
     });
-    if (newPreset === null) {
+    if (!newPreset) {
       return;
     }
     if (newPreset in this.presets) {
       showAlertDialog(this, {
-        title: "Cannot add preset",
-        text: "Preset already exists",
-        confirmText: "Dismiss",
+        title: this._localStr("add_preset_error"),
+        text: this._localStr("add_preset_exists"),
+        confirmText: this._localStr("dismiss"),
       });
     } else {
       this.presets[newPreset] = { name: `Preset ${newPreset}` };

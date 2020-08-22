@@ -40,6 +40,8 @@ class HaPanelConfigDynalite extends LitElement {
 
   @internalProperty() private _polltimer = "";
 
+  @internalProperty() private _overrideGlobalPresets = "";
+
   @internalProperty() private _globalPresets: any = {};
 
   private _entryData;
@@ -133,11 +135,26 @@ class HaPanelConfigDynalite extends LitElement {
               ></dynalite-single-element>
             </div>
             <div class="card-content">
-              <dynalite-presets-table
-                id="dyn-globalPresets"
-                .presets=${this._globalPresets}
+              <dynalite-single-element
+                id="dyn-overrideGlobalPresets"
+                inputType="boolean"
+                shortDesc=${this._localStr("override_presets")}
+                longDesc=${this._localStr("override_presets_long")}
+                .value=${this._overrideGlobalPresets}
                 .changeCallback="${this._handleChange.bind(this)}"
-              ></dynalite-presets-table>
+              ></dynalite-single-element>
+            </div>
+            <div class="card-content">
+              ${this._overrideGlobalPresets
+                ? html`<div class="card-content">
+                    <dynalite-presets-table
+                      .hass=${this.hass}
+                      id="dyn-globalPresets"
+                      .presets=${this._globalPresets}
+                      .changeCallback="${this._handleChange.bind(this)}"
+                    ></dynalite-presets-table>
+                  </div>`
+                : ""}
             </div>
             <div class="card-actions">
               <mwc-button @click=${this._publish}>
@@ -180,9 +197,11 @@ class HaPanelConfigDynalite extends LitElement {
     this._autodiscover = this._entryData.autodiscover;
     this._polltimer = this._entryData.polltimer;
     if ("preset" in this._entryData) {
-      this._globalPresets = this._entryData.preset;
+      this._globalPresets = JSON.parse(JSON.stringify(this._entryData.preset));
+      this._overrideGlobalPresets = "true";
     } else {
       this._globalPresets = {};
+      this._overrideGlobalPresets = "false";
     }
   }
 
@@ -214,6 +233,21 @@ class HaPanelConfigDynalite extends LitElement {
     this._entryData.active = this._active;
     this._entryData.autodiscover = this._autodiscover;
     this._entryData.polltimer = this._polltimer;
+    if (this._overrideGlobalPresets) {
+      const globalPresets = {};
+      for (const preset in this._globalPresets) {
+        if ({}.hasOwnProperty.call(this._globalPresets, preset)) {
+          globalPresets[preset] = {};
+          if (this._globalPresets[preset].name)
+            globalPresets[preset].name = this._globalPresets[preset].name;
+          if (this._globalPresets[preset].level)
+            globalPresets[preset].level = this._globalPresets[preset].level;
+        }
+      }
+      this._entryData.preset = globalPresets;
+    } else {
+      delete this._entryData.preset;
+    }
     const configEntryId = this._getConfigEntry();
     if (!configEntryId) return;
     console.log("xxx entry=%s", JSON.stringify(this._entryData));
