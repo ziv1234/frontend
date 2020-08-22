@@ -42,18 +42,11 @@ class HaPanelConfigDynalite extends LitElement {
 
   @internalProperty() private _globalPresets: any = {};
 
-  @internalProperty() private _globalPresetsRenderCounter = 2;
-
   private _entryData;
 
   private _activeOptions: Array<Array<string>> = [];
 
   protected render(): TemplateResult {
-    console.log(
-      "xxx render preset=%s counter=%s",
-      JSON.stringify(this._globalPresets),
-      this._globalPresetsRenderCounter
-    );
     return html`
       <ha-app-layout>
         <app-header slot="header" fixed>
@@ -206,7 +199,6 @@ class HaPanelConfigDynalite extends LitElement {
   }
 
   private _handleChange(id: string, value: any) {
-    console.log("xxx sss id=%s value=%s", id, JSON.stringify(value));
     this["_" + id.substr(4)] = value;
   }
 
@@ -225,7 +217,6 @@ class HaPanelConfigDynalite extends LitElement {
     const configEntryId = this._getConfigEntry();
     if (!configEntryId) return;
     console.log("xxx entry=%s", JSON.stringify(this._entryData));
-    return;
     await this.hass.callWS({
       type: "dynalite/update_entry",
       entry_id: configEntryId,

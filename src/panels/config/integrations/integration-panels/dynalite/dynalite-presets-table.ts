@@ -14,7 +14,11 @@ import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-icon-button";
 import { HomeAssistant } from "../../../../../types";
-import { showAddPresetDialog } from "./dynalite-show-dialog-add-preset";
+import {
+  showConfirmationDialog,
+  showPromptDialog,
+  showAlertDialog,
+} from "../../../../../dialogs/generic/show-dialog-box";
 
 @customElement("dynalite-presets-table")
 class HaDynalitePresetsTable extends LitElement {
@@ -32,7 +36,6 @@ class HaDynalitePresetsTable extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
-    console.log("xxx preset=%s", JSON.stringify(this.presets));
     const firstPreset = Object.keys(this.presets)[0];
     return html`
       <div>
@@ -97,7 +100,6 @@ class HaDynalitePresetsTable extends LitElement {
   }
 
   private _handleInputChange(ev: PolymerChangedEvent<string>) {
-    console.log("xxx starting");
     const target = ev.currentTarget as PaperInputElement;
     const newValue = target.value as string;
     const targetId = (ev.currentTarget as any).id;
@@ -105,38 +107,45 @@ class HaDynalitePresetsTable extends LitElement {
     const extracted = myRegEx.exec(targetId);
     const targetKey = extracted![1];
     const targetPreset = extracted![2];
-    console.log(
-      "xxx input id=%s value=%s, extracted=%s",
-      targetId,
-      newValue,
-      targetPreset
-    );
     this.presets[targetPreset][targetKey] = newValue;
     if (this.handleThisChange) this.handleThisChange(this.id, this.presets);
   }
 
   private _handleDeleteButton(ev: CustomEvent) {
-    console.log("xxx button");
     const buttonBase = this.id + "-button-preset-";
     const targetPreset = (ev.currentTarget as any).id.substr(buttonBase.length);
-    console.log("xxx button id=%s", targetPreset);
-    delete this.presets[targetPreset];
-    this.requestUpdate();
-    if (this.handleThisChange) this.handleThisChange(this.id, this.presets);
-  }
-
-  private _handleAddButton(_ev: CustomEvent) {
-    console.log("xxx button");
-    showAddPresetDialog(this, {
-      presets: ["1", "4", "7"],
-      addPreset: async (presetNumber, presetName, presetLevel) => {
-        const result = {};
-        result.name = presetName;
-        result.level = presetLevel;
-        this.presets[presetNumber] = result;
+    showConfirmationDialog(this, {
+      title: "Delete Preset",
+      text: "Are you sure that you want to delete this preset",
+      confirmText: "Confirm",
+      dismissText: "Cancel",
+      confirm: () => {
+        delete this.presets[targetPreset];
         this.requestUpdate();
+        if (this.handleThisChange) this.handleThisChange(this.id, this.presets);
       },
     });
+  }
+
+  private async _handleAddButton(_ev: CustomEvent) {
+    const newPreset = await showPromptDialog(this, {
+      title: "Add New Preset",
+      inputLabel: "Dynalite Preset Number",
+      inputType: "number",
+    });
+    if (newPreset === null) {
+      return;
+    }
+    if (newPreset in this.presets) {
+      showAlertDialog(this, {
+        title: "Cannot add preset",
+        text: "Preset already exists",
+        confirmText: "Dismiss",
+      });
+    } else {
+      this.presets[newPreset] = { name: `Preset ${newPreset}` };
+      this.requestUpdate();
+    }
   }
 }
 
