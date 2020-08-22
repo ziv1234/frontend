@@ -34,7 +34,6 @@ class HaDynaliteTemplates extends LitElement {
     console.log("xxx render templates =%s", JSON.stringify(this.templates));
     if (!this.templates) return html``;
     return html`
-      <h3>${this._localStr("temp_overrides")}</h3>
       <h4>${this._localStr("temp_room")}</h4>
       <dynalite-single-element
         id="${`${this.id}-room-room_off`}"
