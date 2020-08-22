@@ -30,7 +30,7 @@ class HaDynaliteSingleElement extends LitElement {
 
   @property() public options: Array<Array<string>> = [];
 
-  @property({ attribute: false }) public handleThisChange = function (
+  @property({ attribute: false }) public changeCallback = function (
     _id: string,
     _value: any
   ) {};
@@ -99,17 +99,17 @@ class HaDynaliteSingleElement extends LitElement {
   private _handleInputChange(ev: PolymerChangedEvent<string>) {
     const target = ev.currentTarget as PaperInputElement;
     this.value = target.value as string;
-    if (this.handleThisChange) this.handleThisChange(this.id, this.value);
+    if (this.changeCallback) this.changeCallback(this.id, this.value);
   }
 
   private _handleSelectionChange(ev: CustomEvent) {
     this.value = ev.detail.item.active_config;
-    if (this.handleThisChange) this.handleThisChange(this.id, this.value);
+    if (this.changeCallback) this.changeCallback(this.id, this.value);
   }
 
   private _handleSwitchChange(ev: CustomEvent) {
     this.value = (ev.currentTarget as any).checked;
-    if (this.handleThisChange) this.handleThisChange(this.id, this.value);
+    if (this.changeCallback) this.changeCallback(this.id, this.value);
   }
 }
 

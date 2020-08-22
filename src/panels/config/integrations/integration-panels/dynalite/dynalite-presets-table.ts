@@ -30,7 +30,7 @@ class HaDynalitePresetsTable extends LitElement {
 
   @property() public presets = {};
 
-  @property({ attribute: false }) public handleThisChange = function (
+  @property({ attribute: false }) public changeCallback = function (
     _id: string,
     _value: any
   ) {};
@@ -57,7 +57,7 @@ class HaDynalitePresetsTable extends LitElement {
                     label="Name"
                     id="${`${this.id}-name-${preset}`}"
                     type="string"
-                    value=${this.presets[preset].name}
+                    value=${this.presets[preset].name || ""}
                     @value-changed="${this._handleInputChange}"
                   ></paper-input>
                 </td>
@@ -67,7 +67,7 @@ class HaDynalitePresetsTable extends LitElement {
                     label="Level"
                     id="${`${this.id}-level-${preset}`}"
                     type="number"
-                    value=${this.presets[preset].level}
+                    value=${this.presets[preset].level || ""}
                     @value-changed="${this._handleInputChange}"
                   ></paper-input>
                 </td>
@@ -107,8 +107,9 @@ class HaDynalitePresetsTable extends LitElement {
     const extracted = myRegEx.exec(targetId);
     const targetKey = extracted![1];
     const targetPreset = extracted![2];
-    this.presets[targetPreset][targetKey] = newValue;
-    if (this.handleThisChange) this.handleThisChange(this.id, this.presets);
+    if (newValue) this.presets[targetPreset][targetKey] = newValue;
+    else delete this.presets[targetPreset][targetKey];
+    if (this.changeCallback) this.changeCallback(this.id, this.presets);
   }
 
   private _handleDeleteButton(ev: CustomEvent) {
@@ -122,7 +123,7 @@ class HaDynalitePresetsTable extends LitElement {
       confirm: () => {
         delete this.presets[targetPreset];
         this.requestUpdate();
-        if (this.handleThisChange) this.handleThisChange(this.id, this.presets);
+        if (this.changeCallback) this.changeCallback(this.id, this.presets);
       },
     });
   }

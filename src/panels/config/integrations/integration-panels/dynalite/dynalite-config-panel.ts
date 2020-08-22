@@ -68,7 +68,7 @@ class HaPanelConfigDynalite extends LitElement {
                 shortDesc=${this._localStr("name")}
                 longDesc=${this._localStr("name_long")}
                 .value=${this._name}
-                .handleThisChange="${this._handleChange.bind(this)}"
+                .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
             </div>
             <div class="card-content">
@@ -78,7 +78,7 @@ class HaPanelConfigDynalite extends LitElement {
                 shortDesc=${this._localStr("host")}
                 longDesc=${this._localStr("host_long")}
                 .value=${this._host}
-                .handleThisChange="${this._handleChange.bind(this)}"
+                .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
             </div>
             <div class="card-content">
@@ -88,7 +88,7 @@ class HaPanelConfigDynalite extends LitElement {
                 shortDesc=${this._localStr("port")}
                 longDesc=${this._localStr("port_long")}
                 .value=${this._port}
-                .handleThisChange="${this._handleChange.bind(this)}"
+                .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
             </div>
             <div class="card-content">
@@ -98,7 +98,7 @@ class HaPanelConfigDynalite extends LitElement {
                 shortDesc=${this._localStr("fade")}
                 longDesc=${this._localStr("fade_long")}
                 .value=${this._fade}
-                .handleThisChange="${this._handleChange.bind(this)}"
+                .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
             </div>
             <div class="card-content">
@@ -109,7 +109,7 @@ class HaPanelConfigDynalite extends LitElement {
                 longDesc=${this._localStr("active_long")}
                 .options=${this._activeOptions}
                 .value=${this._active}
-                .handleThisChange="${this._handleChange.bind(this)}"
+                .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
             </div>
             <div class="card-content">
@@ -119,7 +119,7 @@ class HaPanelConfigDynalite extends LitElement {
                 shortDesc=${this._localStr("auto_discover")}
                 longDesc=${this._localStr("auto_discover_long")}
                 .value=${this._autodiscover}
-                .handleThisChange="${this._handleChange.bind(this)}"
+                .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
             </div>
             <div class="card-content">
@@ -129,14 +129,14 @@ class HaPanelConfigDynalite extends LitElement {
                 shortDesc=${this._localStr("poll_timer")}
                 longDesc=${this._localStr("poll_timer_long")}
                 .value=${this._polltimer}
-                .handleThisChange="${this._handleChange.bind(this)}"
+                .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
             </div>
             <div class="card-content">
               <dynalite-presets-table
                 id="dyn-globalPresets"
                 .presets=${this._globalPresets}
-                .handleThisChange="${this._handleChange.bind(this)}"
+                .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-presets-table>
             </div>
             <div class="card-actions">
