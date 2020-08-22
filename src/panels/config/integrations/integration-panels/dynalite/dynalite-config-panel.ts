@@ -44,6 +44,10 @@ class HaPanelConfigDynalite extends LitElement {
 
   @internalProperty() private _globalPresets: any = {};
 
+  @internalProperty() private _overrideTemplates = "";
+
+  @internalProperty() private _templates: any = {};
+
   private _entryData;
 
   private _activeOptions: Array<Array<string>> = [];
@@ -198,6 +202,13 @@ class HaPanelConfigDynalite extends LitElement {
     this._polltimer = this._entryData.polltimer;
     if ("preset" in this._entryData) {
       this._globalPresets = JSON.parse(JSON.stringify(this._entryData.preset));
+      this._overrideGlobalPresets = "true";
+    } else {
+      this._globalPresets = {};
+      this._overrideGlobalPresets = "false";
+    }
+    if ("template" in this._entryData) {
+      this._templates = JSON.parse(JSON.stringify(this._entryData.preset));
       this._overrideGlobalPresets = "true";
     } else {
       this._globalPresets = {};
