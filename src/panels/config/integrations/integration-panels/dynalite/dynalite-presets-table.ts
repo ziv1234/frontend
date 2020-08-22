@@ -8,12 +8,15 @@ import {
   html,
   LitElement,
   property,
+  CSSResultArray,
   TemplateResult,
+  css,
 } from "lit-element";
 import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-icon-button";
 import { HomeAssistant } from "../../../../../types";
+import { haStyle } from "../../../../../resources/styles";
 import {
   showConfirmationDialog,
   showPromptDialog,
@@ -81,13 +84,12 @@ class HaDynalitePresetsTable extends LitElement {
                   ${
                     preset === firstPreset
                       ? html` <td rowspan="3">
-                    </td>
-                      <ha-icon-button
-                        id=${`${this.id}-button-add-preset`}
-                        icon="hass:plus-circle"
-                        @click="${this._handleAddButton}"
-                      ></ha-icon-button>
-                    </td>`
+                          <ha-icon-button
+                            id=${`${this.id}-button-add-preset`}
+                            icon="hass:plus-circle"
+                            @click="${this._handleAddButton}"
+                          ></ha-icon-button>
+                        </td>`
                       : ""
                   }
                 </td>
@@ -151,6 +153,41 @@ class HaDynalitePresetsTable extends LitElement {
       this.presets[newPreset] = { name: `Preset ${newPreset}` };
       this.requestUpdate();
     }
+  }
+
+  static get styles(): CSSResultArray {
+    return [
+      haStyle,
+      css`
+        :host {
+          -ms-user-select: initial;
+          -webkit-user-select: initial;
+          -moz-user-select: initial;
+        }
+
+        th {
+          font-size: 120%;
+          text-align: left;
+        }
+
+        tr:nth-child(odd) {
+          background-color: var(--table-row-background-color, #fff);
+        }
+
+        tr:nth-child(even) {
+          background-color: var(--table-row-alternative-background-color, #eee);
+        }
+
+        td {
+          padding: 4px;
+        }
+
+        td:nth-child(1) {
+          font-size: 200%;
+          text-align: center;
+        }
+      `,
+    ];
   }
 }
 
