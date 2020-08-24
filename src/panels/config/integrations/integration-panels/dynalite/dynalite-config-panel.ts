@@ -20,6 +20,7 @@ import { HomeAssistant } from "../../../../../types";
 import "./dynalite-single-element";
 import "./dynalite-presets-table";
 import "./dynalite-templates";
+import "./dynalite-area-cards";
 
 @customElement("dynalite-config-panel")
 class HaPanelConfigDynalite extends LitElement {
@@ -48,6 +49,8 @@ class HaPanelConfigDynalite extends LitElement {
   @internalProperty() private _overrideTemplates = "";
 
   @internalProperty() private _templates: any = {};
+
+  @internalProperty() private _areas: any = {};
 
   private _entryData;
 
@@ -189,6 +192,11 @@ class HaPanelConfigDynalite extends LitElement {
                 : ""}
             </div>
           </ha-card>
+          <dynalite-area-cards
+            .hass=${this.hass}
+            id="dyn-areas"
+            .areas=${this._areas}
+          ></dynalite-area-cards>
         </div>
       </ha-app-layout>
     `;
@@ -243,6 +251,7 @@ class HaPanelConfigDynalite extends LitElement {
       this._templates = this._defaultTemplates;
       this._overrideTemplates = "";
     }
+    this._areas = this._entryData.area; // XXX
   }
 
   private _localStr(item: string) {
