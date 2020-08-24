@@ -26,7 +26,7 @@ import "./dynalite-area-cards";
 class HaPanelConfigDynalite extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
-  @property() public narrow!: boolean;
+  @property({ type: Boolean }) public narrow!: boolean;
 
   @internalProperty() private _name = "";
 

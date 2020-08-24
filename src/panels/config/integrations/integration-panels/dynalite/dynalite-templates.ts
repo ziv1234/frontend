@@ -21,7 +21,7 @@ import "./dynalite-single-element";
 class HaDynaliteTemplates extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
-  @property() public narrow!: boolean;
+  @property({ type: Boolean }) public narrow!: boolean;
 
   @property() public templates: any;
 
@@ -31,7 +31,6 @@ class HaDynaliteTemplates extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
-    console.log("xxx render templates =%s", JSON.stringify(this.templates));
     if (!this.templates) return html``;
     return html`
       <h4>${this._localStr("temp_room")}</h4>
@@ -112,12 +111,6 @@ class HaDynaliteTemplates extends LitElement {
     const extracted = myRegEx.exec(id);
     const targetTemplate = extracted![1];
     const targetKey = extracted![2];
-    console.log(
-      "handleChange target=%s key=%s value=%s",
-      targetTemplate,
-      targetKey,
-      value
-    );
     if (value) this.templates[targetTemplate][targetKey] = value;
     else delete this.templates[targetTemplate][targetKey];
     if (this.changeCallback) this.changeCallback(this.id, this.templates);

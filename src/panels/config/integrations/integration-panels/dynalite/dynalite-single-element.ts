@@ -18,7 +18,7 @@ import { HomeAssistant } from "../../../../../types";
 class HaDynaliteSingleElement extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
-  @property() public narrow!: boolean;
+  @property({ type: Boolean }) public narrow!: boolean;
 
   @property() public inputType = "";
 
@@ -28,7 +28,7 @@ class HaDynaliteSingleElement extends LitElement {
 
   @property() public value = "";
 
-  @property() public options: Array<Array<string>> = [];
+  @property({ type: Array }) public options: Array<Array<string>> = [];
 
   @property({ attribute: false }) public changeCallback = function (
     _id: string,

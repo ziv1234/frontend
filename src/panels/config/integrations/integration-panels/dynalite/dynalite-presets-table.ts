@@ -21,7 +21,7 @@ import "./dynalite-table";
 class HaDynalitePresetsTable extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
-  @property() public narrow!: boolean;
+  @property({ type: Boolean }) public narrow!: boolean;
 
   @property() public presets = {};
 
@@ -31,7 +31,6 @@ class HaDynalitePresetsTable extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
-    console.log("xxx render preset table");
     const presetTableConfig = [
       { header: this._localStr("preset_number") },
       { header: this._localStr("preset_name"), key: "name", type: "string" },
