@@ -40,6 +40,16 @@ class HaDynaliteTable extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
+    const addButton = html`
+      <ha-icon-button
+        id=${`${this.id}-button-add-element`}
+        icon="hass:plus-circle"
+        @click="${this._handleAddButton}"
+      ></ha-icon-button>
+    `;
+    if (Object.keys(this.tableData).length === 0) {
+      return html`<div>${addButton}</div>`;
+    }
     const firstElement = Object.keys(this.tableData)[0];
     return html`
       <div>
@@ -78,11 +88,7 @@ class HaDynaliteTable extends LitElement {
                 </td>
                 ${element === firstElement
                   ? html` <td rowspan="${Object.keys(this.tableData).length}">
-                      <ha-icon-button
-                        id=${`${this.id}-button-add-element`}
-                        icon="hass:plus-circle"
-                        @click="${this._handleAddButton}"
-                      ></ha-icon-button>
+                      ${addButton}
                     </td>`
                   : ""}
               </tr>
