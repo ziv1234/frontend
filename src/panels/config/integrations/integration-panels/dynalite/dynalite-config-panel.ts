@@ -251,7 +251,10 @@ class HaPanelConfigDynalite extends LitElement {
       this._templates = this._defaultTemplates;
       this._overrideTemplates = "";
     }
-    this._areas = this._entryData.area; // XXX
+    this._areas =
+      "area" in this._entryData
+        ? JSON.parse(JSON.stringify(this._entryData.area))
+        : {};
   }
 
   private _localStr(item: string) {

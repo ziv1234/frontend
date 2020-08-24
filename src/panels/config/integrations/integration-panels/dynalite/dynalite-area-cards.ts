@@ -17,6 +17,7 @@ import "../../../../../components/ha-card";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
 import "./dynalite-single-element";
+import "./dynalite-presets-table";
 
 @customElement("dynalite-area-cards")
 class HaDynaliteAreaCards extends LitElement {
@@ -34,6 +35,11 @@ class HaDynaliteAreaCards extends LitElement {
   protected render(): TemplateResult {
     console.log("xxx render areas =%s", JSON.stringify(this.areas));
     if (!this.areas) return html``;
+    const templateOptions = [
+      ["", "XXX None"],
+      ["room", "XXX Room"],
+      ["time_cover", "XXX Cover"],
+    ];
     return html`
       ${Object.keys(this.areas).map(
         (area) => html`
@@ -42,11 +48,43 @@ class HaDynaliteAreaCards extends LitElement {
               <dynalite-single-element
                 id="${`${this.id}-${area}-name`}"
                 inputType="string"
-                shortDesc=${this._localStr("temp_room_off")}
-                longDesc=${this._localStr("temp_room_off_long")}
+                shortDesc="XXX area name"
+                longDesc="XXX area name long"
                 .value=${this.areas[area].name || ""}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
+              <dynalite-single-element
+                id="${`${this.id}-${area}-template`}"
+                inputType="list"
+                shortDesc="XXX area template"
+                longDesc="XXX area template long"
+                .options=${templateOptions}
+                .value=${this.areas[area].template || ""}
+                .changeCallback="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
+              <dynalite-single-element
+                id="${`${this.id}-${area}-fade`}"
+                inputType="number"
+                shortDesc="XXX fade name"
+                longDesc="XXX fade name long"
+                .value=${this.areas[area].fade || ""}
+                .changeCallback="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
+              <dynalite-single-element
+                id="${`${this.id}-${area}-nodefault`}"
+                inputType="boolean"
+                shortDesc="XXX area nodefault"
+                longDesc="XXX area nodefault long"
+                .value=${this.areas[area].nodefault || ""}
+                .changeCallback="${this._handleChange.bind(this)}"
+              ></dynalite-single-element>
+              <h4>XXX Area Specific Presets</h4>
+              <dynalite-presets-table
+                .hass=${this.hass}
+                id="${`${this.id}-${area}-preset`}"
+                .presets=${this.areas[area].preset || {}}
+                .changeCallback="${this._handleChange.bind(this)}"
+              ></dynalite-presets-table>
             </div>
           </ha-card>
         `
