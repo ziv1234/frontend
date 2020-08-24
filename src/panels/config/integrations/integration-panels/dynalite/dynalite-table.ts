@@ -71,7 +71,7 @@ class HaDynaliteTable extends LitElement {
                           <paper-input
                             class="flex"
                             label=${column.header}
-                            id="${this.id}-${column.key}-${element}"
+                            id="${this.id}-${column.key}-${element}-x"
                             type=${column.type}
                             value=${column.key in this.tableData[element]
                               ? this.tableData[element][column.key]
@@ -127,29 +127,27 @@ class HaDynaliteTable extends LitElement {
     return this.hass.localize("ui.panel.config.dynalite." + item);
   }
 
+  private _handleChangeWithId(id: string, value: any) {
+    const myRegEx = new RegExp(`${this.id}-(.*)-(.*)-(.*)`);
+    const extracted = myRegEx.exec(id);
+    const targetKey = extracted![1];
+    const tableElement = extracted![2];
+    if (value) this.tableData[tableElement][targetKey] = value;
+    else delete this.tableData[tableElement][targetKey];
+    if (this.changeCallback) this.changeCallback(this.id, this.tableData);
+  }
+
   private _handleSelectionChange(ev: CustomEvent) {
     const targetId = ev.detail.item.id;
     const newValue = ev.detail.item.active_config;
-    const myRegEx = new RegExp(`${this.id}-(.*)-(.*)-(.*)`);
-    const extracted = myRegEx.exec(targetId);
-    const targetKey = extracted![1];
-    const tableElement = extracted![2];
-    if (newValue) this.tableData[tableElement][targetKey] = newValue;
-    else delete this.tableData[tableElement][targetKey];
-    if (this.changeCallback) this.changeCallback(this.id, this.tableData);
+    this._handleChangeWithId(targetId, newValue);
   }
 
   private _handleInputChange(ev: PolymerChangedEvent<string>) {
     const target = ev.currentTarget as PaperInputElement;
     const newValue = target.value as string;
     const targetId = (ev.currentTarget as any).id;
-    const myRegEx = new RegExp(`${this.id}-(.*)-(.*)`);
-    const extracted = myRegEx.exec(targetId);
-    const targetKey = extracted![1];
-    const tableElement = extracted![2];
-    if (newValue) this.tableData[tableElement][targetKey] = newValue;
-    else delete this.tableData[tableElement][targetKey];
-    if (this.changeCallback) this.changeCallback(this.id, this.tableData);
+    this._handleChangeWithId(targetId, newValue);
   }
 
   private _handleDeleteButton(ev: CustomEvent) {
