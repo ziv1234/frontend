@@ -43,7 +43,7 @@ class HaDynaliteTable extends LitElement {
   protected render(): TemplateResult {
     const addButton = html`
       <ha-icon-button
-        id=${`${this.id}-button-add-element`}
+        id="${this.id}-button-add-element"
         icon="hass:plus-circle"
         @click="${this._handleAddButton}"
       ></ha-icon-button>
@@ -71,7 +71,7 @@ class HaDynaliteTable extends LitElement {
                           <paper-input
                             class="flex"
                             label=${column.header}
-                            id="${`${this.id}-${column.key}-${element}`}"
+                            id="${this.id}-${column.key}-${element}"
                             type=${column.type}
                             value=${column.key in this.tableData[element]
                               ? this.tableData[element][column.key]
@@ -85,7 +85,7 @@ class HaDynaliteTable extends LitElement {
                             dynamic-align
                           >
                             <paper-listbox
-                              id="${`${this.id}-${column.key}-${element}`}"
+                              id="${this.id}-${column.key}-${element}"
                               slot="dropdown-content"
                               selected="0"
                               @iron-select=${this._handleSelectionChange}
@@ -94,7 +94,8 @@ class HaDynaliteTable extends LitElement {
                                 (option) =>
                                   html`<paper-item
                                     .active_config=${option[0]}
-                                    id="${`${this.id}-${column.key}-${element}-${option[0]}`}"
+                                    id="${this
+                                      .id}-${column.key}-${element}-${option[0]}"
                                     >${option[1]}</paper-item
                                   >`
                               )}
@@ -104,7 +105,7 @@ class HaDynaliteTable extends LitElement {
                 )}
                 <td>
                   <ha-icon-button
-                    id=${`${this.id}-button-delete-${element}`}
+                    id="${this.id}-button-delete-${element}"
                     icon="hass:delete"
                     @click="${this._handleDeleteButton}"
                   ></ha-icon-button>

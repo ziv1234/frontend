@@ -49,7 +49,7 @@ class HaDynaliteChannelsTable extends LitElement {
       <div>
         <dynalite-table
           .hass=${this.hass}
-          id="${`${this.id}-table`}"
+          id="${this.id}-table"
           .tableData=${this.channels}
           .tableConfig=${channelsTableConfig}
           tableName="channel"

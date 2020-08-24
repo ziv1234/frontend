@@ -35,7 +35,7 @@ class HaDynaliteTemplates extends LitElement {
     return html`
       <h4>${this._localStr("temp_room")}</h4>
       <dynalite-single-element
-        id="${`${this.id}-room-room_off`}"
+        id="${this.id}-room-room_off"
         inputType="number"
         shortDesc=${this._localStr("temp_room_off")}
         longDesc=${this._localStr("temp_room_off_long")}
@@ -43,7 +43,7 @@ class HaDynaliteTemplates extends LitElement {
         .changeCallback="${this._handleChange.bind(this)}"
       ></dynalite-single-element>
       <dynalite-single-element
-        id="${`${this.id}-room-room_on`}"
+        id="${this.id}-room-room_on"
         inputType="number"
         shortDesc=${this._localStr("temp_room_on")}
         longDesc=${this._localStr("temp_room_on_long")}
@@ -52,7 +52,7 @@ class HaDynaliteTemplates extends LitElement {
       ></dynalite-single-element>
       <h4>${this._localStr("temp_cover")}</h4>
       <dynalite-single-element
-        id="${`${this.id}-time_cover-open`}"
+        id="${this.id}-time_cover-open"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_open")}
         longDesc=${this._localStr("temp_cover_open_long")}
@@ -60,7 +60,7 @@ class HaDynaliteTemplates extends LitElement {
         .changeCallback="${this._handleChange.bind(this)}"
       ></dynalite-single-element>
       <dynalite-single-element
-        id="${`${this.id}-time_cover-close`}"
+        id="${this.id}-time_cover-close"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_close")}
         longDesc=${this._localStr("temp_cover_close_long")}
@@ -68,7 +68,7 @@ class HaDynaliteTemplates extends LitElement {
         .changeCallback="${this._handleChange.bind(this)}"
       ></dynalite-single-element>
       <dynalite-single-element
-        id="${`${this.id}-time_cover-stop`}"
+        id="${this.id}-time_cover-stop"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_stop")}
         longDesc=${this._localStr("temp_cover_stop_long")}
@@ -76,7 +76,7 @@ class HaDynaliteTemplates extends LitElement {
         .changeCallback="${this._handleChange.bind(this)}"
       ></dynalite-single-element>
       <dynalite-single-element
-        id="${`${this.id}-time_cover-channel_cover`}"
+        id="${this.id}-time_cover-channel_cover"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_channel")}
         longDesc=${this._localStr("temp_cover_channel_long")}
@@ -84,7 +84,7 @@ class HaDynaliteTemplates extends LitElement {
         .changeCallback="${this._handleChange.bind(this)}"
       ></dynalite-single-element>
       <dynalite-single-element
-        id="${`${this.id}-time_cover-duration`}"
+        id="${this.id}-time_cover-duration"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_duration")}
         longDesc=${this._localStr("temp_cover_duration_long")}
@@ -92,7 +92,7 @@ class HaDynaliteTemplates extends LitElement {
         .changeCallback="${this._handleChange.bind(this)}"
       ></dynalite-single-element>
       <dynalite-single-element
-        id="${`${this.id}-time_cover-tilt`}"
+        id="${this.id}-time_cover-tilt"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_tilt")}
         longDesc=${this._localStr("temp_cover_tilt_long")}

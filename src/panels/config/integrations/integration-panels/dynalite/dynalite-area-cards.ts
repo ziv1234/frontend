@@ -48,10 +48,10 @@ class HaDynaliteAreaCards extends LitElement {
     return html`
       ${Object.keys(this.areas).map(
         (area) => html`
-          <ha-card .header=${`${this._localStr("area")} ${area}`}>
+          <ha-card .header="${this._localStr("area")} ${area}">
             <div class="card-content">
               <dynalite-single-element
-                id="${`${this.id}-${area}-name`}"
+                id="${this.id}-${area}-name"
                 inputType="string"
                 shortDesc=${this._localStr("area_name")}
                 longDesc=${this._localStr("area_name_long")}
@@ -59,7 +59,7 @@ class HaDynaliteAreaCards extends LitElement {
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
               <dynalite-single-element
-                id="${`${this.id}-${area}-template`}"
+                id="${this.id}-${area}-template"
                 inputType="list"
                 shortDesc=${this._localStr("area_template")}
                 longDesc=${this._localStr("area_template_long")}
@@ -68,7 +68,7 @@ class HaDynaliteAreaCards extends LitElement {
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
               <dynalite-single-element
-                id="${`${this.id}-${area}-fade`}"
+                id="${this.id}-${area}-fade"
                 inputType="number"
                 shortDesc=${this._localStr("area_fade")}
                 longDesc=${this._localStr("area_fade_long")}
@@ -76,7 +76,7 @@ class HaDynaliteAreaCards extends LitElement {
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-single-element>
               <dynalite-single-element
-                id="${`${this.id}-${area}-nodefault`}"
+                id="${this.id}-${area}-nodefault"
                 inputType="boolean"
                 shortDesc=${this._localStr("area_no_default")}
                 longDesc=${this._localStr("area_no_default_long")}
@@ -86,14 +86,14 @@ class HaDynaliteAreaCards extends LitElement {
               <h4>${this._localStr("area_presets")}</h4>
               <dynalite-presets-table
                 .hass=${this.hass}
-                id="${`${this.id}-${area}-preset`}"
+                id="${this.id}-${area}-preset"
                 .presets=${this.areas[area].preset || {}}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-presets-table>
               <h4>${this._localStr("area_channels")}</h4>
               <dynalite-channels-table
                 .hass=${this.hass}
-                id="${`${this.id}-${area}-channel`}"
+                id="${this.id}-${area}-channel"
                 .channels=${this.areas[area].channel || {}}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-channels-table>

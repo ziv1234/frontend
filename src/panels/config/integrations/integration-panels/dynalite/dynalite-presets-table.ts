@@ -40,7 +40,7 @@ class HaDynalitePresetsTable extends LitElement {
       <div>
         <dynalite-table
           .hass=${this.hass}
-          id="${`${this.id}-table`}"
+          id="${this.id}-table"
           .tableData=${this.presets}
           .tableConfig=${presetTableConfig}
           tableName="preset"
