@@ -17,13 +17,13 @@ import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
 import "./dynalite-table";
 
-@customElement("dynalite-presets-table")
-class HaDynalitePresetsTable extends LitElement {
+@customElement("dynalite-channels-table")
+class HaDynaliteChannelsTable extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
   @property({ type: Boolean }) public narrow!: boolean;
 
-  @property() public presets = {};
+  @property() public channels = {};
 
   @property({ attribute: false }) public changeCallback = function (
     _id: string,
@@ -31,19 +31,28 @@ class HaDynalitePresetsTable extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
-    const presetTableConfig = [
-      { header: this._localStr("preset_number") },
-      { header: this._localStr("preset_name"), key: "name", type: "string" },
-      { header: this._localStr("preset_level"), key: "level", type: "number" },
+    const typeOptions = [
+      ["light", this._localStr("channel_type_light")],
+      ["switch", this._localStr("channel_type_switch")],
+    ];
+    const channelsTableConfig = [
+      { header: this._localStr("channel_number") },
+      { header: this._localStr("channel_name"), key: "name", type: "string" },
+      {
+        header: this._localStr("channel_type"),
+        key: "type",
+        type: "list",
+        options: typeOptions,
+      },
     ];
     return html`
       <div>
         <dynalite-table
           .hass=${this.hass}
           id="${`${this.id}-table`}"
-          .tableData=${this.presets}
-          .tableConfig=${presetTableConfig}
-          tableName="preset"
+          .tableData=${this.channels}
+          .tableConfig=${channelsTableConfig}
+          tableName="channel"
           .changeCallback="${this._handleChange.bind(this)}"
         >
         </dynalite-table>
@@ -55,8 +64,8 @@ class HaDynalitePresetsTable extends LitElement {
     return this.hass.localize("ui.panel.config.dynalite." + item);
   }
 
-  private _handleChange(_id: string, _value: any) {
-    if (this.changeCallback) this.changeCallback(this.id, this.presets);
+  private _handleChange(_id: string) {
+    if (this.changeCallback) this.changeCallback(this.id, this.channels);
   }
 
   static get styles(): CSSResultArray {
@@ -75,6 +84,6 @@ class HaDynalitePresetsTable extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "dynalite-presets-table": HaDynalitePresetsTable;
+    "dynalite-channels-table": HaDynaliteChannelsTable;
   }
 }

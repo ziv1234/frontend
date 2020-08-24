@@ -36,7 +36,8 @@ class HaDynaliteTable extends LitElement {
   @property() public tableName = "";
 
   @property({ attribute: false }) public changeCallback = function (
-    _id: string
+    _id: string,
+    _value: any
   ) {};
 
   protected render(): TemplateResult {
@@ -64,20 +65,42 @@ class HaDynaliteTable extends LitElement {
               <tr>
                 <td>${element}</td>
                 ${this.tableConfig.slice(1).map(
-                  (column) => html`
-                    <td>
-                      <paper-input
-                        class="flex"
-                        label=${column.header}
-                        id="${`${this.id}-${column.key}-${element}`}"
-                        type=${column.type}
-                        value=${column.key in this.tableData[element]
-                          ? this.tableData[element][column.key]
-                          : ""}
-                        @value-changed="${this._handleInputChange}"
-                      ></paper-input>
-                    </td>
-                  `
+                  (column) =>
+                    html` ${["string", "number"].includes(column.type)
+                      ? html`<td>
+                          <paper-input
+                            class="flex"
+                            label=${column.header}
+                            id="${`${this.id}-${column.key}-${element}`}"
+                            type=${column.type}
+                            value=${column.key in this.tableData[element]
+                              ? this.tableData[element][column.key]
+                              : ""}
+                            @value-changed="${this._handleInputChange}"
+                          ></paper-input>
+                        </td> `
+                      : html`
+                          <ha-paper-dropdown-menu
+                            label=${column.header}
+                            dynamic-align
+                          >
+                            <paper-listbox
+                              id="${`${this.id}-${column.key}-${element}`}"
+                              slot="dropdown-content"
+                              selected="0"
+                              @iron-select=${this._handleSelectionChange}
+                            >
+                              ${column.options.map(
+                                (option) =>
+                                  html`<paper-item
+                                    .active_config=${option[0]}
+                                    id="${`${this.id}-${column.key}-${element}-${option[0]}`}"
+                                    >${option[1]}</paper-item
+                                  >`
+                              )}
+                            </paper-listbox>
+                          </ha-paper-dropdown-menu>
+                        `}`
                 )}
                 <td>
                   <ha-icon-button
@@ -103,6 +126,18 @@ class HaDynaliteTable extends LitElement {
     return this.hass.localize("ui.panel.config.dynalite." + item);
   }
 
+  private _handleSelectionChange(ev: CustomEvent) {
+    const targetId = ev.detail.item.id;
+    const newValue = ev.detail.item.active_config;
+    const myRegEx = new RegExp(`${this.id}-(.*)-(.*)-(.*)`);
+    const extracted = myRegEx.exec(targetId);
+    const targetKey = extracted![1];
+    const tableElement = extracted![2];
+    if (newValue) this.tableData[tableElement][targetKey] = newValue;
+    else delete this.tableData[tableElement][targetKey];
+    if (this.changeCallback) this.changeCallback(this.id, this.tableData);
+  }
+
   private _handleInputChange(ev: PolymerChangedEvent<string>) {
     const target = ev.currentTarget as PaperInputElement;
     const newValue = target.value as string;
@@ -113,7 +148,7 @@ class HaDynaliteTable extends LitElement {
     const tableElement = extracted![2];
     if (newValue) this.tableData[tableElement][targetKey] = newValue;
     else delete this.tableData[tableElement][targetKey];
-    if (this.changeCallback) this.changeCallback(this.id);
+    if (this.changeCallback) this.changeCallback(this.id, this.tableData);
   }
 
   private _handleDeleteButton(ev: CustomEvent) {
@@ -127,7 +162,7 @@ class HaDynaliteTable extends LitElement {
       confirm: () => {
         delete this.tableData[tableElement];
         this.requestUpdate();
-        if (this.changeCallback) this.changeCallback(this.id);
+        if (this.changeCallback) this.changeCallback(this.id, this.tableData);
       },
     });
   }
@@ -152,7 +187,7 @@ class HaDynaliteTable extends LitElement {
         name: `${this.tableConfig[0].header} ${newElement}`,
       };
       this.requestUpdate();
-      if (this.changeCallback) this.changeCallback(this.id);
+      if (this.changeCallback) this.changeCallback(this.id, this.tableData);
     }
   }
 

@@ -196,6 +196,7 @@ class HaPanelConfigDynalite extends LitElement {
             .hass=${this.hass}
             id="dyn-areas"
             .areas=${this._areas}
+            .changeCallback="${this._handleChange.bind(this)}"
           ></dynalite-area-cards>
         </div>
       </ha-app-layout>
@@ -314,6 +315,7 @@ class HaPanelConfigDynalite extends LitElement {
     } else {
       delete this._entryData.template;
     }
+    this._entryData.area = this._areas;
     const configEntryId = this._getConfigEntry();
     if (!configEntryId) return;
     console.log("xxx entry=%s", JSON.stringify(this._entryData));
