@@ -1,6 +1,3 @@
-import "@polymer/paper-listbox/paper-listbox";
-import "@polymer/paper-item/paper-item";
-import "@polymer/paper-input/paper-input";
 import {
   customElement,
   html,
@@ -10,9 +7,6 @@ import {
   TemplateResult,
   css,
 } from "lit-element";
-import "../../../../../components/ha-settings-row";
-import "../../../../../components/ha-paper-dropdown-menu";
-import "../../../../../components/ha-icon-button";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
 import "./dynalite-single-row";

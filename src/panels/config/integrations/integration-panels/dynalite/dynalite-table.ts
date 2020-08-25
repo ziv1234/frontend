@@ -1,8 +1,3 @@
-import "@polymer/paper-listbox/paper-listbox";
-import "@polymer/paper-item/paper-item";
-import "@polymer/paper-input/paper-input";
-import type { PaperInputElement } from "@polymer/paper-input/paper-input";
-import type { PolymerChangedEvent } from "../../../../../polymer-types";
 import {
   customElement,
   html,
@@ -12,7 +7,6 @@ import {
   TemplateResult,
   css,
 } from "lit-element";
-import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-icon-button";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
@@ -21,6 +15,7 @@ import {
   showPromptDialog,
   showAlertDialog,
 } from "../../../../../dialogs/generic/show-dialog-box";
+import "./dynalite-single-element";
 
 @customElement("dynalite-table")
 class HaDynaliteTable extends LitElement {
@@ -63,43 +58,18 @@ class HaDynaliteTable extends LitElement {
               <tr>
                 <td>${element}</td>
                 ${this.tableConfig.slice(1).map(
-                  (column) =>
-                    html` ${["string", "number"].includes(column.type)
-                      ? html`<td>
-                          <paper-input
-                            class="flex"
-                            label=${column.header}
-                            id="${this.id}-${column.key}-${element}-x"
-                            type=${column.type}
-                            value=${column.key in this.tableData[element]
-                              ? this.tableData[element][column.key]
-                              : ""}
-                            @value-changed="${this._handleInputChange}"
-                          ></paper-input>
-                        </td> `
-                      : html`
-                          <ha-paper-dropdown-menu
-                            label=${column.header}
-                            dynamic-align
-                          >
-                            <paper-listbox
-                              id="${this.id}-${column.key}-${element}"
-                              slot="dropdown-content"
-                              selected="0"
-                              @iron-select=${this._handleSelectionChange}
-                            >
-                              ${column.options.map(
-                                (option) =>
-                                  html`<paper-item
-                                    .active_config=${option[0]}
-                                    id="${this
-                                      .id}-${column.key}-${element}-${option[0]}"
-                                    >${option[1]}</paper-item
-                                  >`
-                              )}
-                            </paper-listbox>
-                          </ha-paper-dropdown-menu>
-                        `}`
+                  (column) => html`<td>
+                    <dynalite-single-element
+                      id="${this.id}-${column.key}-${element}-x"
+                      inputType=${column.type}
+                      shortDesc=${column.header}
+                      .options=${column.options}
+                      value=${column.key in this.tableData[element]
+                        ? this.tableData[element][column.key]
+                        : ""}
+                      .changeCallback="${this._handleChange.bind(this)}"
+                    ></dynalite-single-element>
+                  </td> `
                 )}
                 <td>
                   <ha-icon-button
@@ -127,7 +97,7 @@ class HaDynaliteTable extends LitElement {
     return this.hass.localize("ui.panel.config.dynalite." + item);
   }
 
-  private _handleChangeWithId(id: string, value: any) {
+  private _handleChange(id: string, value: any) {
     const myRegEx = new RegExp(`${this.id}-(.*)-(.*)-(.*)`);
     const extracted = myRegEx.exec(id);
     const targetKey = extracted![1];
@@ -135,19 +105,6 @@ class HaDynaliteTable extends LitElement {
     if (value) this.tableData[tableElement][targetKey] = value;
     else delete this.tableData[tableElement][targetKey];
     if (this.changeCallback) this.changeCallback(this.id, this.tableData);
-  }
-
-  private _handleSelectionChange(ev: CustomEvent) {
-    const targetId = ev.detail.item.id;
-    const newValue = ev.detail.item.active_config;
-    this._handleChangeWithId(targetId, newValue);
-  }
-
-  private _handleInputChange(ev: PolymerChangedEvent<string>) {
-    const target = ev.currentTarget as PaperInputElement;
-    const newValue = target.value as string;
-    const targetId = (ev.currentTarget as any).id;
-    this._handleChangeWithId(targetId, newValue);
   }
 
   private _handleDeleteButton(ev: CustomEvent) {
