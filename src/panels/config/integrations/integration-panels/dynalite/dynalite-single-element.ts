@@ -12,14 +12,9 @@ import {
 import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-switch";
-import { HomeAssistant } from "../../../../../types";
 
 @customElement("dynalite-single-element")
 class HaDynaliteSingleElement extends LitElement {
-  @property({ attribute: false }) public hass!: HomeAssistant;
-
-  @property({ type: Boolean }) public narrow!: boolean;
-
   @property() public inputType = "";
 
   @property() public shortDesc = "";

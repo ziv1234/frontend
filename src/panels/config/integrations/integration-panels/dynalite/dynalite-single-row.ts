@@ -6,13 +6,10 @@ import {
   TemplateResult,
 } from "lit-element";
 import "../../../../../components/ha-settings-row";
-import { HomeAssistant } from "../../../../../types";
 import "./dynalite-single-element";
 
 @customElement("dynalite-single-row")
 class HaDynaliteSingleRow extends LitElement {
-  @property({ attribute: false }) public hass!: HomeAssistant;
-
   @property({ type: Boolean }) public narrow!: boolean;
 
   @property() public inputType = "";
@@ -42,7 +39,6 @@ class HaDynaliteSingleRow extends LitElement {
           .options=${this.options}
           .value=${this.value}
           .changeCallback="${this._handleChange.bind(this)}"
-          .narrow=${this.narrow}
         ></dynalite-single-element>
       </ha-settings-row>
     `;
