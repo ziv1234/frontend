@@ -60,7 +60,7 @@ class HaDynaliteTable extends LitElement {
                 ${this.tableConfig.slice(1).map(
                   (column) => html`<td>
                     <dynalite-single-element
-                      id="${this.id}-${column.key}-${element}-x"
+                      id="${this.id}-${column.key}-${element}"
                       inputType=${column.type}
                       shortDesc=${column.header}
                       .options=${column.options}
@@ -98,7 +98,7 @@ class HaDynaliteTable extends LitElement {
   }
 
   private _handleChange(id: string, value: any) {
-    const myRegEx = new RegExp(`${this.id}-(.*)-(.*)-(.*)`);
+    const myRegEx = new RegExp(`${this.id}-(.*)-(.*)`);
     const extracted = myRegEx.exec(id);
     const targetKey = extracted![1];
     const tableElement = extracted![2];
