@@ -12,7 +12,6 @@ import {
   TemplateResult,
   css,
 } from "lit-element";
-import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-icon-button";
 import { HomeAssistant } from "../../../../../types";
@@ -26,8 +25,6 @@ import {
 @customElement("dynalite-table")
 class HaDynaliteTable extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
-
-  @property({ type: Boolean }) public narrow!: boolean;
 
   @property() public tableData = {};
 

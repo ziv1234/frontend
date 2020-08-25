@@ -91,6 +91,7 @@ class HaPanelConfigDynalite extends LitElement {
                 longDesc=${this._localStr("name_long")}
                 .value=${this._name}
                 .changeCallback="${this._handleChange.bind(this)}"
+                .narrow=${this.narrow}
               ></dynalite-single-element>
               <dynalite-single-element
                 id="dyn-host"
@@ -99,6 +100,7 @@ class HaPanelConfigDynalite extends LitElement {
                 longDesc=${this._localStr("host_long")}
                 .value=${this._host}
                 .changeCallback="${this._handleChange.bind(this)}"
+                .narrow=${this.narrow}
               ></dynalite-single-element>
               <dynalite-single-element
                 id="dyn-port"
@@ -107,6 +109,7 @@ class HaPanelConfigDynalite extends LitElement {
                 longDesc=${this._localStr("port_long")}
                 .value=${this._port}
                 .changeCallback="${this._handleChange.bind(this)}"
+                .narrow=${this.narrow}
               ></dynalite-single-element>
               <dynalite-single-element
                 id="dyn-fade"
@@ -115,6 +118,7 @@ class HaPanelConfigDynalite extends LitElement {
                 longDesc=${this._localStr("fade_long")}
                 .value=${this._fade}
                 .changeCallback="${this._handleChange.bind(this)}"
+                .narrow=${this.narrow}
               ></dynalite-single-element>
               <dynalite-single-element
                 id="dyn-active"
@@ -124,6 +128,7 @@ class HaPanelConfigDynalite extends LitElement {
                 .options=${this._activeOptions}
                 .value=${this._active}
                 .changeCallback="${this._handleChange.bind(this)}"
+                .narrow=${this.narrow}
               ></dynalite-single-element>
               <dynalite-single-element
                 id="dyn-autodiscover"
@@ -132,6 +137,7 @@ class HaPanelConfigDynalite extends LitElement {
                 longDesc=${this._localStr("auto_discover_long")}
                 .value=${this._autodiscover}
                 .changeCallback="${this._handleChange.bind(this)}"
+                .narrow=${this.narrow}
               ></dynalite-single-element>
               <dynalite-single-element
                 id="dyn-polltimer"
@@ -140,6 +146,7 @@ class HaPanelConfigDynalite extends LitElement {
                 longDesc=${this._localStr("poll_timer_long")}
                 .value=${this._polltimer}
                 .changeCallback="${this._handleChange.bind(this)}"
+                .narrow=${this.narrow}
               ></dynalite-single-element>
             </div>
             <div class="card-actions">
@@ -157,6 +164,7 @@ class HaPanelConfigDynalite extends LitElement {
                 longDesc=${this._localStr("override_presets_long")}
                 .value=${this._overrideGlobalPresets}
                 .changeCallback="${this._handleChange.bind(this)}"
+                .narrow=${this.narrow}
               ></dynalite-single-element>
               ${this._overrideGlobalPresets
                 ? html`
@@ -179,6 +187,7 @@ class HaPanelConfigDynalite extends LitElement {
                 longDesc=${this._localStr("override_templates_long")}
                 .value=${this._overrideTemplates}
                 .changeCallback="${this._handleChange.bind(this)}"
+                .narrow=${this.narrow}
               ></dynalite-single-element>
               ${this._overrideTemplates
                 ? html`
@@ -187,6 +196,7 @@ class HaPanelConfigDynalite extends LitElement {
                       id="dyn-templates"
                       .templates=${this._templates}
                       .changeCallback="${this._handleChange.bind(this)}"
+                      .narrow=${this.narrow}
                     ></dynalite-templates>
                   `
                 : ""}
@@ -197,6 +207,7 @@ class HaPanelConfigDynalite extends LitElement {
             id="dyn-areas"
             .areas=${this._areas}
             .changeCallback="${this._handleChange.bind(this)}"
+            .narrow=${this.narrow}
           ></dynalite-area-cards>
         </div>
       </ha-app-layout>

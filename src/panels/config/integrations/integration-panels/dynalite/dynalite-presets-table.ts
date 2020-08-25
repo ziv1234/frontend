@@ -21,8 +21,6 @@ import "./dynalite-table";
 class HaDynalitePresetsTable extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
-  @property({ type: Boolean }) public narrow!: boolean;
-
   @property() public presets = {};
 
   @property({ attribute: false }) public changeCallback = function (

@@ -1802,7 +1802,7 @@
           "area_name": "Name",
           "area_name_long": "The name of this Dynalite area",
           "area_template": "Template",
-          "area_template_long": "What template to use for the area",
+          "area_template_long": "Which template to use for the area",
           "area_fade": "Fade",
           "area_fade_long": "Fade time for the area (seconds)",
           "area_no_default": "Ignore Global Presets",
