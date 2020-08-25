@@ -15,7 +15,7 @@ import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-icon-button";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
-import "./dynalite-single-element";
+import "./dynalite-single-row";
 
 @customElement("dynalite-templates")
 class HaDynaliteTemplates extends LitElement {
@@ -34,7 +34,7 @@ class HaDynaliteTemplates extends LitElement {
     if (!this.templates) return html``;
     return html`
       <h4>${this._localStr("temp_room")}</h4>
-      <dynalite-single-element
+      <dynalite-single-row
         id="${this.id}-room-room_off"
         inputType="number"
         shortDesc=${this._localStr("temp_room_off")}
@@ -42,8 +42,8 @@ class HaDynaliteTemplates extends LitElement {
         .value=${this.templates.room.room_off || ""}
         .changeCallback="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
-      ></dynalite-single-element>
-      <dynalite-single-element
+      ></dynalite-single-row>
+      <dynalite-single-row
         id="${this.id}-room-room_on"
         inputType="number"
         shortDesc=${this._localStr("temp_room_on")}
@@ -51,9 +51,9 @@ class HaDynaliteTemplates extends LitElement {
         .value=${this.templates.room.room_on || ""}
         .changeCallback="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
-      ></dynalite-single-element>
+      ></dynalite-single-row>
       <h4>${this._localStr("temp_cover")}</h4>
-      <dynalite-single-element
+      <dynalite-single-row
         id="${this.id}-time_cover-open"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_open")}
@@ -61,8 +61,8 @@ class HaDynaliteTemplates extends LitElement {
         .value=${this.templates.time_cover.open || ""}
         .changeCallback="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
-      ></dynalite-single-element>
-      <dynalite-single-element
+      ></dynalite-single-row>
+      <dynalite-single-row
         id="${this.id}-time_cover-close"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_close")}
@@ -70,8 +70,8 @@ class HaDynaliteTemplates extends LitElement {
         .value=${this.templates.time_cover.close || ""}
         .changeCallback="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
-      ></dynalite-single-element>
-      <dynalite-single-element
+      ></dynalite-single-row>
+      <dynalite-single-row
         id="${this.id}-time_cover-stop"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_stop")}
@@ -79,8 +79,8 @@ class HaDynaliteTemplates extends LitElement {
         .value=${this.templates.time_cover.stop || ""}
         .changeCallback="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
-      ></dynalite-single-element>
-      <dynalite-single-element
+      ></dynalite-single-row>
+      <dynalite-single-row
         id="${this.id}-time_cover-channel_cover"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_channel")}
@@ -88,8 +88,8 @@ class HaDynaliteTemplates extends LitElement {
         .value=${this.templates.time_cover.channel_cover || ""}
         .changeCallback="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
-      ></dynalite-single-element>
-      <dynalite-single-element
+      ></dynalite-single-row>
+      <dynalite-single-row
         id="${this.id}-time_cover-duration"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_duration")}
@@ -97,8 +97,8 @@ class HaDynaliteTemplates extends LitElement {
         .value=${this.templates.time_cover.duration || ""}
         .changeCallback="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
-      ></dynalite-single-element>
-      <dynalite-single-element
+      ></dynalite-single-row>
+      <dynalite-single-row
         id="${this.id}-time_cover-tilt"
         inputType="number"
         shortDesc=${this._localStr("temp_cover_tilt")}
@@ -106,7 +106,7 @@ class HaDynaliteTemplates extends LitElement {
         .value=${this.templates.time_cover.tilt || ""}
         .changeCallback="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
-      ></dynalite-single-element>
+      ></dynalite-single-row>
     `;
   }
 

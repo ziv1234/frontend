@@ -16,7 +16,7 @@ import "../../../../../components/ha-icon-button";
 import "../../../../../components/ha-card";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
-import "./dynalite-single-element";
+import "./dynalite-single-row";
 import "./dynalite-presets-table";
 import "./dynalite-channels-table";
 import {
@@ -51,7 +51,7 @@ class HaDynaliteAreaCards extends LitElement {
         (area) => html`
           <ha-card .header="${this._localStr("area")} ${area}">
             <div class="card-content">
-              <dynalite-single-element
+              <dynalite-single-row
                 id="${this.id}-${area}-name"
                 inputType="string"
                 shortDesc=${this._localStr("area_name")}
@@ -59,8 +59,8 @@ class HaDynaliteAreaCards extends LitElement {
                 .value=${this.areas[area].name || ""}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
-              <dynalite-single-element
+              ></dynalite-single-row>
+              <dynalite-single-row
                 id="${this.id}-${area}-template"
                 inputType="list"
                 shortDesc=${this._localStr("area_template")}
@@ -69,8 +69,8 @@ class HaDynaliteAreaCards extends LitElement {
                 .value=${this.areas[area].template || ""}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
-              <dynalite-single-element
+              ></dynalite-single-row>
+              <dynalite-single-row
                 id="${this.id}-${area}-fade"
                 inputType="number"
                 shortDesc=${this._localStr("area_fade")}
@@ -78,8 +78,8 @@ class HaDynaliteAreaCards extends LitElement {
                 .value=${this.areas[area].fade || ""}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
-              <dynalite-single-element
+              ></dynalite-single-row>
+              <dynalite-single-row
                 id="${this.id}-${area}-nodefault"
                 inputType="boolean"
                 shortDesc=${this._localStr("area_no_default")}
@@ -87,7 +87,7 @@ class HaDynaliteAreaCards extends LitElement {
                 .value=${this.areas[area].nodefault || ""}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
+              ></dynalite-single-row>
               <h4>${this._localStr("area_presets")}</h4>
               <dynalite-presets-table
                 .hass=${this.hass}

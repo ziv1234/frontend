@@ -17,7 +17,7 @@ import "../../../../../components/ha-menu-button";
 import "../../../../../layouts/ha-app-layout";
 import { haStyle } from "../../../../../resources/styles";
 import { HomeAssistant } from "../../../../../types";
-import "./dynalite-single-element";
+import "./dynalite-single-row";
 import "./dynalite-presets-table";
 import "./dynalite-templates";
 import "./dynalite-area-cards";
@@ -84,7 +84,7 @@ class HaPanelConfigDynalite extends LitElement {
         <div class="content">
           <ha-card .header=${this._localStr("description_system")}>
             <div class="card-content">
-              <dynalite-single-element
+              <dynalite-single-row
                 id="dyn-name"
                 inputType="string"
                 shortDesc=${this._localStr("name")}
@@ -92,8 +92,8 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._name}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
-              <dynalite-single-element
+              ></dynalite-single-row>
+              <dynalite-single-row
                 id="dyn-host"
                 inputType="string"
                 shortDesc=${this._localStr("host")}
@@ -101,8 +101,8 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._host}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
-              <dynalite-single-element
+              ></dynalite-single-row>
+              <dynalite-single-row
                 id="dyn-port"
                 inputType="number"
                 shortDesc=${this._localStr("port")}
@@ -110,8 +110,8 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._port}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
-              <dynalite-single-element
+              ></dynalite-single-row>
+              <dynalite-single-row
                 id="dyn-fade"
                 inputType="number"
                 shortDesc=${this._localStr("fade")}
@@ -119,8 +119,8 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._fade}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
-              <dynalite-single-element
+              ></dynalite-single-row>
+              <dynalite-single-row
                 id="dyn-active"
                 inputType="list"
                 shortDesc=${this._localStr("active")}
@@ -129,8 +129,8 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._active}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
-              <dynalite-single-element
+              ></dynalite-single-row>
+              <dynalite-single-row
                 id="dyn-autodiscover"
                 inputType="boolean"
                 shortDesc=${this._localStr("auto_discover")}
@@ -138,8 +138,8 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._autodiscover}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
-              <dynalite-single-element
+              ></dynalite-single-row>
+              <dynalite-single-row
                 id="dyn-polltimer"
                 inputType="number"
                 shortDesc=${this._localStr("poll_timer")}
@@ -147,7 +147,7 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._polltimer}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
+              ></dynalite-single-row>
             </div>
             <div class="card-actions">
               <mwc-button @click=${this._publish}>
@@ -157,7 +157,7 @@ class HaPanelConfigDynalite extends LitElement {
           </ha-card>
           <ha-card .header=${this._localStr("description_presets")}>
             <div class="card-content">
-              <dynalite-single-element
+              <dynalite-single-row
                 id="dyn-overrideGlobalPresets"
                 inputType="boolean"
                 shortDesc=${this._localStr("override_presets")}
@@ -165,7 +165,7 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._overrideGlobalPresets}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
+              ></dynalite-single-row>
               ${this._overrideGlobalPresets
                 ? html`
                     <dynalite-presets-table
@@ -180,7 +180,7 @@ class HaPanelConfigDynalite extends LitElement {
           </ha-card>
           <ha-card .header=${this._localStr("temp_overrides")}>
             <div class="card-content">
-              <dynalite-single-element
+              <dynalite-single-row
                 id="dyn-overrideTemplates"
                 inputType="boolean"
                 shortDesc=${this._localStr("override_templates")}
@@ -188,7 +188,7 @@ class HaPanelConfigDynalite extends LitElement {
                 .value=${this._overrideTemplates}
                 .changeCallback="${this._handleChange.bind(this)}"
                 .narrow=${this.narrow}
-              ></dynalite-single-element>
+              ></dynalite-single-row>
               ${this._overrideTemplates
                 ? html`
                     <dynalite-templates

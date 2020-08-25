@@ -24,8 +24,6 @@ class HaDynaliteSingleElement extends LitElement {
 
   @property() public shortDesc = "";
 
-  @property() public longDesc = "";
-
   @property() public value = "";
 
   @property({ type: Array }) public options: Array<Array<string>> = [];
@@ -36,9 +34,8 @@ class HaDynaliteSingleElement extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
-    let innerElement;
     if (["string", "number"].includes(this.inputType)) {
-      innerElement = html`
+      return html`
         <paper-input
           class="flex"
           .label=${this.shortDesc}
@@ -47,11 +44,12 @@ class HaDynaliteSingleElement extends LitElement {
           @value-changed=${this._handleInputChange}
         ></paper-input>
       `;
-    } else if (this.inputType === "list") {
+    }
+    if (this.inputType === "list") {
       const listIndex = this.options.findIndex(
         (element) => element[0] === this.value
       );
-      innerElement = html`
+      return html`
         <ha-paper-dropdown-menu label=${this.shortDesc} dynamic-align>
           <paper-listbox
             slot="dropdown-content"
@@ -67,23 +65,16 @@ class HaDynaliteSingleElement extends LitElement {
           </paper-listbox>
         </ha-paper-dropdown-menu>
       `;
-    } else if (this.inputType === "boolean") {
-      innerElement = html`
+    }
+    if (this.inputType === "boolean") {
+      return html`
         <ha-switch
           .checked=${this.value}
           @change=${this._handleSwitchChange}
         ></ha-switch>
       `;
-    } else {
-      return html``;
     }
-    return html`
-      <ha-settings-row .narrow=${this.narrow}>
-        <span slot="heading">${this.shortDesc}</span>
-        <span slot="description">${this.longDesc}</span>
-        ${innerElement}
-      </ha-settings-row>
-    `;
+    return html``;
   }
 
   private _handleInputChange(ev: PolymerChangedEvent<string>) {
