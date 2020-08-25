@@ -93,7 +93,6 @@ class HaDynaliteAreaCards extends LitElement {
                 id="${this.id}-${area}-preset"
                 .presets=${this.areas[area].preset || {}}
                 .changeCallback="${this._handleChange.bind(this)}"
-                .narrow=${this.narrow}
               ></dynalite-presets-table>
               <h4>${this._localStr("area_channels")}</h4>
               <dynalite-channels-table
@@ -101,7 +100,6 @@ class HaDynaliteAreaCards extends LitElement {
                 id="${this.id}-${area}-channel"
                 .channels=${this.areas[area].channel || {}}
                 .changeCallback="${this._handleChange.bind(this)}"
-                .narrow=${this.narrow}
               ></dynalite-channels-table>
             </div>
           </ha-card>
