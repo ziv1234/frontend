@@ -1824,6 +1824,8 @@
           "add_channel_label": "Dynalite Channel Number",
           "add_channel_error": "Cannot Add Channel",
           "add_channel_exists": "This channel is already configured. Please edit it in the table.",
+          "delete_area_title": "Delete Area",
+          "delete_area_text": "Are you sure that you want to delete this area?",
           "add_area_title": "Add New Area",
           "add_area_label": "Dynalite Area Number",
           "add_area_error": "Cannot Add Area",

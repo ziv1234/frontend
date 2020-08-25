@@ -24,6 +24,7 @@ import {
   showPromptDialog,
   showAlertDialog,
 } from "../../../../../dialogs/generic/show-dialog-box";
+import "@material/mwc-button";
 
 @customElement("dynalite-area-cards")
 class HaDynaliteAreaCards extends LitElement {
@@ -102,14 +103,21 @@ class HaDynaliteAreaCards extends LitElement {
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-channels-table>
             </div>
+            <div class="card-actions">
+              <mwc-button
+                @click=${this._handleDeleteButton}
+                id="${this.id}-button-delete-${area}"
+              >
+                ${this._localStr("delete_area_title")}
+              </mwc-button>
+            </div>
           </ha-card>
         `
       )}
-      <ha-icon-button
-        id=${`${this.id}-button-add-area`}
-        icon="hass:plus-circle"
-        @click="${this._handleAddButton}"
-      ></ha-icon-button>
+      <mwc-button @click="${this._handleAddButton}">
+        <ha-icon class="add-icon" icon="hass:plus-circle"></ha-icon>
+        ${this._localStr("add_area_title")}
+      </mwc-button>
     `;
   }
 
@@ -151,6 +159,23 @@ class HaDynaliteAreaCards extends LitElement {
     }
   }
 
+  private _handleDeleteButton(ev: CustomEvent) {
+    const buttonBase = this.id + "-button-delete-";
+    const area = (ev.currentTarget as any).id.substr(buttonBase.length);
+    console.log("deleting area %s", area);
+    showConfirmationDialog(this, {
+      title: this._localStr(`delete_area_title`),
+      text: this._localStr(`delete_area_text`),
+      confirmText: this._localStr("confirm"),
+      dismissText: this._localStr("cancel"),
+      confirm: () => {
+        delete this.areas[area];
+        this.requestUpdate();
+        if (this.changeCallback) this.changeCallback(this.id, this.areas);
+      },
+    });
+  }
+
   static get styles(): CSSResultArray {
     return [
       haStyle,
@@ -162,6 +187,9 @@ class HaDynaliteAreaCards extends LitElement {
         }
         ha-card {
           margin-bottom: 16px;
+        }
+        .add-icon {
+          padding: 10px;
         }
       `,
     ];
