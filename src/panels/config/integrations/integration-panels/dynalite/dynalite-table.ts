@@ -199,29 +199,23 @@ class HaDynaliteTable extends LitElement {
           -webkit-user-select: initial;
           -moz-user-select: initial;
         }
-
         th {
           font-size: 120%;
           text-align: left;
         }
-
         tr:nth-child(odd) {
           background-color: var(--table-row-background-color, #fff);
         }
-
         tr:nth-child(even) {
           background-color: var(--table-row-alternative-background-color, #eee);
         }
-
         td {
           padding: 4px;
         }
-
         td:nth-child(1) {
           font-size: 200%;
           text-align: center;
         }
-
         .add-icon {
           padding: 10px;
         }

@@ -346,14 +346,12 @@ class HaPanelConfigDynalite extends LitElement {
           -webkit-user-select: initial;
           -moz-user-select: initial;
         }
-
         .content {
           display: block;
           max-width: 600px;
           margin: 0 auto;
           padding-bottom: env(safe-area-inset-bottom);
         }
-
         ha-card {
           margin-bottom: 16px;
         }

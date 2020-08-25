@@ -162,7 +162,6 @@ class HaDynaliteAreaCards extends LitElement {
   private _handleDeleteButton(ev: CustomEvent) {
     const buttonBase = this.id + "-button-delete-";
     const area = (ev.currentTarget as any).id.substr(buttonBase.length);
-    console.log("deleting area %s", area);
     showConfirmationDialog(this, {
       title: this._localStr(`delete_area_title`),
       text: this._localStr(`delete_area_text`),

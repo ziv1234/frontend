@@ -37,22 +37,12 @@ class HaDynaliteSingleElement extends LitElement {
 
   protected render(): TemplateResult {
     let innerElement;
-    if (this.inputType === "string") {
+    if (["string", "number"].includes(this.inputType)) {
       innerElement = html`
         <paper-input
           class="flex"
           .label=${this.shortDesc}
-          type="string"
-          .value=${this.value}
-          @value-changed=${this._handleInputChange}
-        ></paper-input>
-      `;
-    } else if (this.inputType === "number") {
-      innerElement = html`
-        <paper-input
-          class="flex"
-          .label=${this.shortDesc}
-          type="number"
+          type=${this.inputType}
           .value=${this.value}
           @value-changed=${this._handleInputChange}
         ></paper-input>
