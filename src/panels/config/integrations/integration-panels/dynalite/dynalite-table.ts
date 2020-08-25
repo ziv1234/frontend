@@ -38,15 +38,16 @@ class HaDynaliteTable extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
-    const addButton = html`
-      <ha-icon-button
-        id="${this.id}-button-add-element"
-        icon="hass:plus-circle"
-        @click="${this._handleAddButton}"
-      ></ha-icon-button>
-    `;
     if (Object.keys(this.tableData).length === 0) {
-      return html`<div>${addButton}</div>`;
+      return html`<div>
+        <mwc-button
+          id="${this.id}-button-add-element"
+          @click="${this._handleAddButton}"
+        >
+          <ha-icon class="add-icon" icon="hass:plus-circle"></ha-icon>
+          ${this._localStr(`add_${this.tableName}_title`)}
+        </mwc-button>
+      </div>`;
     }
     const firstElement = Object.keys(this.tableData)[0];
     return html`
@@ -109,7 +110,9 @@ class HaDynaliteTable extends LitElement {
                 </td>
                 ${element === firstElement
                   ? html` <td rowspan="${Object.keys(this.tableData).length}">
-                      ${addButton}
+                      <mwc-button @click="${this._handleAddButton}">
+                        <ha-icon icon="hass:plus-circle"></ha-icon>
+                      </mwc-button>
                     </td>`
                   : ""}
               </tr>
@@ -217,6 +220,10 @@ class HaDynaliteTable extends LitElement {
         td:nth-child(1) {
           font-size: 200%;
           text-align: center;
+        }
+
+        .add-icon {
+          padding: 10px;
         }
       `,
     ];
