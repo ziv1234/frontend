@@ -1787,6 +1787,8 @@
           "temp_room_room_on": "On Preset",
           "temp_room_room_on_long": "Preset to turn the room on",
           "temp_time_cover": "Cover template",
+          "temp_time_cover_class": "Cover Device Class",
+          "temp_time_cover_class_long": "Type of cover device for the UI to display",
           "temp_time_cover_open": "Open Preset",
           "temp_time_cover_open_long": "Preset to open the cover",
           "temp_time_cover_close": "Close Preset",
@@ -1842,7 +1844,17 @@
           "cancel": "Cancel",
           "dismiss": "Dismiss",
           "publish": "Save",
-          "area": "Area"
+          "area": "Area",
+          "cover_class_awning": "Awning",
+          "cover_class_blind": "Blind",
+          "cover_class_curtain": "Curtain",
+          "cover_class_damper": "Damper",
+          "cover_class_door": "Door",
+          "cover_class_garage": "Garage",
+          "cover_class_gate": "Gate",
+          "cover_class_shade": "Shade",
+          "cover_class_shutter": "Shutter",
+          "cover_class_window": "Window"
         },
         "ozw": {
           "button": "Configure",

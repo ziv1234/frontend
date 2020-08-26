@@ -23,10 +23,34 @@ class HaDynaliteTemplates extends LitElement {
 
   private _templateParams = {
     room: ["room_on", "room_off"],
-    time_cover: ["open", "close", "stop", "channel_cover", "duration", "tilt"],
+    time_cover: [
+      "class",
+      "open",
+      "close",
+      "stop",
+      "channel_cover",
+      "duration",
+      "tilt",
+    ],
   };
 
   protected render(): TemplateResult {
+    const coverClasses = [
+      "awning",
+      "blind",
+      "curtain",
+      "damper",
+      "door",
+      "garage",
+      "gate",
+      "shade",
+      "shutter",
+      "window",
+    ];
+    const coverClassOptions = coverClasses.map((myClass) => [
+      myClass,
+      this._localStr(`cover_class_${myClass}`),
+    ]);
     Object.keys(this._templateParams).forEach((curTemplate) => {
       if (curTemplate !== this.template)
         this._templateParams[curTemplate].forEach((param) => {
@@ -39,7 +63,8 @@ class HaDynaliteTemplates extends LitElement {
         (param) => html`
           <dynalite-single-row
             id="${this.id}-${param}"
-            inputType="number"
+            inputType=${param === "class" ? "list" : "number"}
+            .options=${param === "class" ? coverClassOptions : []}
             shortDesc=${this._localStr(`temp_${this.template}_${param}`)}
             longDesc=${this._localStr(`temp_${this.template}_${param}_long`)}
             .value=${this.templates[param] || ""}
