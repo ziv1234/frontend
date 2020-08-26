@@ -17,11 +17,6 @@ class HaDynalitePresetsTable extends LitElement {
 
   @property() public presets = {};
 
-  @property({ attribute: false }) public changeCallback = function (
-    _id: string,
-    _value: any
-  ) {};
-
   protected render(): TemplateResult {
     const presetTableConfig = [
       { header: this._localStr("preset_number") },
@@ -36,7 +31,6 @@ class HaDynalitePresetsTable extends LitElement {
           .tableData=${this.presets}
           .tableConfig=${presetTableConfig}
           tableName="preset"
-          .changeCallback="${this._handleChange.bind(this)}"
         >
         </dynalite-table>
       </div>
@@ -45,10 +39,6 @@ class HaDynalitePresetsTable extends LitElement {
 
   private _localStr(item: string) {
     return this.hass.localize("ui.panel.config.dynalite." + item);
-  }
-
-  private _handleChange(_id: string, _value: any) {
-    if (this.changeCallback) this.changeCallback(this.id, this.presets);
   }
 
   static get styles(): CSSResultArray {

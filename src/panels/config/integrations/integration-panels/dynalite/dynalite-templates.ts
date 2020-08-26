@@ -36,31 +36,17 @@ class HaDynaliteTemplates extends LitElement {
     },
   };
 
-  @property({ attribute: false }) public changeCallback = function (
-    _id: string,
-    _value: any
-  ) {};
-
   protected render(): TemplateResult {
-    if (this.template)
-      return this._renderSingleTemplate(this.template, this.templates);
-    return html` ${Object.keys(this._templateParams).map((template) =>
-      this._renderSingleTemplate(template, this.templates[template])
-    )}`;
-  }
-
-  private _renderSingleTemplate(template: string, params: any): TemplateResult {
-    const templateParams = this._templateParams[template];
+    const templateParams = this._templateParams[this.template];
     return html`
-      <h4>${this._localStr(`temp_${template}`)}</h4>
       ${Object.keys(templateParams).map(
         (param) => html`
           <dynalite-single-row
-            id="${this.id}-${template}-${param}"
+            id="${this.id}-${param}"
             inputType=${templateParams[param].type}
-            shortDesc=${this._localStr(`temp_${template}_${param}`)}
-            longDesc=${this._localStr(`temp_${template}_${param}_long`)}
-            .value=${params[param] || ""}
+            shortDesc=${this._localStr(`temp_${this.template}_${param}`)}
+            longDesc=${this._localStr(`temp_${this.template}_${param}_long`)}
+            .value=${this.templates[param] || ""}
             .changeCallback="${this._handleChange.bind(this)}"
             .narrow=${this.narrow}
           ></dynalite-single-row>
@@ -74,13 +60,11 @@ class HaDynaliteTemplates extends LitElement {
   }
 
   private _handleChange(id: string, value: any) {
-    const myRegEx = new RegExp(`${this.id}-(.*)-(.*)`);
+    const myRegEx = new RegExp(`${this.id}-(.*)`);
     const extracted = myRegEx.exec(id);
-    const targetTemplate = extracted![1];
-    const targetKey = extracted![2];
-    if (value) this.templates[targetTemplate][targetKey] = value;
-    else delete this.templates[targetTemplate][targetKey];
-    if (this.changeCallback) this.changeCallback(this.id, this.templates);
+    const targetKey = extracted![1];
+    if (value) this.templates[targetKey] = value;
+    else delete this.templates[targetKey];
   }
 
   static get styles(): CSSResultArray {

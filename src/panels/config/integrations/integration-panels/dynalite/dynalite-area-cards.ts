@@ -34,11 +34,6 @@ class HaDynaliteAreaCards extends LitElement {
 
   @property() public areas: any;
 
-  @property({ attribute: false }) public changeCallback = function (
-    _id: string,
-    _value: any
-  ) {};
-
   protected render(): TemplateResult {
     if (!this.areas) return html``;
     const templateOptions = [
@@ -132,7 +127,6 @@ class HaDynaliteAreaCards extends LitElement {
     const targetKey = extracted![2];
     if (value) this.areas[targetArea][targetKey] = value;
     else delete this.areas[targetArea][targetKey];
-    if (this.changeCallback) this.changeCallback(this.id, this.areas);
   }
 
   private async _handleAddButton(_ev: CustomEvent) {
@@ -155,7 +149,6 @@ class HaDynaliteAreaCards extends LitElement {
         name: `${this._localStr("area")} ${newElement}`,
       };
       this.requestUpdate();
-      if (this.changeCallback) this.changeCallback(this.id, this.areas);
     }
   }
 
@@ -170,7 +163,6 @@ class HaDynaliteAreaCards extends LitElement {
       confirm: () => {
         delete this.areas[area];
         this.requestUpdate();
-        if (this.changeCallback) this.changeCallback(this.id, this.areas);
       },
     });
   }

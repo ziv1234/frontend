@@ -17,11 +17,6 @@ class HaDynaliteChannelsTable extends LitElement {
 
   @property() public channels = {};
 
-  @property({ attribute: false }) public changeCallback = function (
-    _id: string,
-    _value: any
-  ) {};
-
   protected render(): TemplateResult {
     const typeOptions = [
       ["light", this._localStr("channel_type_light")],
@@ -45,7 +40,6 @@ class HaDynaliteChannelsTable extends LitElement {
           .tableData=${this.channels}
           .tableConfig=${channelsTableConfig}
           tableName="channel"
-          .changeCallback="${this._handleChange.bind(this)}"
         >
         </dynalite-table>
       </div>
@@ -54,10 +48,6 @@ class HaDynaliteChannelsTable extends LitElement {
 
   private _localStr(item: string) {
     return this.hass.localize("ui.panel.config.dynalite." + item);
-  }
-
-  private _handleChange(_id: string) {
-    if (this.changeCallback) this.changeCallback(this.id, this.channels);
   }
 
   static get styles(): CSSResultArray {

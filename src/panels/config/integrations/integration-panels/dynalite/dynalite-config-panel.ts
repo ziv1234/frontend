@@ -43,15 +43,11 @@ class HaPanelConfigDynalite extends LitElement {
 
   @internalProperty() private _overrideGlobalPresets = "";
 
-  @internalProperty() private _globalPresets: any = {};
-
   @internalProperty() private _overrideTemplates = "";
-
-  @internalProperty() private _templates: any = {};
 
   @internalProperty() private _areas: any = {};
 
-  private _entryData;
+  private _entryData: any;
 
   private _activeOptions: Array<Array<string>> = [];
 
@@ -170,7 +166,7 @@ class HaPanelConfigDynalite extends LitElement {
                     <dynalite-presets-table
                       .hass=${this.hass}
                       id="dyn-globalPresets"
-                      .presets=${this._globalPresets}
+                      .presets=${this._entryData.preset}
                       .changeCallback="${this._handleChange.bind(this)}"
                     ></dynalite-presets-table>
                   `
@@ -189,15 +185,18 @@ class HaPanelConfigDynalite extends LitElement {
                 .narrow=${this.narrow}
               ></dynalite-single-row>
               ${this._overrideTemplates
-                ? html`
-                    <dynalite-templates
-                      .hass=${this.hass}
-                      id="dyn-templates"
-                      .templates=${this._templates}
-                      .changeCallback="${this._handleChange.bind(this)}"
-                      .narrow=${this.narrow}
-                    ></dynalite-templates>
-                  `
+                ? ["room", "time_cover"].map(
+                    (template) => html`
+                      <h4>${this._localStr(`temp_${template}`)}</h4>
+                      <dynalite-templates
+                        .hass=${this.hass}
+                        id="dyn-templates"
+                        .templates=${this._entryData.template[template]}
+                        template=${template}
+                        .narrow=${this.narrow}
+                      ></dynalite-templates>
+                    `
+                  )
                 : ""}
             </div>
           </ha-card>
@@ -243,23 +242,22 @@ class HaPanelConfigDynalite extends LitElement {
     this._autodiscover = this._entryData.autodiscover;
     this._polltimer = this._entryData.polltimer;
     if ("preset" in this._entryData) {
-      this._globalPresets = JSON.parse(JSON.stringify(this._entryData.preset));
       this._overrideGlobalPresets = "true";
     } else {
-      this._globalPresets = {
+      this._entryData.preset = {
         "1": { name: "On", level: 1.0 },
         "4": { name: "Off", level: 0.0 },
       };
       this._overrideGlobalPresets = "";
     }
     if ("template" in this._entryData) {
-      this._templates = JSON.parse(JSON.stringify(this._entryData.template));
       Object.keys(this._defaultTemplates).forEach((template) => {
-        if (!(template in this._templates)) this._templates[template] = {};
+        if (!(template in this._entryData.template))
+          this._entryData.template[template] = {};
       });
       this._overrideTemplates = "true";
     } else {
-      this._templates = this._defaultTemplates;
+      this._entryData.template = this._defaultTemplates;
       this._overrideTemplates = "";
     }
     this._areas =
@@ -296,33 +294,14 @@ class HaPanelConfigDynalite extends LitElement {
     this._entryData.active = this._active;
     this._entryData.autodiscover = this._autodiscover;
     this._entryData.polltimer = this._polltimer;
-    if (this._overrideGlobalPresets) {
-      const globalPresets = {};
-      Object.keys(this._globalPresets).forEach((preset) => {
-        globalPresets[preset] = {};
-        if (this._globalPresets[preset].name)
-          globalPresets[preset].name = this._globalPresets[preset].name;
-        if (this._globalPresets[preset].level)
-          globalPresets[preset].level = this._globalPresets[preset].level;
-      });
-      this._entryData.preset = globalPresets;
-    } else {
+    let savePreset: any;
+    let saveTemplates: any;
+    if (!this._overrideGlobalPresets) {
+      savePreset = this._entryData.preset;
       delete this._entryData.preset;
     }
-    if (this._overrideTemplates) {
-      const templates = {};
-      Object.keys(this._defaultTemplates).forEach((template) => {
-        if (template in this._templates) {
-          templates[template] = {};
-          Object.keys(this._defaultTemplates[template]).forEach((key) => {
-            if (key in this._templates[template]) {
-              templates[template][key] = this._templates[template][key];
-            }
-          });
-        }
-      });
-      this._entryData.template = templates;
-    } else {
+    if (!this._overrideTemplates) {
+      saveTemplates = this._entryData.template;
       delete this._entryData.template;
     }
     this._entryData.area = this._areas;
@@ -334,6 +313,8 @@ class HaPanelConfigDynalite extends LitElement {
       entry_id: configEntryId,
       entry_data: JSON.stringify(this._entryData),
     });
+    if (!this._overrideGlobalPresets) this._entryData.preset = savePreset;
+    if (!this._overrideTemplates) this._entryData.template = saveTemplates;
   }
 
   static get styles(): CSSResultArray {

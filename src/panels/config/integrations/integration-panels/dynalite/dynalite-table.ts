@@ -27,11 +27,6 @@ class HaDynaliteTable extends LitElement {
 
   @property() public tableName = "";
 
-  @property({ attribute: false }) public changeCallback = function (
-    _id: string,
-    _value: any
-  ) {};
-
   protected render(): TemplateResult {
     if (Object.keys(this.tableData).length === 0) {
       return html`<div>
@@ -104,7 +99,6 @@ class HaDynaliteTable extends LitElement {
     const tableElement = extracted![2];
     if (value) this.tableData[tableElement][targetKey] = value;
     else delete this.tableData[tableElement][targetKey];
-    if (this.changeCallback) this.changeCallback(this.id, this.tableData);
   }
 
   private _handleDeleteButton(ev: CustomEvent) {
@@ -118,7 +112,6 @@ class HaDynaliteTable extends LitElement {
       confirm: () => {
         delete this.tableData[tableElement];
         this.requestUpdate();
-        if (this.changeCallback) this.changeCallback(this.id, this.tableData);
       },
     });
   }
@@ -143,7 +136,6 @@ class HaDynaliteTable extends LitElement {
         name: `${this.tableConfig[0].header} ${newElement}`,
       };
       this.requestUpdate();
-      if (this.changeCallback) this.changeCallback(this.id, this.tableData);
     }
   }
 
