@@ -21,7 +21,7 @@ class HaDynaliteTemplates extends LitElement {
 
   @property() public template = "";
 
-  private templateParams = {
+  private _templateParams = {
     room: {
       room_on: { type: "number" },
       room_off: { type: "number" },
@@ -42,27 +42,31 @@ class HaDynaliteTemplates extends LitElement {
   ) {};
 
   protected render(): TemplateResult {
-    const relevantTemplates = this.template
-      ? [this.template]
-      : Object.keys(this.templateParams);
-    return html` ${relevantTemplates.map(
-      (template) => html`
-        <h4>${this._localStr(`temp_${template}`)}</h4>
-        ${Object.keys(this.templateParams[template]).map(
-          (param) => html`
-            <dynalite-single-row
-              id="${this.id}-${template}-${param}"
-              inputType=${this.templateParams[template][param].type}
-              shortDesc=${this._localStr(`temp_${template}_${param}`)}
-              longDesc=${this._localStr(`temp_${template}_${param}_long`)}
-              .value=${this.templates[template][param] || ""}
-              .changeCallback="${this._handleChange.bind(this)}"
-              .narrow=${this.narrow}
-            ></dynalite-single-row>
-          `
-        )}
-      `
+    if (this.template)
+      return this._renderSingleTemplate(this.template, this.templates);
+    return html` ${Object.keys(this._templateParams).map((template) =>
+      this._renderSingleTemplate(template, this.templates[template])
     )}`;
+  }
+
+  private _renderSingleTemplate(template: string, params: any): TemplateResult {
+    const templateParams = this._templateParams[template];
+    return html`
+      <h4>${this._localStr(`temp_${template}`)}</h4>
+      ${Object.keys(templateParams).map(
+        (param) => html`
+          <dynalite-single-row
+            id="${this.id}-${template}-${param}"
+            inputType=${templateParams[param].type}
+            shortDesc=${this._localStr(`temp_${template}_${param}`)}
+            longDesc=${this._localStr(`temp_${template}_${param}_long`)}
+            .value=${params[param] || ""}
+            .changeCallback="${this._handleChange.bind(this)}"
+            .narrow=${this.narrow}
+          ></dynalite-single-row>
+        `
+      )}
+    `;
   }
 
   private _localStr(item: string) {
