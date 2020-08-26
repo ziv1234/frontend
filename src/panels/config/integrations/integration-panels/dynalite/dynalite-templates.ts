@@ -19,89 +19,50 @@ class HaDynaliteTemplates extends LitElement {
 
   @property() public templates: any;
 
+  @property() public template = "";
+
+  private templateParams = {
+    room: {
+      room_on: { type: "number" },
+      room_off: { type: "number" },
+    },
+    time_cover: {
+      open: { type: "number" },
+      close: { type: "number" },
+      stop: { type: "number" },
+      channel_cover: { type: "number" },
+      duration: { type: "number" },
+      tilt: { type: "number" },
+    },
+  };
+
   @property({ attribute: false }) public changeCallback = function (
     _id: string,
     _value: any
   ) {};
 
   protected render(): TemplateResult {
-    if (!this.templates) return html``;
-    return html`
-      <h4>${this._localStr("temp_room")}</h4>
-      <dynalite-single-row
-        id="${this.id}-room-room_off"
-        inputType="number"
-        shortDesc=${this._localStr("temp_room_off")}
-        longDesc=${this._localStr("temp_room_off_long")}
-        .value=${this.templates.room.room_off || ""}
-        .changeCallback="${this._handleChange.bind(this)}"
-        .narrow=${this.narrow}
-      ></dynalite-single-row>
-      <dynalite-single-row
-        id="${this.id}-room-room_on"
-        inputType="number"
-        shortDesc=${this._localStr("temp_room_on")}
-        longDesc=${this._localStr("temp_room_on_long")}
-        .value=${this.templates.room.room_on || ""}
-        .changeCallback="${this._handleChange.bind(this)}"
-        .narrow=${this.narrow}
-      ></dynalite-single-row>
-      <h4>${this._localStr("temp_cover")}</h4>
-      <dynalite-single-row
-        id="${this.id}-time_cover-open"
-        inputType="number"
-        shortDesc=${this._localStr("temp_cover_open")}
-        longDesc=${this._localStr("temp_cover_open_long")}
-        .value=${this.templates.time_cover.open || ""}
-        .changeCallback="${this._handleChange.bind(this)}"
-        .narrow=${this.narrow}
-      ></dynalite-single-row>
-      <dynalite-single-row
-        id="${this.id}-time_cover-close"
-        inputType="number"
-        shortDesc=${this._localStr("temp_cover_close")}
-        longDesc=${this._localStr("temp_cover_close_long")}
-        .value=${this.templates.time_cover.close || ""}
-        .changeCallback="${this._handleChange.bind(this)}"
-        .narrow=${this.narrow}
-      ></dynalite-single-row>
-      <dynalite-single-row
-        id="${this.id}-time_cover-stop"
-        inputType="number"
-        shortDesc=${this._localStr("temp_cover_stop")}
-        longDesc=${this._localStr("temp_cover_stop_long")}
-        .value=${this.templates.time_cover.stop || ""}
-        .changeCallback="${this._handleChange.bind(this)}"
-        .narrow=${this.narrow}
-      ></dynalite-single-row>
-      <dynalite-single-row
-        id="${this.id}-time_cover-channel_cover"
-        inputType="number"
-        shortDesc=${this._localStr("temp_cover_channel")}
-        longDesc=${this._localStr("temp_cover_channel_long")}
-        .value=${this.templates.time_cover.channel_cover || ""}
-        .changeCallback="${this._handleChange.bind(this)}"
-        .narrow=${this.narrow}
-      ></dynalite-single-row>
-      <dynalite-single-row
-        id="${this.id}-time_cover-duration"
-        inputType="number"
-        shortDesc=${this._localStr("temp_cover_duration")}
-        longDesc=${this._localStr("temp_cover_duration_long")}
-        .value=${this.templates.time_cover.duration || ""}
-        .changeCallback="${this._handleChange.bind(this)}"
-        .narrow=${this.narrow}
-      ></dynalite-single-row>
-      <dynalite-single-row
-        id="${this.id}-time_cover-tilt"
-        inputType="number"
-        shortDesc=${this._localStr("temp_cover_tilt")}
-        longDesc=${this._localStr("temp_cover_tilt_long")}
-        .value=${this.templates.time_cover.tilt || ""}
-        .changeCallback="${this._handleChange.bind(this)}"
-        .narrow=${this.narrow}
-      ></dynalite-single-row>
-    `;
+    const relevantTemplates = this.template
+      ? [this.template]
+      : Object.keys(this.templateParams);
+    return html` ${relevantTemplates.map(
+      (template) => html`
+        <h4>${this._localStr(`temp_${template}`)}</h4>
+        ${Object.keys(this.templateParams[template]).map(
+          (param) => html`
+            <dynalite-single-row
+              id="${this.id}-${template}-${param}"
+              inputType=${this.templateParams[template][param].type}
+              shortDesc=${this._localStr(`temp_${template}_${param}`)}
+              longDesc=${this._localStr(`temp_${template}_${param}_long`)}
+              .value=${this.templates[template][param] || ""}
+              .changeCallback="${this._handleChange.bind(this)}"
+              .narrow=${this.narrow}
+            ></dynalite-single-row>
+          `
+        )}
+      `
+    )}`;
   }
 
   private _localStr(item: string) {
