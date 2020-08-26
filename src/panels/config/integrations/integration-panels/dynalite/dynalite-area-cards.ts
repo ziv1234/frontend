@@ -139,7 +139,7 @@ class HaDynaliteAreaCards extends LitElement {
     const targetKey = extracted![2];
     if (value) this.areas[targetArea][targetKey] = value;
     else delete this.areas[targetArea][targetKey];
-    if (targetKey == "template") this.requestUpdate();
+    if (targetKey === "template") this.requestUpdate();
   }
 
   private async _handleAddButton(_ev: CustomEvent) {
