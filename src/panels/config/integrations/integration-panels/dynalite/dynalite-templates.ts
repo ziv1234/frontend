@@ -22,28 +22,24 @@ class HaDynaliteTemplates extends LitElement {
   @property() public template = "";
 
   private _templateParams = {
-    room: {
-      room_on: { type: "number" },
-      room_off: { type: "number" },
-    },
-    time_cover: {
-      open: { type: "number" },
-      close: { type: "number" },
-      stop: { type: "number" },
-      channel_cover: { type: "number" },
-      duration: { type: "number" },
-      tilt: { type: "number" },
-    },
+    room: ["room_on", "room_off"],
+    time_cover: ["open", "close", "stop", "channel_cover", "duration", "tilt"],
   };
 
   protected render(): TemplateResult {
+    Object.keys(this._templateParams).forEach((curTemplate) => {
+      if (curTemplate !== this.template)
+        this._templateParams[curTemplate].forEach((param) => {
+          delete this.templates[param];
+        });
+    });
     const templateParams = this._templateParams[this.template];
     return html`
-      ${Object.keys(templateParams).map(
+      ${templateParams.map(
         (param) => html`
           <dynalite-single-row
             id="${this.id}-${param}"
-            inputType=${templateParams[param].type}
+            inputType="number"
             shortDesc=${this._localStr(`temp_${this.template}_${param}`)}
             longDesc=${this._localStr(`temp_${this.template}_${param}_long`)}
             .value=${this.templates[param] || ""}

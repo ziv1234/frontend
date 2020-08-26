@@ -19,6 +19,7 @@ import { haStyle } from "../../../../../resources/styles";
 import "./dynalite-single-row";
 import "./dynalite-presets-table";
 import "./dynalite-channels-table";
+import "./dynalite-templates";
 import {
   showConfirmationDialog,
   showPromptDialog,
@@ -97,6 +98,17 @@ class HaDynaliteAreaCards extends LitElement {
                 .channels=${this.areas[area].channel || {}}
                 .changeCallback="${this._handleChange.bind(this)}"
               ></dynalite-channels-table>
+              ${this.areas[area].template
+                ? html`
+                    <dynalite-templates
+                      .hass=${this.hass}
+                      id="${this.id}-${area}-templates"
+                      .templates=${this.areas[area]}
+                      template=${this.areas[area].template}
+                      .narrow=${this.narrow}
+                    ></dynalite-templates>
+                  `
+                : ""}
             </div>
             <div class="card-actions">
               <mwc-button
@@ -127,6 +139,7 @@ class HaDynaliteAreaCards extends LitElement {
     const targetKey = extracted![2];
     if (value) this.areas[targetArea][targetKey] = value;
     else delete this.areas[targetArea][targetKey];
+    if (targetKey == "template") this.requestUpdate();
   }
 
   private async _handleAddButton(_ev: CustomEvent) {
