@@ -1781,6 +1781,8 @@
           "override_templates": "Override System Defined Templates",
           "override_templates_long": "Override the settings for the system templates (advanced)",
           "temp_overrides": "System Template Overrides",
+          "save_settings_title": "Save Dynalite Settings",
+          "save_settings_text": "This will save the updated system settings. Are you sure?",
           "temp_room": "Room template",
           "temp_room_room_off": "Off Preset",
           "temp_room_room_off_long": "Preset to turn the room off",

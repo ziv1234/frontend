@@ -20,6 +20,7 @@ import "./dynalite-single-row";
 import "./dynalite-presets-table";
 import "./dynalite-templates";
 import "./dynalite-area-cards";
+import { showConfirmationDialog } from "../../../../../dialogs/generic/show-dialog-box";
 
 @customElement("dynalite-config-panel")
 class HaPanelConfigDynalite extends LitElement {
@@ -286,35 +287,43 @@ class HaPanelConfigDynalite extends LitElement {
     if (!this.hass) {
       return;
     }
-    this._entryData.name = this._name;
-    this._entryData.host = this._host;
-    this._entryData.port = this._port;
-    if (this._fade !== "") this._entryData.default.fade = this._fade;
-    else delete this._entryData.default.fade;
-    this._entryData.active = this._active;
-    this._entryData.autodiscover = this._autodiscover;
-    this._entryData.polltimer = this._polltimer;
-    let savePreset: any;
-    let saveTemplates: any;
-    if (!this._overrideGlobalPresets) {
-      savePreset = this._entryData.preset;
-      delete this._entryData.preset;
-    }
-    if (!this._overrideTemplates) {
-      saveTemplates = this._entryData.template;
-      delete this._entryData.template;
-    }
-    this._entryData.area = this._areas;
-    const configEntryId = this._getConfigEntry();
-    if (!configEntryId) return;
-    console.log("xxx entry=%s", JSON.stringify(this._entryData));
-    await this.hass.callWS({
-      type: "dynalite/update_entry",
-      entry_id: configEntryId,
-      entry_data: JSON.stringify(this._entryData),
+    showConfirmationDialog(this, {
+      title: this._localStr("save_settings_title"),
+      text: this._localStr("save_settings_text"),
+      confirmText: this._localStr("confirm"),
+      dismissText: this._localStr("cancel"),
+      confirm: async () => {
+        this._entryData.name = this._name;
+        this._entryData.host = this._host;
+        this._entryData.port = this._port;
+        if (this._fade !== "") this._entryData.default.fade = this._fade;
+        else delete this._entryData.default.fade;
+        this._entryData.active = this._active;
+        this._entryData.autodiscover = this._autodiscover;
+        this._entryData.polltimer = this._polltimer;
+        let savePreset: any;
+        let saveTemplates: any;
+        if (!this._overrideGlobalPresets) {
+          savePreset = this._entryData.preset;
+          delete this._entryData.preset;
+        }
+        if (!this._overrideTemplates) {
+          saveTemplates = this._entryData.template;
+          delete this._entryData.template;
+        }
+        this._entryData.area = this._areas;
+        const configEntryId = this._getConfigEntry();
+        if (!configEntryId) return;
+        console.log("xxx entry=%s", JSON.stringify(this._entryData));
+        await this.hass.callWS({
+          type: "dynalite/update_entry",
+          entry_id: configEntryId,
+          entry_data: JSON.stringify(this._entryData),
+        });
+        if (!this._overrideGlobalPresets) this._entryData.preset = savePreset;
+        if (!this._overrideTemplates) this._entryData.template = saveTemplates;
+      },
     });
-    if (!this._overrideGlobalPresets) this._entryData.preset = savePreset;
-    if (!this._overrideTemplates) this._entryData.template = saveTemplates;
   }
 
   static get styles(): CSSResultArray {
