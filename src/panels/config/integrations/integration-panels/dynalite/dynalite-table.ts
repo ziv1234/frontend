@@ -107,7 +107,9 @@ class HaDynaliteTable extends LitElement {
       this,
       this.tableName,
       this.tableData,
-      this.tableConfig[0].header
+      (element) => {
+        return { name: `${this.tableConfig[0].header} ${element}` };
+      }
     );
   }
 

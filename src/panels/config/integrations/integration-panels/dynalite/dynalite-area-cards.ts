@@ -142,13 +142,13 @@ class HaDynaliteAreaCards extends LitElement {
   }
 
   private async _handleAddButton(_ev: CustomEvent) {
-    showDynaliteAddDialog(
-      this.hass,
-      this,
-      "area",
-      this.areas,
-      this._localStr("area")
-    );
+    showDynaliteAddDialog(this.hass, this, "area", this.areas, (area) => {
+      return {
+        name: `${this._localStr("area")} ${area}`,
+        channel: {},
+        preset: {},
+      };
+    });
   }
 
   private _handleDeleteButton(ev: CustomEvent) {

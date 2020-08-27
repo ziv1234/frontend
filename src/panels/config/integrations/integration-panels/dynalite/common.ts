@@ -11,7 +11,7 @@ export async function showDynaliteAddDialog(
   orig: LitElement,
   tableName: string,
   table: any,
-  namePrefix: any
+  newElementFunc: (element: string) => any
 ) {
   const newElement = await showPromptDialog(orig, {
     title: _localStr(hass, `add_${tableName}_title`),
@@ -28,7 +28,7 @@ export async function showDynaliteAddDialog(
       confirmText: _localStr(hass, "dismiss"),
     });
   } else {
-    table[newElement] = { name: namePrefix + " " + newElement };
+    table[newElement] = newElementFunc(newElement);
     orig.requestUpdate();
   }
 }

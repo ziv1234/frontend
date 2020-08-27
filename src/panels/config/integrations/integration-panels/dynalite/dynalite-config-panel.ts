@@ -251,7 +251,13 @@ class HaPanelConfigDynalite extends LitElement {
       if (!(template in this._entryData.template))
         this._entryData.template[template] = {};
     });
-    if (!("area" in this._entryData)) this._entryData.area = {};
+    if ("area" in this._entryData) {
+      Object.keys(this._entryData.area).forEach((area) => {
+        const curArea = this._entryData.area[area];
+        if (!("channel" in curArea)) curArea.channel = {};
+        if (!("preset" in curArea)) curArea.preset = {};
+      });
+    } else this._entryData.area = {};
     this._configured = true;
   }
 
