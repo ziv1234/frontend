@@ -21,7 +21,12 @@ class HaDynalitePresetsTable extends LitElement {
     const presetTableConfig = [
       { header: this._localStr("preset_number") },
       { header: this._localStr("preset_name"), key: "name", type: "string" },
-      { header: this._localStr("preset_level"), key: "level", type: "number" },
+      {
+        header: this._localStr("preset_level"),
+        key: "level",
+        type: "number",
+        percent: "true",
+      },
     ];
     return html`
       <div>

@@ -58,6 +58,7 @@ class HaDynaliteTable extends LitElement {
                       inputType=${column.type}
                       shortDesc=${column.header}
                       .options=${column.options}
+                      .percent=${column.percent}
                       value=${column.key in this.tableData[element]
                         ? this.tableData[element][column.key]
                         : ""}
