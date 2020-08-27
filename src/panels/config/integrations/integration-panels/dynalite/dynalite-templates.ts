@@ -9,6 +9,7 @@ import {
 } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
+import { allTemplateParams } from "./common";
 import "./dynalite-single-row";
 
 @customElement("dynalite-templates")
@@ -20,19 +21,6 @@ class HaDynaliteTemplates extends LitElement {
   @property() public templates: any;
 
   @property() public template = "";
-
-  private _templateParams = {
-    room: ["room_on", "room_off"],
-    time_cover: [
-      "class",
-      "open",
-      "close",
-      "stop",
-      "channel_cover",
-      "duration",
-      "tilt",
-    ],
-  };
 
   protected render(): TemplateResult {
     const coverClasses = [
@@ -51,13 +39,7 @@ class HaDynaliteTemplates extends LitElement {
       myClass,
       this._localStr(`cover_class_${myClass}`),
     ]);
-    Object.keys(this._templateParams).forEach((curTemplate) => {
-      if (curTemplate !== this.template)
-        this._templateParams[curTemplate].forEach((param) => {
-          delete this.templates[param];
-        });
-    });
-    const templateParams = this._templateParams[this.template];
+    const templateParams = allTemplateParams[this.template];
     return html`
       ${templateParams.map(
         (param) => html`

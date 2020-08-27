@@ -20,6 +20,7 @@ import "../../../../../components/ha-card";
 import {
   showDynaliteAddDialog,
   showDynaliteDeleteConfirmationDialog,
+  allTemplates,
 } from "./common";
 import "./dynalite-single-row";
 import "./dynalite-presets-table";
@@ -36,11 +37,13 @@ class HaDynaliteAreaCards extends LitElement {
 
   protected render(): TemplateResult {
     if (!this.areas) return html``;
-    const templateOptions = [
-      ["", this._localStr("area_template_none")],
-      ["room", this._localStr("area_template_room")],
-      ["time_cover", this._localStr("area_template_cover")],
-    ];
+    const templateOptions = [["", this._localStr("area_template_none")]];
+    allTemplates.forEach((template) => {
+      templateOptions.push([
+        template,
+        this._localStr(`area_template_${template}`),
+      ]);
+    });
     return html`
       ${Object.keys(this.areas).map(
         (area) => html`

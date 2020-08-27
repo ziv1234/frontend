@@ -1836,7 +1836,7 @@
           "add_area_exists": "This area is already configured. Please edit it in the cards.",
           "area_template_none": "None",
           "area_template_room": "Room",
-          "area_template_cover": "Cover",
+          "area_template_time_cover": "Cover",
           "channel_name": "Name",
           "channel_number": "Channel",
           "channel_type": "Entity Type",

@@ -52,6 +52,21 @@ export async function showDynaliteDeleteConfirmationDialog(
   });
 }
 
+export const allTemplateParams = {
+  room: ["room_on", "room_off"],
+  time_cover: [
+    "class",
+    "open",
+    "close",
+    "stop",
+    "channel_cover",
+    "duration",
+    "tilt",
+  ],
+};
+
+export const allTemplates = Object.keys(allTemplateParams);
+
 function _localStr(hass: HomeAssistant, item: string) {
   return hass.localize("ui.panel.config.dynalite." + item);
 }

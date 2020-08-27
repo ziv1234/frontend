@@ -21,6 +21,7 @@ import "./dynalite-single-row";
 import "./dynalite-presets-table";
 import "./dynalite-templates";
 import "./dynalite-area-cards";
+import { allTemplates, allTemplateParams } from "./common";
 
 @customElement("dynalite-config-panel")
 class HaPanelConfigDynalite extends LitElement {
@@ -304,6 +305,14 @@ class HaPanelConfigDynalite extends LitElement {
           saveTemplates = this._entryData.template;
           delete this._entryData.template;
         }
+        Object.keys(this._entryData.area).forEach((area) => {
+          allTemplates.forEach((curTemplate) => {
+            if (curTemplate !== this._entryData.area[area].template)
+              allTemplateParams[curTemplate].forEach((param) => {
+                delete this._entryData.area[area][param];
+              });
+          });
+        });
         const configEntryId = this._getConfigEntry();
         if (!configEntryId) return;
         console.log("xxx entry=%s", JSON.stringify(this._entryData));
