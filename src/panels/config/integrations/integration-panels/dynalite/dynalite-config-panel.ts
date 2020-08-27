@@ -46,15 +46,16 @@ class HaPanelConfigDynalite extends LitElement {
 
   @internalProperty() private _overrideTemplates = "";
 
-  @internalProperty() private _areas: any = {};
-
   private _entryData: any;
 
   private _activeOptions: Array<Array<string>> = [];
 
   private _defaultTemplates = ["room", "time_cover"];
 
+  private _configured = false;
+
   protected render(): TemplateResult {
+    if (!this._configured) return html``;
     return html`
       <ha-app-layout>
         <app-header slot="header" fixed>
@@ -194,7 +195,7 @@ class HaPanelConfigDynalite extends LitElement {
           <dynalite-area-cards
             .hass=${this.hass}
             id="dyn-areas"
-            .areas=${this._areas}
+            .areas=${this._entryData.area}
             .changeCallback="${this._handleChange.bind(this)}"
             .narrow=${this.narrow}
           ></dynalite-area-cards>
@@ -254,10 +255,8 @@ class HaPanelConfigDynalite extends LitElement {
       });
       this._overrideTemplates = "";
     }
-    this._areas =
-      "area" in this._entryData
-        ? JSON.parse(JSON.stringify(this._entryData.area))
-        : {};
+    if (!("area" in this._entryData)) this._entryData.area = {};
+    this._configured = true;
   }
 
   private _localStr(item: string) {
@@ -292,6 +291,7 @@ class HaPanelConfigDynalite extends LitElement {
             else delete this._entryData[key];
           }
         );
+        if (this._port) this._entryData.port = parseInt(this._port);
         if (this._fade !== "") this._entryData.default.fade = this._fade;
         else delete this._entryData.default.fade;
         let savePreset: any;
@@ -304,7 +304,6 @@ class HaPanelConfigDynalite extends LitElement {
           saveTemplates = this._entryData.template;
           delete this._entryData.template;
         }
-        this._entryData.area = this._areas;
         const configEntryId = this._getConfigEntry();
         if (!configEntryId) return;
         console.log("xxx entry=%s", JSON.stringify(this._entryData));
