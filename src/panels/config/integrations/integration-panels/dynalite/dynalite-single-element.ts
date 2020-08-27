@@ -36,6 +36,8 @@ class HaDynaliteSingleElement extends LitElement {
           .label=${this.shortDesc}
           type=${this.inputType}
           .value=${this.value}
+          always-float-label
+          placeholder="Default"
           @value-changed=${this._handleInputChange}
         ></paper-input>
       `;

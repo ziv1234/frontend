@@ -52,17 +52,7 @@ class HaPanelConfigDynalite extends LitElement {
 
   private _activeOptions: Array<Array<string>> = [];
 
-  private _defaultTemplates = {
-    room: { room_on: "1", room_off: "4" },
-    time_cover: {
-      open: "1",
-      close: "2",
-      stop: "4",
-      channel_cover: "2",
-      duration: 60.0,
-      tilt: 0,
-    },
-  };
+  private _defaultTemplates = ["room", "time_cover"];
 
   protected render(): TemplateResult {
     return html`
@@ -186,7 +176,7 @@ class HaPanelConfigDynalite extends LitElement {
                 .narrow=${this.narrow}
               ></dynalite-single-row>
               ${this._overrideTemplates
-                ? ["room", "time_cover"].map(
+                ? this._defaultTemplates.map(
                     (template) => html`
                       <h4>${this._localStr(`temp_${template}`)}</h4>
                       <dynalite-templates
@@ -252,13 +242,16 @@ class HaPanelConfigDynalite extends LitElement {
       this._overrideGlobalPresets = "";
     }
     if ("template" in this._entryData) {
-      Object.keys(this._defaultTemplates).forEach((template) => {
+      this._defaultTemplates.forEach((template) => {
         if (!(template in this._entryData.template))
           this._entryData.template[template] = {};
       });
       this._overrideTemplates = "true";
     } else {
-      this._entryData.template = this._defaultTemplates;
+      this._entryData.template = {};
+      this._defaultTemplates.forEach((template) => {
+        this._entryData.template[template] = {};
+      });
       this._overrideTemplates = "";
     }
     this._areas =
@@ -293,14 +286,14 @@ class HaPanelConfigDynalite extends LitElement {
       confirmText: this._localStr("confirm"),
       dismissText: this._localStr("cancel"),
       confirm: async () => {
-        this._entryData.name = this._name;
-        this._entryData.host = this._host;
-        this._entryData.port = this._port;
+        ["name", "host", "port", "active", "autodiscover", "polltimer"].forEach(
+          (key) => {
+            if (this["_" + key]) this._entryData[key] = this["_" + key];
+            else delete this._entryData[key];
+          }
+        );
         if (this._fade !== "") this._entryData.default.fade = this._fade;
         else delete this._entryData.default.fade;
-        this._entryData.active = this._active;
-        this._entryData.autodiscover = this._autodiscover;
-        this._entryData.polltimer = this._polltimer;
         let savePreset: any;
         let saveTemplates: any;
         if (!this._overrideGlobalPresets) {
