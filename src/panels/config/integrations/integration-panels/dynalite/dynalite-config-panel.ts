@@ -51,8 +51,6 @@ class HaPanelConfigDynalite extends LitElement {
 
   private _activeOptions: Array<Array<string>> = [];
 
-  private _defaultTemplates = ["room", "time_cover"];
-
   private _configured = false;
 
   protected render(): TemplateResult {
@@ -178,7 +176,7 @@ class HaPanelConfigDynalite extends LitElement {
                 .narrow=${this.narrow}
               ></dynalite-single-row>
               ${this._overrideTemplates
-                ? this._defaultTemplates.map(
+                ? allTemplates.map(
                     (template) => html`
                       <h4>${this._localStr(`temp_${template}`)}</h4>
                       <dynalite-templates
@@ -244,18 +242,15 @@ class HaPanelConfigDynalite extends LitElement {
       this._overrideGlobalPresets = "";
     }
     if ("template" in this._entryData) {
-      this._defaultTemplates.forEach((template) => {
-        if (!(template in this._entryData.template))
-          this._entryData.template[template] = {};
-      });
       this._overrideTemplates = "true";
     } else {
       this._entryData.template = {};
-      this._defaultTemplates.forEach((template) => {
-        this._entryData.template[template] = {};
-      });
       this._overrideTemplates = "";
     }
+    allTemplates.forEach((template) => {
+      if (!(template in this._entryData.template))
+        this._entryData.template[template] = {};
+    });
     if (!("area" in this._entryData)) this._entryData.area = {};
     this._configured = true;
   }
