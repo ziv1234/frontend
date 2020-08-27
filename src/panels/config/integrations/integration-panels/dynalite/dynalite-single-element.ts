@@ -37,7 +37,9 @@ class HaDynaliteSingleElement extends LitElement {
           class="flex"
           .label=${this.shortDesc}
           type=${this.inputType}
-          value=${this.percent ? parseFloat(this.value) * 100 : this.value}
+          value=${this.percent && this.value
+            ? parseFloat(this.value) * 100
+            : this.value}
           always-float-label
           placeholder="Default"
           @value-changed=${this._handleInputChange}
@@ -79,9 +81,10 @@ class HaDynaliteSingleElement extends LitElement {
   private _handleInputChange(ev: PolymerChangedEvent<string>) {
     const target = ev.currentTarget as PaperInputElement;
     const newValue = target.value as string;
-    this.value = this.percent
-      ? (parseFloat(newValue) / 100).toString()
-      : newValue;
+    this.value =
+      this.percent && newValue
+        ? (parseFloat(newValue) / 100).toString()
+        : newValue;
     if (this.changeCallback) this.changeCallback(this.id, this.value);
   }
 
