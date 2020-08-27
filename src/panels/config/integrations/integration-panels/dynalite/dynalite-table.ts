@@ -15,6 +15,7 @@ import {
   showPromptDialog,
   showAlertDialog,
 } from "../../../../../dialogs/generic/show-dialog-box";
+import { showDynaliteAddDialog } from "./common";
 import "./dynalite-single-element";
 
 @customElement("dynalite-table")
@@ -117,26 +118,13 @@ class HaDynaliteTable extends LitElement {
   }
 
   private async _handleAddButton(_ev: CustomEvent) {
-    const newElement = await showPromptDialog(this, {
-      title: this._localStr(`add_${this.tableName}_title`),
-      inputLabel: this._localStr(`add_${this.tableName}_label`),
-      inputType: "number",
-    });
-    if (!newElement) {
-      return;
-    }
-    if (newElement in this.tableData) {
-      showAlertDialog(this, {
-        title: this._localStr(`add_${this.tableName}_error`),
-        text: this._localStr(`add_${this.tableName}_exists`),
-        confirmText: this._localStr("dismiss"),
-      });
-    } else {
-      this.tableData[newElement] = {
-        name: `${this.tableConfig[0].header} ${newElement}`,
-      };
-      this.requestUpdate();
-    }
+    await showDynaliteAddDialog(
+      this.hass,
+      this,
+      this.tableName,
+      this.tableData,
+      this.tableConfig[0].header
+    );
   }
 
   static get styles(): CSSResultArray {

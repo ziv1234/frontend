@@ -26,6 +26,7 @@ import {
   showAlertDialog,
 } from "../../../../../dialogs/generic/show-dialog-box";
 import "@material/mwc-button";
+import { showDynaliteAddDialog } from "./common";
 
 @customElement("dynalite-area-cards")
 class HaDynaliteAreaCards extends LitElement {
@@ -143,26 +144,13 @@ class HaDynaliteAreaCards extends LitElement {
   }
 
   private async _handleAddButton(_ev: CustomEvent) {
-    const newElement = await showPromptDialog(this, {
-      title: this._localStr(`add_area_title`),
-      inputLabel: this._localStr(`add_area_label`),
-      inputType: "number",
-    });
-    if (!newElement) {
-      return;
-    }
-    if (newElement in this.areas) {
-      showAlertDialog(this, {
-        title: this._localStr(`add_area_error`),
-        text: this._localStr(`add_area_exists`),
-        confirmText: this._localStr("dismiss"),
-      });
-    } else {
-      this.areas[newElement] = {
-        name: `${this._localStr("area")} ${newElement}`,
-      };
-      this.requestUpdate();
-    }
+    await showDynaliteAddDialog(
+      this.hass,
+      this,
+      "area",
+      this.areas,
+      this._localStr("area")
+    );
   }
 
   private _handleDeleteButton(ev: CustomEvent) {
