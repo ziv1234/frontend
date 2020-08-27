@@ -1856,7 +1856,8 @@
           "cover_class_gate": "Gate",
           "cover_class_shade": "Shade",
           "cover_class_shutter": "Shutter",
-          "cover_class_window": "Window"
+          "cover_class_window": "Window",
+          "cover_class_default": "Default"
         },
         "ozw": {
           "button": "Configure",

@@ -39,6 +39,7 @@ class HaDynaliteTemplates extends LitElement {
       myClass,
       this._localStr(`cover_class_${myClass}`),
     ]);
+    coverClassOptions.unshift(["", this._localStr("cover_class_default")]);
     const templateParams = allTemplateParams[this.template];
     return html`
       ${templateParams.map(
