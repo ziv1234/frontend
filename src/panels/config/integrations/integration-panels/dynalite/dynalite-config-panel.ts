@@ -11,16 +11,16 @@ import {
   internalProperty,
   TemplateResult,
 } from "lit-element";
+import { haStyle } from "../../../../../resources/styles";
+import { HomeAssistant } from "../../../../../types";
+import { showConfirmationDialog } from "../../../../../dialogs/generic/show-dialog-box";
 import "../../../../../components/ha-card";
 import "../../../../../components/ha-menu-button";
 import "../../../../../layouts/ha-app-layout";
-import { haStyle } from "../../../../../resources/styles";
-import { HomeAssistant } from "../../../../../types";
 import "./dynalite-single-row";
 import "./dynalite-presets-table";
 import "./dynalite-templates";
 import "./dynalite-area-cards";
-import { showConfirmationDialog } from "../../../../../dialogs/generic/show-dialog-box";
 
 @customElement("dynalite-config-panel")
 class HaPanelConfigDynalite extends LitElement {

@@ -1,7 +1,6 @@
 import "@polymer/paper-listbox/paper-listbox";
 import "@polymer/paper-item/paper-item";
 import type { PaperInputElement } from "@polymer/paper-input/paper-input";
-import type { PolymerChangedEvent } from "../../../../../polymer-types";
 import {
   customElement,
   html,
@@ -9,6 +8,7 @@ import {
   property,
   TemplateResult,
 } from "lit-element";
+import type { PolymerChangedEvent } from "../../../../../polymer-types";
 import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-switch";

@@ -1,3 +1,4 @@
+import "@material/mwc-button";
 import "@polymer/paper-listbox/paper-listbox";
 import "@polymer/paper-item/paper-item";
 import "@polymer/paper-input/paper-input";
@@ -10,21 +11,20 @@ import {
   TemplateResult,
   css,
 } from "lit-element";
+import { HomeAssistant } from "../../../../../types";
+import { haStyle } from "../../../../../resources/styles";
 import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-icon-button";
 import "../../../../../components/ha-card";
-import { HomeAssistant } from "../../../../../types";
-import { haStyle } from "../../../../../resources/styles";
-import "./dynalite-single-row";
-import "./dynalite-presets-table";
-import "./dynalite-channels-table";
-import "./dynalite-templates";
-import "@material/mwc-button";
 import {
   showDynaliteAddDialog,
   showDynaliteDeleteConfirmationDialog,
 } from "./common";
+import "./dynalite-single-row";
+import "./dynalite-presets-table";
+import "./dynalite-channels-table";
+import "./dynalite-templates";
 
 @customElement("dynalite-area-cards")
 class HaDynaliteAreaCards extends LitElement {

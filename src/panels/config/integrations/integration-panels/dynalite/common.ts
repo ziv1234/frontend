@@ -1,10 +1,10 @@
+import { LitElement } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
 import {
   showConfirmationDialog,
   showPromptDialog,
   showAlertDialog,
 } from "../../../../../dialogs/generic/show-dialog-box";
-import { LitElement } from "lit-element";
 
 export async function showDynaliteAddDialog(
   hass: HomeAssistant,
