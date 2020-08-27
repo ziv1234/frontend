@@ -37,13 +37,10 @@ class HaDynaliteAreaCards extends LitElement {
 
   protected render(): TemplateResult {
     if (!this.areas) return html``;
-    const templateOptions = [["", this._localStr("area_template_none")]];
-    allTemplates.forEach((template) => {
-      templateOptions.push([
-        template,
-        this._localStr(`area_template_${template}`),
-      ]);
+    const templateOptions = allTemplates.map((template) => {
+      return [template, this._localStr(`area_template_${template}`)];
     });
+    templateOptions.unshift(["", this._localStr("area_template_none")]);
     return html`
       ${Object.keys(this.areas).map(
         (area) => html`
