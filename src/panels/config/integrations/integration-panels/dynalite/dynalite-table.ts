@@ -11,11 +11,9 @@ import "../../../../../components/ha-icon-button";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
 import {
-  showConfirmationDialog,
-  showPromptDialog,
-  showAlertDialog,
-} from "../../../../../dialogs/generic/show-dialog-box";
-import { showDynaliteAddDialog } from "./common";
+  showDynaliteAddDialog,
+  showDynaliteDeleteConfirmationDialog,
+} from "./common";
 import "./dynalite-single-element";
 
 @customElement("dynalite-table")
@@ -102,28 +100,25 @@ class HaDynaliteTable extends LitElement {
     else delete this.tableData[tableElement][targetKey];
   }
 
-  private _handleDeleteButton(ev: CustomEvent) {
-    const buttonBase = this.id + "-button-delete-";
-    const tableElement = (ev.currentTarget as any).id.substr(buttonBase.length);
-    showConfirmationDialog(this, {
-      title: this._localStr(`delete_${this.tableName}_title`),
-      text: this._localStr(`delete_${this.tableName}_text`),
-      confirmText: this._localStr("confirm"),
-      dismissText: this._localStr("cancel"),
-      confirm: () => {
-        delete this.tableData[tableElement];
-        this.requestUpdate();
-      },
-    });
-  }
-
   private async _handleAddButton(_ev: CustomEvent) {
-    await showDynaliteAddDialog(
+    showDynaliteAddDialog(
       this.hass,
       this,
       this.tableName,
       this.tableData,
       this.tableConfig[0].header
+    );
+  }
+
+  private _handleDeleteButton(ev: CustomEvent) {
+    const buttonBase = this.id + "-button-delete-";
+    const tableElement = (ev.currentTarget as any).id.substr(buttonBase.length);
+    showDynaliteDeleteConfirmationDialog(
+      this.hass,
+      this,
+      this.tableName,
+      this.tableData,
+      tableElement
     );
   }
 

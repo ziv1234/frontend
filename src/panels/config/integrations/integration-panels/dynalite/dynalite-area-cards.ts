@@ -20,13 +20,11 @@ import "./dynalite-single-row";
 import "./dynalite-presets-table";
 import "./dynalite-channels-table";
 import "./dynalite-templates";
-import {
-  showConfirmationDialog,
-  showPromptDialog,
-  showAlertDialog,
-} from "../../../../../dialogs/generic/show-dialog-box";
 import "@material/mwc-button";
-import { showDynaliteAddDialog } from "./common";
+import {
+  showDynaliteAddDialog,
+  showDynaliteDeleteConfirmationDialog,
+} from "./common";
 
 @customElement("dynalite-area-cards")
 class HaDynaliteAreaCards extends LitElement {
@@ -144,7 +142,7 @@ class HaDynaliteAreaCards extends LitElement {
   }
 
   private async _handleAddButton(_ev: CustomEvent) {
-    await showDynaliteAddDialog(
+    showDynaliteAddDialog(
       this.hass,
       this,
       "area",
@@ -156,16 +154,13 @@ class HaDynaliteAreaCards extends LitElement {
   private _handleDeleteButton(ev: CustomEvent) {
     const buttonBase = this.id + "-button-delete-";
     const area = (ev.currentTarget as any).id.substr(buttonBase.length);
-    showConfirmationDialog(this, {
-      title: this._localStr(`delete_area_title`),
-      text: this._localStr(`delete_area_text`),
-      confirmText: this._localStr("confirm"),
-      dismissText: this._localStr("cancel"),
-      confirm: () => {
-        delete this.areas[area];
-        this.requestUpdate();
-      },
-    });
+    showDynaliteDeleteConfirmationDialog(
+      this.hass,
+      this,
+      "area",
+      this.areas,
+      area
+    );
   }
 
   static get styles(): CSSResultArray {
