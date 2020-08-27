@@ -181,7 +181,7 @@ class HaPanelConfigDynalite extends LitElement {
                       <h4>${this._localStr(`temp_${template}`)}</h4>
                       <dynalite-templates
                         .hass=${this.hass}
-                        id="dyn-templates"
+                        id="dyn-templates-${template}"
                         .templates=${this._entryData.template[template]}
                         template=${template}
                         .narrow=${this.narrow}
