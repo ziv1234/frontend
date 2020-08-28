@@ -37,9 +37,7 @@ class HaDynaliteSingleElement extends LitElement {
           class="flex"
           .label=${this.shortDesc}
           type=${this.inputType}
-          value=${this.percent && this.value
-            ? parseFloat(this.value) * 100
-            : this.value}
+          value=${this.percent ? this._toPercent(this.value) : this.value}
           always-float-label
           placeholder="Default"
           @value-changed=${this._handleInputChange}
@@ -81,10 +79,7 @@ class HaDynaliteSingleElement extends LitElement {
   private _handleInputChange(ev: PolymerChangedEvent<string>) {
     const target = ev.currentTarget as PaperInputElement;
     const newValue = target.value as string;
-    this.value =
-      this.percent && newValue
-        ? (parseFloat(newValue) / 100).toString()
-        : newValue;
+    this.value = this.percent ? this._fromPercent(newValue) : newValue;
     if (this.changeCallback) this.changeCallback(this.id, this.value);
   }
 
@@ -96,6 +91,18 @@ class HaDynaliteSingleElement extends LitElement {
   private _handleSwitchChange(ev: CustomEvent) {
     this.value = (ev.currentTarget as any).checked;
     if (this.changeCallback) this.changeCallback(this.id, this.value);
+  }
+
+  private _toPercent(value: string) {
+    if (!value) return "";
+    const result = Math.round(parseFloat(value) * 100).toString();
+    return result;
+  }
+
+  private _fromPercent(value: string) {
+    if (!value) return "";
+    const result = (parseFloat(value) / 100).toString();
+    return result;
   }
 }
 
