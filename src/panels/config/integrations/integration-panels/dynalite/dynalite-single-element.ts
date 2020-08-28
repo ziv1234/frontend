@@ -2,12 +2,15 @@ import "@polymer/paper-listbox/paper-listbox";
 import "@polymer/paper-item/paper-item";
 import type { PaperInputElement } from "@polymer/paper-input/paper-input";
 import {
+  css,
   customElement,
   html,
   LitElement,
   property,
   TemplateResult,
+  CSSResultArray,
 } from "lit-element";
+import { haStyle } from "../../../../../resources/styles";
 import type { PolymerChangedEvent } from "../../../../../polymer-types";
 import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
@@ -34,14 +37,17 @@ class HaDynaliteSingleElement extends LitElement {
     if (["string", "number"].includes(this.inputType)) {
       return html`
         <paper-input
-          class="flex"
+          class=${`flex${this.percent ? "flex percent" : ""}`}
           .label=${this.shortDesc}
           type=${this.inputType}
           value=${this.percent ? this._toPercent(this.value) : this.value}
           always-float-label
           placeholder="Default"
           @value-changed=${this._handleInputChange}
-        ></paper-input>
+          >${this.percent
+            ? html`<div slot="suffix"><b>%</b></div></paper-input>`
+            : ""}
+        </paper-input>
       `;
     }
     if (this.inputType === "list") {
@@ -103,6 +109,22 @@ class HaDynaliteSingleElement extends LitElement {
     if (!value) return "";
     const result = (parseFloat(value) / 100).toString();
     return result;
+  }
+
+  static get styles(): CSSResultArray {
+    return [
+      haStyle,
+      css`
+        :host {
+          -ms-user-select: initial;
+          -webkit-user-select: initial;
+          -moz-user-select: initial;
+        }
+        .percent {
+          text-align: right;
+        }
+      `,
+    ];
   }
 }
 
