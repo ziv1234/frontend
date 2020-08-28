@@ -32,6 +32,7 @@ class HaDynaliteChannelsTable extends LitElement {
         options: typeOptions,
       },
     ];
+    const initParams = { type: "light" };
     return html`
       <div>
         <dynalite-table
@@ -40,6 +41,7 @@ class HaDynaliteChannelsTable extends LitElement {
           .tableData=${this.channels}
           .tableConfig=${channelsTableConfig}
           tableName="channel"
+          .initParams=${initParams}
         >
         </dynalite-table>
       </div>

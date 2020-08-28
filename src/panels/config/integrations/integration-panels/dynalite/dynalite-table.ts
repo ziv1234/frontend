@@ -26,6 +26,8 @@ class HaDynaliteTable extends LitElement {
 
   @property() public tableName = "";
 
+  @property() public initParams: any = {};
+
   protected render(): TemplateResult {
     if (Object.keys(this.tableData).length === 0) {
       return html`<div>
@@ -108,7 +110,9 @@ class HaDynaliteTable extends LitElement {
       this.tableName,
       this.tableData,
       (element) => {
-        return { name: `${this.tableConfig[0].header} ${element}` };
+        const result = this.initParams ? this.initParams : {};
+        result.name = `${this.tableConfig[0].header} ${element}`;
+        return result;
       }
     );
   }
