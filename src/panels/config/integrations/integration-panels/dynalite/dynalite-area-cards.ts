@@ -35,6 +35,8 @@ class HaDynaliteAreaCards extends LitElement {
 
   @property() public areas: any;
 
+  private _expanded = {};
+
   protected render(): TemplateResult {
     if (!this.areas) return html``;
     const templateOptions = allTemplates.map((template) => {
@@ -44,79 +46,97 @@ class HaDynaliteAreaCards extends LitElement {
     return html`
       ${Object.keys(this.areas).map(
         (area) => html`
-          <ha-card .header="${this._localStr("area")} ${area}">
-            <div class="card-content">
-              <dynalite-single-row
-                id="${this.id}-${area}-name"
-                inputType="string"
-                shortDesc=${this._localStr("area_name")}
-                longDesc=${this._localStr("area_name_long")}
-                .value=${this.areas[area].name || ""}
-                .changeCallback="${this._handleChange.bind(this)}"
-                .narrow=${this.narrow}
-              ></dynalite-single-row>
-              <dynalite-single-row
-                id="${this.id}-${area}-template"
-                inputType="list"
-                shortDesc=${this._localStr("area_template")}
-                longDesc=${this._localStr("area_template_long")}
-                .options=${templateOptions}
-                .value=${this.areas[area].template || ""}
-                .changeCallback="${this._handleChange.bind(this)}"
-                .narrow=${this.narrow}
-              ></dynalite-single-row>
-              <dynalite-single-row
-                id="${this.id}-${area}-fade"
-                inputType="number"
-                shortDesc=${this._localStr("area_fade")}
-                longDesc=${this._localStr("area_fade_long")}
-                .value=${this.areas[area].fade || ""}
-                .changeCallback="${this._handleChange.bind(this)}"
-                .narrow=${this.narrow}
-              ></dynalite-single-row>
-              <dynalite-single-row
-                id="${this.id}-${area}-nodefault"
-                inputType="boolean"
-                shortDesc=${this._localStr("area_no_default")}
-                longDesc=${this._localStr("area_no_default_long")}
-                .value=${this.areas[area].nodefault || ""}
-                .changeCallback="${this._handleChange.bind(this)}"
-                .narrow=${this.narrow}
-              ></dynalite-single-row>
-              <h4>${this._localStr("area_presets")}</h4>
-              <dynalite-presets-table
-                .hass=${this.hass}
-                id="${this.id}-${area}-preset"
-                .presets=${this.areas[area].preset || {}}
-                .changeCallback="${this._handleChange.bind(this)}"
-              ></dynalite-presets-table>
-              <h4>${this._localStr("area_channels")}</h4>
-              <dynalite-channels-table
-                .hass=${this.hass}
-                id="${this.id}-${area}-channel"
-                .channels=${this.areas[area].channel || {}}
-                .changeCallback="${this._handleChange.bind(this)}"
-              ></dynalite-channels-table>
-              ${this.areas[area].template
-                ? html`
-                    <dynalite-templates
-                      .hass=${this.hass}
-                      id="${this.id}-${area}-templates"
-                      .templates=${this.areas[area]}
-                      template=${this.areas[area].template}
-                      .narrow=${this.narrow}
-                    ></dynalite-templates>
-                  `
-                : ""}
-            </div>
-            <div class="card-actions">
+          <ha-card
+            .header="${this._localStr("area")} '${this.areas[area]
+              .name}' (${area})"
+          >
+            <div class="shrink-button">
               <mwc-button
-                @click=${this._handleDeleteButton}
-                id="${this.id}-button-delete-${area}"
+                @click="${this._handleExpandToggle}"
+                id="${this.id}-button-expand-${area}"
               >
-                ${this._localStr("delete_area_title")}
+                <ha-icon
+                  class="add-icon"
+                  icon=${this._expanded[area]
+                    ? "hass:minus-circle"
+                    : "hass:plus-circle"}
+                ></ha-icon>
               </mwc-button>
             </div>
+            ${this._expanded[area]
+              ? html` <div class="card-content">
+                    <dynalite-single-row
+                      id="${this.id}-${area}-name"
+                      inputType="string"
+                      shortDesc=${this._localStr("area_name")}
+                      longDesc=${this._localStr("area_name_long")}
+                      .value=${this.areas[area].name || ""}
+                      .changeCallback="${this._handleChange.bind(this)}"
+                      .narrow=${this.narrow}
+                    ></dynalite-single-row>
+                    <dynalite-single-row
+                      id="${this.id}-${area}-template"
+                      inputType="list"
+                      shortDesc=${this._localStr("area_template")}
+                      longDesc=${this._localStr("area_template_long")}
+                      .options=${templateOptions}
+                      .value=${this.areas[area].template || ""}
+                      .changeCallback="${this._handleChange.bind(this)}"
+                      .narrow=${this.narrow}
+                    ></dynalite-single-row>
+                    <dynalite-single-row
+                      id="${this.id}-${area}-fade"
+                      inputType="number"
+                      shortDesc=${this._localStr("area_fade")}
+                      longDesc=${this._localStr("area_fade_long")}
+                      .value=${this.areas[area].fade || ""}
+                      .changeCallback="${this._handleChange.bind(this)}"
+                      .narrow=${this.narrow}
+                    ></dynalite-single-row>
+                    <dynalite-single-row
+                      id="${this.id}-${area}-nodefault"
+                      inputType="boolean"
+                      shortDesc=${this._localStr("area_no_default")}
+                      longDesc=${this._localStr("area_no_default_long")}
+                      .value=${this.areas[area].nodefault || ""}
+                      .changeCallback="${this._handleChange.bind(this)}"
+                      .narrow=${this.narrow}
+                    ></dynalite-single-row>
+                    <h4>${this._localStr("area_presets")}</h4>
+                    <dynalite-presets-table
+                      .hass=${this.hass}
+                      id="${this.id}-${area}-preset"
+                      .presets=${this.areas[area].preset || {}}
+                      .changeCallback="${this._handleChange.bind(this)}"
+                    ></dynalite-presets-table>
+                    <h4>${this._localStr("area_channels")}</h4>
+                    <dynalite-channels-table
+                      .hass=${this.hass}
+                      id="${this.id}-${area}-channel"
+                      .channels=${this.areas[area].channel || {}}
+                      .changeCallback="${this._handleChange.bind(this)}"
+                    ></dynalite-channels-table>
+                    ${this.areas[area].template
+                      ? html`
+                          <dynalite-templates
+                            .hass=${this.hass}
+                            id="${this.id}-${area}-templates"
+                            .templates=${this.areas[area]}
+                            template=${this.areas[area].template}
+                            .narrow=${this.narrow}
+                          ></dynalite-templates>
+                        `
+                      : ""}
+                  </div>
+                  <div class="card-actions">
+                    <mwc-button
+                      @click=${this._handleDeleteButton}
+                      id="${this.id}-button-delete-${area}"
+                    >
+                      ${this._localStr("delete_area_title")}
+                    </mwc-button>
+                  </div>`
+              : ""}
           </ha-card>
         `
       )}
@@ -163,6 +183,13 @@ class HaDynaliteAreaCards extends LitElement {
     );
   }
 
+  private _handleExpandToggle(ev: CustomEvent) {
+    const buttonBase = this.id + "-button-expand-";
+    const area = (ev.currentTarget as any).id.substr(buttonBase.length);
+    this._expanded[area] = !this._expanded[area];
+    this.requestUpdate();
+  }
+
   static get styles(): CSSResultArray {
     return [
       haStyle,
@@ -177,6 +204,11 @@ class HaDynaliteAreaCards extends LitElement {
         }
         .add-icon {
           padding: 10px;
+        }
+        .shrink-button {
+          position: absolute;
+          top: 16px;
+          right: 16px;
         }
       `,
     ];
