@@ -43,9 +43,9 @@ class HaPanelConfigDynalite extends LitElement {
 
   @internalProperty() private _polltimer = "";
 
-  @internalProperty() private _overrideGlobalPresets = "";
+  @internalProperty() private _override_presets = "";
 
-  @internalProperty() private _overrideTemplates = "";
+  @internalProperty() private _override_templates = "";
 
   private _entryData: any;
 
@@ -80,20 +80,7 @@ class HaPanelConfigDynalite extends LitElement {
         <div class="content">
           <ha-card .header=${this._localStr("description_system")}>
             <div class="card-content">
-              ${this._inputRows.map(
-                (row) => html`
-                  <dynalite-single-row
-                    id=${`dyn-${row.name}`}
-                    inputType=${row.type}
-                    shortDesc=${this._localStr(row.name)}
-                    longDesc=${this._localStr(row.name + "_long")}
-                    .value=${this["_" + row.name]}
-                    .options=${row.options ? row.options : []}
-                    .changeCallback="${this._handleChange.bind(this)}"
-                    .narrow=${this.narrow}
-                  ></dynalite-single-row>
-                `
-              )}
+              ${this._inputRows.map((row) => this._singleRow(row))}
             </div>
             <div class="card-actions">
               <mwc-button @click=${this._publish}>
@@ -103,16 +90,8 @@ class HaPanelConfigDynalite extends LitElement {
           </ha-card>
           <ha-card .header=${this._localStr("description_presets")}>
             <div class="card-content">
-              <dynalite-single-row
-                id="dyn-overrideGlobalPresets"
-                inputType="boolean"
-                shortDesc=${this._localStr("override_presets")}
-                longDesc=${this._localStr("override_presets_long")}
-                .value=${this._overrideGlobalPresets}
-                .changeCallback="${this._handleChange.bind(this)}"
-                .narrow=${this.narrow}
-              ></dynalite-single-row>
-              ${this._overrideGlobalPresets
+              ${this._singleRow({ name: "override_presets", type: "boolean" })}
+              ${this._override_presets
                 ? html`
                     <dynalite-presets-table
                       .hass=${this.hass}
@@ -126,16 +105,11 @@ class HaPanelConfigDynalite extends LitElement {
           </ha-card>
           <ha-card .header=${this._localStr("temp_overrides")}>
             <div class="card-content">
-              <dynalite-single-row
-                id="dyn-overrideTemplates"
-                inputType="boolean"
-                shortDesc=${this._localStr("override_templates")}
-                longDesc=${this._localStr("override_templates_long")}
-                .value=${this._overrideTemplates}
-                .changeCallback="${this._handleChange.bind(this)}"
-                .narrow=${this.narrow}
-              ></dynalite-single-row>
-              ${this._overrideTemplates
+              ${this._singleRow({
+                name: "override_templates",
+                type: "boolean",
+              })}
+              ${this._override_templates
                 ? allTemplates.map(
                     (template) => html`
                       <h4>${this._localStr(`temp_${template}`)}</h4>
@@ -193,19 +167,19 @@ class HaPanelConfigDynalite extends LitElement {
     this._autodiscover = this._entryData.autodiscover;
     this._polltimer = this._entryData.polltimer;
     if ("preset" in this._entryData) {
-      this._overrideGlobalPresets = "true";
+      this._override_presets = "true";
     } else {
       this._entryData.preset = {
         "1": { name: "On", level: 1.0 },
         "4": { name: "Off", level: 0.0 },
       };
-      this._overrideGlobalPresets = "";
+      this._override_presets = "";
     }
     if ("template" in this._entryData) {
-      this._overrideTemplates = "true";
+      this._override_templates = "true";
     } else {
       this._entryData.template = {};
-      this._overrideTemplates = "";
+      this._override_templates = "";
     }
     allTemplates.forEach((template) => {
       if (!(template in this._entryData.template))
@@ -223,6 +197,21 @@ class HaPanelConfigDynalite extends LitElement {
 
   private _localStr(item: string) {
     return this.hass.localize("ui.panel.config.dynalite." + item);
+  }
+
+  private _singleRow(row: any): TemplateResult {
+    return html`
+      <dynalite-single-row
+        id=${`dyn-${row.name}`}
+        inputType=${row.type}
+        shortDesc=${this._localStr(row.name)}
+        longDesc=${this._localStr(row.name + "_long")}
+        .value=${this["_" + row.name]}
+        .options=${row.options ? row.options : []}
+        .changeCallback="${this._handleChange.bind(this)}"
+        .narrow=${this.narrow}
+      ></dynalite-single-row>
+    `;
   }
 
   private _getConfigEntry() {
@@ -258,11 +247,11 @@ class HaPanelConfigDynalite extends LitElement {
         else delete this._entryData.default.fade;
         let savePreset: any;
         let saveTemplates: any;
-        if (!this._overrideGlobalPresets) {
+        if (!this._override_presets) {
           savePreset = this._entryData.preset;
           delete this._entryData.preset;
         }
-        if (!this._overrideTemplates) {
+        if (!this._override_templates) {
           saveTemplates = this._entryData.template;
           delete this._entryData.template;
         }
@@ -282,8 +271,8 @@ class HaPanelConfigDynalite extends LitElement {
           entry_id: configEntryId,
           entry_data: JSON.stringify(this._entryData),
         });
-        if (!this._overrideGlobalPresets) this._entryData.preset = savePreset;
-        if (!this._overrideTemplates) this._entryData.template = saveTemplates;
+        if (!this._override_presets) this._entryData.preset = savePreset;
+        if (!this._override_templates) this._entryData.template = saveTemplates;
       },
     });
   }
