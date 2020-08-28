@@ -43,6 +43,13 @@ class HaDynaliteAreaCards extends LitElement {
       return [template, this._localStr(`area_template_${template}`)];
     });
     templateOptions.unshift(["", this._localStr("area_template_none")]);
+    const inputRows = [
+      { name: "name", type: "string" },
+      { name: "template", type: "list", options: templateOptions },
+      { name: "fade", type: "number" },
+      { name: "nodefault", type: "boolean" },
+    ];
+
     return html`
       ${Object.keys(this.areas).map(
         (area) => html`
@@ -65,43 +72,20 @@ class HaDynaliteAreaCards extends LitElement {
             </div>
             ${this._expanded[area]
               ? html` <div class="card-content">
-                    <dynalite-single-row
-                      id="${this.id}-${area}-name"
-                      inputType="string"
-                      shortDesc=${this._localStr("area_name")}
-                      longDesc=${this._localStr("area_name_long")}
-                      .value=${this.areas[area].name || ""}
-                      .changeCallback="${this._handleChange.bind(this)}"
-                      .narrow=${this.narrow}
-                    ></dynalite-single-row>
-                    <dynalite-single-row
-                      id="${this.id}-${area}-template"
-                      inputType="list"
-                      shortDesc=${this._localStr("area_template")}
-                      longDesc=${this._localStr("area_template_long")}
-                      .options=${templateOptions}
-                      .value=${this.areas[area].template || ""}
-                      .changeCallback="${this._handleChange.bind(this)}"
-                      .narrow=${this.narrow}
-                    ></dynalite-single-row>
-                    <dynalite-single-row
-                      id="${this.id}-${area}-fade"
-                      inputType="number"
-                      shortDesc=${this._localStr("area_fade")}
-                      longDesc=${this._localStr("area_fade_long")}
-                      .value=${this.areas[area].fade || ""}
-                      .changeCallback="${this._handleChange.bind(this)}"
-                      .narrow=${this.narrow}
-                    ></dynalite-single-row>
-                    <dynalite-single-row
-                      id="${this.id}-${area}-nodefault"
-                      inputType="boolean"
-                      shortDesc=${this._localStr("area_no_default")}
-                      longDesc=${this._localStr("area_no_default_long")}
-                      .value=${this.areas[area].nodefault || ""}
-                      .changeCallback="${this._handleChange.bind(this)}"
-                      .narrow=${this.narrow}
-                    ></dynalite-single-row>
+                    ${inputRows.map(
+                      (row) => html`
+                        <dynalite-single-row
+                          id="${this.id}-${area}-${row.name}"
+                          inputType=${row.type}
+                          shortDesc=${this._localStr(`area_${row.name}`)}
+                          longDesc=${this._localStr(`area_${row.name}_long`)}
+                          .value=${this.areas[area][row.name] || ""}
+                          .options=${row.options ? row.options : []}
+                          .changeCallback="${this._handleChange.bind(this)}"
+                          .narrow=${this.narrow}
+                        ></dynalite-single-row>
+                      `
+                    )}
                     <h4>${this._localStr("area_presets")}</h4>
                     <dynalite-presets-table
                       .hass=${this.hass}
