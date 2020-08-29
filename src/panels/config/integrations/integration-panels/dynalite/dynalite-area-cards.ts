@@ -63,7 +63,6 @@ class HaDynaliteAreaCards extends LitElement {
                 id="${this.id}-button-expand-${area}"
               >
                 <ha-icon
-                  class="add-icon"
                   icon=${this._expanded[area]
                     ? "hass:minus-circle"
                     : "hass:plus-circle"}
@@ -124,7 +123,7 @@ class HaDynaliteAreaCards extends LitElement {
           </ha-card>
         `
       )}
-      <mwc-button @click="${this._handleAddButton}">
+      <mwc-button class="add-area-global" @click="${this._handleAddButton}">
         <ha-icon class="add-icon" icon="hass:plus-circle"></ha-icon>
         ${this._localStr("add_area_title")}
       </mwc-button>
@@ -193,6 +192,9 @@ class HaDynaliteAreaCards extends LitElement {
           position: absolute;
           top: 16px;
           right: 16px;
+        }
+        .add-area-global {
+          padding-bottom: 2em;
         }
       `,
     ];
