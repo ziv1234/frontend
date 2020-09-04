@@ -35,7 +35,7 @@ class HaPanelConfigDynalite extends LitElement {
 
   @property({ type: Boolean }) public narrow!: boolean;
 
-  @internalProperty() private _params = {
+  private _params = {
     name: "",
     host: "",
     port: "",
