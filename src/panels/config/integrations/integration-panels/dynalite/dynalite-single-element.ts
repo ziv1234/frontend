@@ -51,19 +51,17 @@ class HaDynaliteSingleElement extends LitElement {
       `;
     }
     if (this.inputType === "list") {
-      const listIndex = this.options.findIndex(
-        (element) => element[0] === this.value
-      );
       return html`
         <ha-paper-dropdown-menu label=${this.shortDesc} dynamic-align>
           <paper-listbox
             slot="dropdown-content"
-            .selected=${listIndex}
+            selected=${this.value}
+            attr-for-selected="selector"
             @iron-select=${this._handleSelectionChange}
           >
             ${this.options.map(
               (option) =>
-                html`<paper-item .active_config=${option[0]}
+                html`<paper-item .selector=${option[0]}
                   >${option[1]}</paper-item
                 >`
             )}
@@ -90,7 +88,7 @@ class HaDynaliteSingleElement extends LitElement {
   }
 
   private _handleSelectionChange(ev: CustomEvent) {
-    this.value = ev.detail.item.active_config;
+    this.value = ev.detail.item.selector;
     if (this.changeCallback) this.changeCallback(this.id, this.value);
   }
 

@@ -22,49 +22,62 @@ import "./dynalite-presets-table";
 import "./dynalite-templates";
 import "./dynalite-area-cards";
 import { allTemplates, allTemplateParams } from "./common";
+import {
+  getEntry,
+  GetEntryData,
+  updateEntry,
+} from "../../../../../data/dynalite";
 
+const _activeOptions = ["on", "init", "off"];
 @customElement("dynalite-config-panel")
 class HaPanelConfigDynalite extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
   @property({ type: Boolean }) public narrow!: boolean;
 
-  @internalProperty() private _name = "";
+  @internalProperty() private _name?: string;
 
-  @internalProperty() private _host = "";
+  @internalProperty() private _host?: string;
 
-  @internalProperty() private _port = "";
+  @internalProperty() private _port?: string;
 
-  @internalProperty() private _fade = "";
+  @internalProperty() private _fade?: string;
 
-  @internalProperty() private _active = "";
+  @internalProperty() private _active?: string;
 
-  @internalProperty() private _autodiscover = "";
+  @internalProperty() private _autodiscover?: string;
 
-  @internalProperty() private _polltimer = "";
+  @internalProperty() private _polltimer?: string;
 
-  @internalProperty() private _override_presets = "";
+  @internalProperty() private _override_presets?: string;
 
-  @internalProperty() private _override_templates = "";
+  @internalProperty() private _override_templates?: string;
 
   private _entryData: any;
 
-  private _activeOptions: Array<Array<string>> = [];
+  private _configEntry?: string;
 
   private _configured = false;
 
-  private _inputRows = [
-    { name: "name", type: "string" },
-    { name: "host", type: "string" },
-    { name: "port", type: "number" },
-    { name: "fade", type: "number" },
-    { name: "active", type: "list", options: this._activeOptions },
-    { name: "autodiscover", type: "boolean" },
-    { name: "polltimer", type: "number" },
-  ];
-
   protected render(): TemplateResult {
     if (!this._configured) return html``;
+    const inputRows = [
+      { name: "name", type: "string" },
+      { name: "host", type: "string" },
+      { name: "port", type: "number" },
+      { name: "fade", type: "number" },
+      {
+        name: "active",
+        type: "list",
+        options: _activeOptions.map((option) => [
+          option,
+          this._localStr(`active_${option}`),
+        ]),
+      },
+      { name: "autodiscover", type: "boolean" },
+      { name: "polltimer", type: "number" },
+    ];
+
     return html`
       <ha-app-layout>
         <app-header slot="header" fixed>
@@ -80,7 +93,7 @@ class HaPanelConfigDynalite extends LitElement {
         <div class="content">
           <ha-card .header=${this._localStr("description_system")}>
             <div class="card-content">
-              ${this._inputRows.map((row) => this._singleRow(row))}
+              ${inputRows.map((row) => this._singleRow(row))}
             </div>
             <div class="card-actions">
               <mwc-button @click=${this._publish}>
@@ -139,31 +152,21 @@ class HaPanelConfigDynalite extends LitElement {
 
   protected async firstUpdated() {
     const configEntryId = this._getConfigEntry();
-    if (!configEntryId) return;
-    const response = await this.hass.callWS({
-      type: "dynalite/get_entry",
-      entry_id: configEntryId,
-    });
-    this._entryData = (response as any).data;
+    if (!configEntryId) {
+      return;
+    }
+    const response = await getEntry(this.hass, configEntryId);
+    this._entryData = (response as GetEntryData).data;
     this._name = this._entryData.name;
     this._host = this._entryData.host;
     this._port = this._entryData.port;
     if (!this._entryData.default) this._entryData.default = {};
     const defaults = this._entryData.default;
     this._fade = "fade" in defaults ? defaults.fade : "";
-    const activeMap = {
-      on: "on",
-      true: "on",
-      init: "init",
-      false: "off",
-      off: "off",
-    };
-    this._active = activeMap[this._entryData.active];
-    this._activeOptions = [
-      ["on", this._localStr("active_on")],
-      ["init", this._localStr("active_init")],
-      ["off", this._localStr("active_off")],
-    ];
+    const currentActive = this._entryData.active;
+    if (currentActive === true) this._active = "on";
+    else if (currentActive === false) this._active = "off";
+    else this._active = currentActive;
     this._autodiscover = this._entryData.autodiscover;
     this._polltimer = this._entryData.polltimer;
     if ("preset" in this._entryData) {
@@ -196,7 +199,7 @@ class HaPanelConfigDynalite extends LitElement {
   }
 
   private _localStr(item: string) {
-    return this.hass.localize("ui.panel.config.dynalite." + item);
+    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
   }
 
   private _singleRow(row: any): TemplateResult {
@@ -215,11 +218,12 @@ class HaPanelConfigDynalite extends LitElement {
   }
 
   private _getConfigEntry() {
-    const searchParams = new URLSearchParams(window.location.search);
-    if (!searchParams.has("config_entry")) {
-      return false;
+    if (!this._configEntry) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const configEntry = searchParams.get("config_entry");
+      if (configEntry) this._configEntry = configEntry;
     }
-    return searchParams.get("config_entry") as string;
+    return this._configEntry;
   }
 
   private _handleChange(id: string, value: any) {
@@ -264,13 +268,11 @@ class HaPanelConfigDynalite extends LitElement {
           });
         });
         const configEntryId = this._getConfigEntry();
-        if (!configEntryId) return;
+        if (!configEntryId) {
+          return;
+        }
         console.log("xxx entry=%s", JSON.stringify(this._entryData));
-        await this.hass.callWS({
-          type: "dynalite/update_entry",
-          entry_id: configEntryId,
-          entry_data: JSON.stringify(this._entryData),
-        });
+        await updateEntry(this.hass, configEntryId, this._entryData);
         if (!this._override_presets) this._entryData.preset = savePreset;
         if (!this._override_templates) this._entryData.template = saveTemplates;
       },
