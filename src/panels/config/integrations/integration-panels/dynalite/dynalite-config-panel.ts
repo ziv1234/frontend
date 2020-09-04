@@ -8,7 +8,6 @@ import {
   html,
   LitElement,
   property,
-  internalProperty,
   TemplateResult,
 } from "lit-element";
 import { haStyle } from "../../../../../resources/styles";
