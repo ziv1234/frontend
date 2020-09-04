@@ -35,23 +35,17 @@ class HaPanelConfigDynalite extends LitElement {
 
   @property({ type: Boolean }) public narrow!: boolean;
 
-  @internalProperty() private _name?: string;
-
-  @internalProperty() private _host?: string;
-
-  @internalProperty() private _port?: string;
-
-  @internalProperty() private _fade?: string;
-
-  @internalProperty() private _active?: string;
-
-  @internalProperty() private _autodiscover?: string;
-
-  @internalProperty() private _polltimer?: string;
-
-  @internalProperty() private _override_presets?: string;
-
-  @internalProperty() private _override_templates?: string;
+  @internalProperty() private _params = {
+    name: "",
+    host: "",
+    port: "",
+    fade: "",
+    active: "",
+    autodiscover: "",
+    polltimer: "",
+    override_presets: "",
+    override_templates: "",
+  };
 
   private _entryData: any;
 
@@ -104,7 +98,7 @@ class HaPanelConfigDynalite extends LitElement {
           <ha-card .header=${this._localStr("description_presets")}>
             <div class="card-content">
               ${this._singleRow({ name: "override_presets", type: "boolean" })}
-              ${this._override_presets
+              ${this._params.override_presets
                 ? html`
                     <dynalite-presets-table
                       .hass=${this.hass}
@@ -122,7 +116,7 @@ class HaPanelConfigDynalite extends LitElement {
                 name: "override_templates",
                 type: "boolean",
               })}
-              ${this._override_templates
+              ${this._params.override_templates
                 ? allTemplates.map(
                     (template) => html`
                       <h4>${this._localStr(`temp_${template}`)}</h4>
@@ -157,32 +151,32 @@ class HaPanelConfigDynalite extends LitElement {
     }
     const response = await getEntry(this.hass, configEntryId);
     this._entryData = (response as GetEntryData).data;
-    this._name = this._entryData.name;
-    this._host = this._entryData.host;
-    this._port = this._entryData.port;
+    this._params.name = this._entryData.name;
+    this._params.host = this._entryData.host;
+    this._params.port = this._entryData.port;
     if (!this._entryData.default) this._entryData.default = {};
     const defaults = this._entryData.default;
-    this._fade = "fade" in defaults ? defaults.fade : "";
+    this._params.fade = "fade" in defaults ? defaults.fade : "";
     const currentActive = this._entryData.active;
-    if (currentActive === true) this._active = "on";
-    else if (currentActive === false) this._active = "off";
-    else this._active = currentActive;
-    this._autodiscover = this._entryData.autodiscover;
-    this._polltimer = this._entryData.polltimer;
+    if (currentActive === true) this._params.active = "on";
+    else if (currentActive === false) this._params.active = "off";
+    else this._params.active = currentActive;
+    this._params.autodiscover = this._entryData.autodiscover;
+    this._params.polltimer = this._entryData.polltimer;
     if ("preset" in this._entryData) {
-      this._override_presets = "true";
+      this._params.override_presets = "true";
     } else {
       this._entryData.preset = {
         "1": { name: "On", level: 1.0 },
         "4": { name: "Off", level: 0.0 },
       };
-      this._override_presets = "";
+      this._params.override_presets = "";
     }
     if ("template" in this._entryData) {
-      this._override_templates = "true";
+      this._params.override_templates = "true";
     } else {
       this._entryData.template = {};
-      this._override_templates = "";
+      this._params.override_templates = "";
     }
     allTemplates.forEach((template) => {
       if (!(template in this._entryData.template))
@@ -196,6 +190,7 @@ class HaPanelConfigDynalite extends LitElement {
       });
     } else this._entryData.area = {};
     this._configured = true;
+    this.requestUpdate();
   }
 
   private _localStr(item: string) {
@@ -209,7 +204,7 @@ class HaPanelConfigDynalite extends LitElement {
         inputType=${row.type}
         shortDesc=${this._localStr(row.name)}
         longDesc=${this._localStr(row.name + "_long")}
-        .value=${this["_" + row.name]}
+        .value=${this._params[row.name]}
         .options=${row.options ? row.options : []}
         .changeCallback="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
@@ -227,7 +222,8 @@ class HaPanelConfigDynalite extends LitElement {
   }
 
   private _handleChange(id: string, value: any) {
-    this["_" + id.substr(4)] = value;
+    this._params[id.substr(4)] = value;
+    this.requestUpdate();
   }
 
   private async _publish(): Promise<void> {
@@ -242,20 +238,22 @@ class HaPanelConfigDynalite extends LitElement {
       confirm: async () => {
         ["name", "host", "port", "active", "autodiscover", "polltimer"].forEach(
           (key) => {
-            if (this["_" + key]) this._entryData[key] = this["_" + key];
+            if (this._params[key]) this._entryData[key] = this._params[key];
             else delete this._entryData[key];
           }
         );
-        if (this._port) this._entryData.port = parseInt(this._port);
-        if (this._fade !== "") this._entryData.default.fade = this._fade;
+        if (this._params.port)
+          this._entryData.port = parseInt(this._params.port);
+        if (this._params.fade !== "")
+          this._entryData.default.fade = this._params.fade;
         else delete this._entryData.default.fade;
         let savePreset: any;
         let saveTemplates: any;
-        if (!this._override_presets) {
+        if (!this._params.override_presets) {
           savePreset = this._entryData.preset;
           delete this._entryData.preset;
         }
-        if (!this._override_templates) {
+        if (!this._params.override_templates) {
           saveTemplates = this._entryData.template;
           delete this._entryData.template;
         }
@@ -273,8 +271,9 @@ class HaPanelConfigDynalite extends LitElement {
         }
         console.log("xxx entry=%s", JSON.stringify(this._entryData));
         await updateEntry(this.hass, configEntryId, this._entryData);
-        if (!this._override_presets) this._entryData.preset = savePreset;
-        if (!this._override_templates) this._entryData.template = saveTemplates;
+        if (!this._params.override_presets) this._entryData.preset = savePreset;
+        if (!this._params.override_templates)
+          this._entryData.template = saveTemplates;
       },
     });
   }
