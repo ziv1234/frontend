@@ -203,7 +203,7 @@ class HaPanelConfigDynalite extends LitElement {
         id=${`dyn-${row.name}`}
         inputType=${row.type}
         shortDesc=${this._localStr(row.name)}
-        longDesc=${this._localStr(row.name + "_long")}
+        longDesc=${this._localStr(`${row.name}_long`)}
         .value=${this._params[row.name]}
         .options=${row.options ? row.options : []}
         .changeCallback="${this._handleChange.bind(this)}"

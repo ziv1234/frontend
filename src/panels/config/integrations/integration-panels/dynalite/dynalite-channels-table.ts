@@ -49,7 +49,7 @@ class HaDynaliteChannelsTable extends LitElement {
   }
 
   private _localStr(item: string) {
-    return this.hass.localize("ui.panel.config.dynalite." + item);
+    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
   }
 
   static get styles(): CSSResultArray {

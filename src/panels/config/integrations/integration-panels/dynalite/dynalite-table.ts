@@ -91,7 +91,7 @@ class HaDynaliteTable extends LitElement {
   }
 
   private _localStr(item: string) {
-    return this.hass.localize("ui.panel.config.dynalite." + item);
+    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
   }
 
   private _handleChange(id: string, value: any) {
@@ -118,7 +118,7 @@ class HaDynaliteTable extends LitElement {
   }
 
   private _handleDeleteButton(ev: CustomEvent) {
-    const buttonBase = this.id + "-button-delete-";
+    const buttonBase = `${this.id}-button-delete-`;
     const tableElement = (ev.currentTarget as any).id.substr(buttonBase.length);
     showDynaliteDeleteConfirmationDialog(
       this.hass,

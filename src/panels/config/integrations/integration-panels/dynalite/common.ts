@@ -68,5 +68,5 @@ export const allTemplateParams = {
 export const allTemplates = Object.keys(allTemplateParams);
 
 function _localStr(hass: HomeAssistant, item: string) {
-  return hass.localize("ui.panel.config.dynalite." + item);
+  return hass.localize(`ui.panel.config.dynalite.${item}`);
 }

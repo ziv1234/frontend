@@ -131,7 +131,7 @@ class HaDynaliteAreaCards extends LitElement {
   }
 
   private _localStr(item: string) {
-    return this.hass.localize("ui.panel.config.dynalite." + item);
+    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
   }
 
   private _handleChange(id: string, value: any) {
@@ -155,7 +155,7 @@ class HaDynaliteAreaCards extends LitElement {
   }
 
   private _handleDeleteButton(ev: CustomEvent) {
-    const buttonBase = this.id + "-button-delete-";
+    const buttonBase = `${this.id}-button-delete-`;
     const area = (ev.currentTarget as any).id.substr(buttonBase.length);
     showDynaliteDeleteConfirmationDialog(
       this.hass,
@@ -167,7 +167,7 @@ class HaDynaliteAreaCards extends LitElement {
   }
 
   private _handleExpandToggle(ev: CustomEvent) {
-    const buttonBase = this.id + "-button-expand-";
+    const buttonBase = `${this.id}-button-expand-`;
     const area = (ev.currentTarget as any).id.substr(buttonBase.length);
     this._expanded[area] = !this._expanded[area];
     this.requestUpdate();
