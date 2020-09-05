@@ -3,12 +3,9 @@ import {
   html,
   LitElement,
   property,
-  CSSResultArray,
   TemplateResult,
-  css,
 } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
-import { haStyle } from "../../../../../resources/styles";
 import { allTemplateParams, dynStr } from "./common";
 import "./dynalite-single-row";
 
@@ -65,19 +62,6 @@ class HaDynaliteTemplates extends LitElement {
     const targetKey = extracted![1];
     if (value) this.templates[targetKey] = value;
     else delete this.templates[targetKey];
-  }
-
-  static get styles(): CSSResultArray {
-    return [
-      haStyle,
-      css`
-        :host {
-          -ms-user-select: initial;
-          -webkit-user-select: initial;
-          -moz-user-select: initial;
-        }
-      `,
-    ];
   }
 }
 

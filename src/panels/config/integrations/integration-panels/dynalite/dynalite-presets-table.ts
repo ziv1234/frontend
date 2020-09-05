@@ -3,12 +3,9 @@ import {
   html,
   LitElement,
   property,
-  CSSResultArray,
   TemplateResult,
-  css,
 } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
-import { haStyle } from "../../../../../resources/styles";
 import "./dynalite-table";
 import { dynStr } from "./common";
 
@@ -41,19 +38,6 @@ class HaDynalitePresetsTable extends LitElement {
         </dynalite-table>
       </div>
     `;
-  }
-
-  static get styles(): CSSResultArray {
-    return [
-      haStyle,
-      css`
-        :host {
-          -ms-user-select: initial;
-          -webkit-user-select: initial;
-          -moz-user-select: initial;
-        }
-      `,
-    ];
   }
 }
 
