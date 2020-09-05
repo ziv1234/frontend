@@ -21,6 +21,7 @@ import {
   showDynaliteAddDialog,
   showDynaliteDeleteConfirmationDialog,
   allTemplates,
+  dynStr,
 } from "./common";
 import "./dynalite-single-row";
 import "./dynalite-presets-table";
@@ -40,9 +41,9 @@ class HaDynaliteAreaCards extends LitElement {
   protected render(): TemplateResult {
     if (!this.areas) return html``;
     const templateOptions = allTemplates.map((template) => {
-      return [template, this._localStr(`area_template_${template}`)];
+      return [template, dynStr(this.hass, `area_template_${template}`)];
     });
-    templateOptions.unshift(["", this._localStr("area_template_none")]);
+    templateOptions.unshift(["", dynStr(this.hass, "area_template_none")]);
     const inputRows = [
       { name: "name", type: "string" },
       { name: "template", type: "list", options: templateOptions },
@@ -54,7 +55,7 @@ class HaDynaliteAreaCards extends LitElement {
       ${Object.keys(this.areas).map(
         (area) => html`
           <ha-card
-            .header="${this._localStr("area")} '${this.areas[area]
+            .header="${dynStr(this.hass, "area")} '${this.areas[area]
               .name}' (${area})"
           >
             <div class="shrink-button">
@@ -76,8 +77,8 @@ class HaDynaliteAreaCards extends LitElement {
                         <dynalite-single-row
                           id="${this.id}-${area}-${row.name}"
                           inputType=${row.type}
-                          shortDesc=${this._localStr(`area_${row.name}`)}
-                          longDesc=${this._localStr(`area_${row.name}_long`)}
+                          shortDesc=${dynStr(this.hass, `area_${row.name}`)}
+                          longDesc=${dynStr(this.hass, `area_${row.name}_long`)}
                           .value=${this.areas[area][row.name] || ""}
                           .options=${row.options ? row.options : []}
                           .changeCallback="${this._handleChange.bind(this)}"
@@ -85,14 +86,14 @@ class HaDynaliteAreaCards extends LitElement {
                         ></dynalite-single-row>
                       `
                     )}
-                    <h4>${this._localStr("area_presets")}</h4>
+                    <h4>${dynStr(this.hass, "area_presets")}</h4>
                     <dynalite-presets-table
                       .hass=${this.hass}
                       id="${this.id}-${area}-preset"
                       .presets=${this.areas[area].preset || {}}
                       .changeCallback="${this._handleChange.bind(this)}"
                     ></dynalite-presets-table>
-                    <h4>${this._localStr("area_channels")}</h4>
+                    <h4>${dynStr(this.hass, "area_channels")}</h4>
                     <dynalite-channels-table
                       .hass=${this.hass}
                       id="${this.id}-${area}-channel"
@@ -116,7 +117,7 @@ class HaDynaliteAreaCards extends LitElement {
                       @click=${this._handleDeleteButton}
                       id="${this.id}-button-delete-${area}"
                     >
-                      ${this._localStr("delete_area_title")}
+                      ${dynStr(this.hass, "delete_area_title")}
                     </mwc-button>
                   </div>`
               : ""}
@@ -125,13 +126,9 @@ class HaDynaliteAreaCards extends LitElement {
       )}
       <mwc-button class="add-area-global" @click="${this._handleAddButton}">
         <ha-icon class="add-icon" icon="hass:plus-circle"></ha-icon>
-        ${this._localStr("add_area_title")}
+        ${dynStr(this.hass, "add_area_title")}
       </mwc-button>
     `;
-  }
-
-  private _localStr(item: string) {
-    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
   }
 
   private _handleChange(id: string, value: any) {
@@ -147,7 +144,7 @@ class HaDynaliteAreaCards extends LitElement {
   private async _handleAddButton(_ev: CustomEvent) {
     showDynaliteAddDialog(this.hass, this, "area", this.areas, (area) => {
       return {
-        name: `${this._localStr("area")} ${area}`,
+        name: `${dynStr(this.hass, "area")} ${area}`,
         channel: {},
         preset: {},
       };

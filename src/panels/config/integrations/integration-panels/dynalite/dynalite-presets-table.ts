@@ -10,6 +10,7 @@ import {
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
 import "./dynalite-table";
+import { dynStr } from "./common";
 
 @customElement("dynalite-presets-table")
 class HaDynalitePresetsTable extends LitElement {
@@ -19,10 +20,10 @@ class HaDynalitePresetsTable extends LitElement {
 
   protected render(): TemplateResult {
     const presetTableConfig = [
-      { header: this._localStr("preset_number") },
-      { header: this._localStr("preset_name"), key: "name", type: "string" },
+      { header: dynStr(this.hass, "preset_number") },
+      { header: dynStr(this.hass, "preset_name"), key: "name", type: "string" },
       {
-        header: this._localStr("preset_level"),
+        header: dynStr(this.hass, "preset_level"),
         key: "level",
         type: "number",
         percent: "true",
@@ -40,10 +41,6 @@ class HaDynalitePresetsTable extends LitElement {
         </dynalite-table>
       </div>
     `;
-  }
-
-  private _localStr(item: string) {
-    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
   }
 
   static get styles(): CSSResultArray {

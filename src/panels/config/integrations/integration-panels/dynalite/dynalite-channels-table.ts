@@ -10,6 +10,7 @@ import {
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
 import "./dynalite-table";
+import { dynStr } from "./common";
 
 @customElement("dynalite-channels-table")
 class HaDynaliteChannelsTable extends LitElement {
@@ -19,14 +20,18 @@ class HaDynaliteChannelsTable extends LitElement {
 
   protected render(): TemplateResult {
     const typeOptions = [
-      ["light", this._localStr("channel_type_light")],
-      ["switch", this._localStr("channel_type_switch")],
+      ["light", dynStr(this.hass, "channel_type_light")],
+      ["switch", dynStr(this.hass, "channel_type_switch")],
     ];
     const channelsTableConfig = [
-      { header: this._localStr("channel_number") },
-      { header: this._localStr("channel_name"), key: "name", type: "string" },
+      { header: dynStr(this.hass, "channel_number") },
       {
-        header: this._localStr("channel_type"),
+        header: dynStr(this.hass, "channel_name"),
+        key: "name",
+        type: "string",
+      },
+      {
+        header: dynStr(this.hass, "channel_type"),
         key: "type",
         type: "list",
         options: typeOptions,
@@ -46,10 +51,6 @@ class HaDynaliteChannelsTable extends LitElement {
         </dynalite-table>
       </div>
     `;
-  }
-
-  private _localStr(item: string) {
-    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
   }
 
   static get styles(): CSSResultArray {

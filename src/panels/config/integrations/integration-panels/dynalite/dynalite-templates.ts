@@ -9,7 +9,7 @@ import {
 } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
-import { allTemplateParams } from "./common";
+import { allTemplateParams, dynStr } from "./common";
 import "./dynalite-single-row";
 
 @customElement("dynalite-templates")
@@ -37,9 +37,9 @@ class HaDynaliteTemplates extends LitElement {
     ];
     const coverClassOptions = coverClasses.map((myClass) => [
       myClass,
-      this._localStr(`cover_class_${myClass}`),
+      dynStr(this.hass, `cover_class_${myClass}`),
     ]);
-    coverClassOptions.unshift(["", this._localStr("cover_class_default")]);
+    coverClassOptions.unshift(["", dynStr(this.hass, "cover_class_default")]);
     const templateParams = allTemplateParams[this.template];
     return html`
       ${templateParams.map(
@@ -48,8 +48,8 @@ class HaDynaliteTemplates extends LitElement {
             id="${this.id}-${param}"
             inputType=${param === "class" ? "list" : "number"}
             .options=${param === "class" ? coverClassOptions : []}
-            shortDesc=${this._localStr(`temp_${this.template}_${param}`)}
-            longDesc=${this._localStr(`temp_${this.template}_${param}_long`)}
+            shortDesc=${dynStr(this.hass, `temp_${this.template}_${param}`)}
+            longDesc=${dynStr(this.hass, `temp_${this.template}_${param}_long`)}
             .value=${this.templates[param] || ""}
             .changeCallback="${this._handleChange.bind(this)}"
             .narrow=${this.narrow}
@@ -57,10 +57,6 @@ class HaDynaliteTemplates extends LitElement {
         `
       )}
     `;
-  }
-
-  private _localStr(item: string) {
-    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
   }
 
   private _handleChange(id: string, value: any) {

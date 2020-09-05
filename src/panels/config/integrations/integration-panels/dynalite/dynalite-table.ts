@@ -13,6 +13,7 @@ import "../../../../../components/ha-icon-button";
 import {
   showDynaliteAddDialog,
   showDynaliteDeleteConfirmationDialog,
+  dynStr,
 } from "./common";
 import "./dynalite-single-element";
 
@@ -36,7 +37,7 @@ class HaDynaliteTable extends LitElement {
           @click="${this._handleAddButton}"
         >
           <ha-icon class="add-icon" icon="hass:plus-circle"></ha-icon>
-          ${this._localStr(`add_${this.tableName}_title`)}
+          ${dynStr(this.hass, `add_${this.tableName}_title`)}
         </mwc-button>
       </div>`;
     }
@@ -88,10 +89,6 @@ class HaDynaliteTable extends LitElement {
         </table>
       </div>
     `;
-  }
-
-  private _localStr(item: string) {
-    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
   }
 
   private _handleChange(id: string, value: any) {

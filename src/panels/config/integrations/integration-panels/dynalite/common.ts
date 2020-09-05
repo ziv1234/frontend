@@ -14,8 +14,8 @@ export async function showDynaliteAddDialog(
   newElementFunc: (element: string) => any
 ) {
   const newElement = await showPromptDialog(orig, {
-    title: _localStr(hass, `add_${tableName}_title`),
-    inputLabel: _localStr(hass, `add_${tableName}_label`),
+    title: dynStr(hass, `add_${tableName}_title`),
+    inputLabel: dynStr(hass, `add_${tableName}_label`),
     inputType: "number",
   });
   if (!newElement) {
@@ -23,9 +23,9 @@ export async function showDynaliteAddDialog(
   }
   if (newElement in table) {
     showAlertDialog(orig, {
-      title: _localStr(hass, `add_${tableName}_error`),
-      text: _localStr(hass, `add_${tableName}_exists`),
-      confirmText: _localStr(hass, "dismiss"),
+      title: dynStr(hass, `add_${tableName}_error`),
+      text: dynStr(hass, `add_${tableName}_exists`),
+      confirmText: dynStr(hass, "dismiss"),
     });
   } else {
     table[newElement] = newElementFunc(newElement);
@@ -41,10 +41,10 @@ export async function showDynaliteDeleteConfirmationDialog(
   elementToDelete: string
 ) {
   showConfirmationDialog(orig, {
-    title: _localStr(hass, `delete_${tableName}_title`),
-    text: _localStr(hass, `delete_${tableName}_text`),
-    confirmText: _localStr(hass, "confirm"),
-    dismissText: _localStr(hass, "cancel"),
+    title: dynStr(hass, `delete_${tableName}_title`),
+    text: dynStr(hass, `delete_${tableName}_text`),
+    confirmText: dynStr(hass, "confirm"),
+    dismissText: dynStr(hass, "cancel"),
     confirm: () => {
       delete table[elementToDelete];
       orig.requestUpdate();
@@ -67,6 +67,6 @@ export const allTemplateParams = {
 
 export const allTemplates = Object.keys(allTemplateParams);
 
-function _localStr(hass: HomeAssistant, item: string) {
+export function dynStr(hass: HomeAssistant, item: string) {
   return hass.localize(`ui.panel.config.dynalite.${item}`);
 }

@@ -20,7 +20,7 @@ import "./dynalite-single-row";
 import "./dynalite-presets-table";
 import "./dynalite-templates";
 import "./dynalite-area-cards";
-import { allTemplates, allTemplateParams } from "./common";
+import { allTemplates, allTemplateParams, dynStr } from "./common";
 import {
   getEntry,
   GetEntryData,
@@ -64,7 +64,7 @@ class HaPanelConfigDynalite extends LitElement {
         type: "list",
         options: _activeOptions.map((option) => [
           option,
-          this._localStr(`active_${option}`),
+          dynStr(this.hass, `active_${option}`),
         ]),
       },
       { name: "autodiscover", type: "boolean" },
@@ -79,22 +79,22 @@ class HaPanelConfigDynalite extends LitElement {
               .hass=${this.hass}
               .narrow=${this.narrow}
             ></ha-menu-button>
-            <div main-title>${this._localStr("description_settings")}</div>
+            <div main-title>${dynStr(this.hass, "description_settings")}</div>
           </app-toolbar>
         </app-header>
 
         <div class="content">
-          <ha-card .header=${this._localStr("description_system")}>
+          <ha-card .header=${dynStr(this.hass, "description_system")}>
             <div class="card-content">
               ${inputRows.map((row) => this._singleRow(row))}
             </div>
             <div class="card-actions">
               <mwc-button @click=${this._publish}>
-                ${this._localStr("publish")}
+                ${dynStr(this.hass, "publish")}
               </mwc-button>
             </div>
           </ha-card>
-          <ha-card .header=${this._localStr("description_presets")}>
+          <ha-card .header=${dynStr(this.hass, "description_presets")}>
             <div class="card-content">
               ${this._singleRow({ name: "override_presets", type: "boolean" })}
               ${this._params.override_presets
@@ -109,7 +109,7 @@ class HaPanelConfigDynalite extends LitElement {
                 : ""}
             </div>
           </ha-card>
-          <ha-card .header=${this._localStr("temp_overrides")}>
+          <ha-card .header=${dynStr(this.hass, "temp_overrides")}>
             <div class="card-content">
               ${this._singleRow({
                 name: "override_templates",
@@ -118,7 +118,7 @@ class HaPanelConfigDynalite extends LitElement {
               ${this._params.override_templates
                 ? allTemplates.map(
                     (template) => html`
-                      <h4>${this._localStr(`temp_${template}`)}</h4>
+                      <h4>${dynStr(this.hass, `temp_${template}`)}</h4>
                       <dynalite-templates
                         .hass=${this.hass}
                         id="dyn-templates-${template}"
@@ -192,17 +192,13 @@ class HaPanelConfigDynalite extends LitElement {
     this.requestUpdate();
   }
 
-  private _localStr(item: string) {
-    return this.hass.localize(`ui.panel.config.dynalite.${item}`);
-  }
-
   private _singleRow(row: any): TemplateResult {
     return html`
       <dynalite-single-row
         id=${`dyn-${row.name}`}
         inputType=${row.type}
-        shortDesc=${this._localStr(row.name)}
-        longDesc=${this._localStr(`${row.name}_long`)}
+        shortDesc=${dynStr(this.hass, row.name)}
+        longDesc=${dynStr(this.hass, `${row.name}_long`)}
         .value=${this._params[row.name]}
         .options=${row.options ? row.options : []}
         .changeCallback="${this._handleChange.bind(this)}"
@@ -230,10 +226,10 @@ class HaPanelConfigDynalite extends LitElement {
       return;
     }
     showConfirmationDialog(this, {
-      title: this._localStr("save_settings_title"),
-      text: this._localStr("save_settings_text"),
-      confirmText: this._localStr("confirm"),
-      dismissText: this._localStr("cancel"),
+      title: dynStr(this.hass, "save_settings_title"),
+      text: dynStr(this.hass, "save_settings_text"),
+      confirmText: dynStr(this.hass, "confirm"),
+      dismissText: dynStr(this.hass, "cancel"),
       confirm: async () => {
         ["name", "host", "port", "active", "autodiscover", "polltimer"].forEach(
           (key) => {
