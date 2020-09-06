@@ -103,7 +103,6 @@ class HaPanelConfigDynalite extends LitElement {
                       .hass=${this.hass}
                       id="dyn-globalPresets"
                       .presets=${this._entryData.preset}
-                      .changeCallback="${this._handleChange.bind(this)}"
                     ></dynalite-presets-table>
                   `
                 : ""}
@@ -135,7 +134,6 @@ class HaPanelConfigDynalite extends LitElement {
             .hass=${this.hass}
             id="dyn-areas"
             .areas=${this._entryData.area}
-            .changeCallback="${this._handleChange.bind(this)}"
             .narrow=${this.narrow}
           ></dynalite-area-cards>
         </div>
@@ -201,7 +199,7 @@ class HaPanelConfigDynalite extends LitElement {
         longDesc=${dynStr(this.hass, `${row.name}_long`)}
         .value=${this._params[row.name]}
         .options=${row.options ? row.options : []}
-        .changeCallback="${this._handleChange.bind(this)}"
+        @dyn-update="${this._handleChange.bind(this)}"
         .narrow=${this.narrow}
       ></dynalite-single-row>
     `;
@@ -216,8 +214,8 @@ class HaPanelConfigDynalite extends LitElement {
     return this._configEntry;
   }
 
-  private _handleChange(id: string, value: any) {
-    this._params[id.substr(4)] = value;
+  private _handleChange(ev: CustomEvent) {
+    this._params[ev.detail.id.substr(4)] = ev.detail.value;
     this.requestUpdate();
   }
 

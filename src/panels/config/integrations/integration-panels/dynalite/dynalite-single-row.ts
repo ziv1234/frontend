@@ -7,6 +7,7 @@ import {
 } from "lit-element";
 import "../../../../../components/ha-settings-row";
 import "./dynalite-single-element";
+import { dynUpdateEvent } from "./common";
 
 @customElement("dynalite-single-row")
 class HaDynaliteSingleRow extends LitElement {
@@ -22,11 +23,6 @@ class HaDynaliteSingleRow extends LitElement {
 
   @property({ type: Array }) public options: Array<Array<string>> = [];
 
-  @property({ attribute: false }) public changeCallback = function (
-    _id: string,
-    _value: any
-  ) {};
-
   protected render(): TemplateResult {
     return html`
       <ha-settings-row .narrow=${this.narrow}>
@@ -38,14 +34,16 @@ class HaDynaliteSingleRow extends LitElement {
           shortDesc=${this.shortDesc}
           .options=${this.options}
           .value=${this.value}
-          .changeCallback="${this._handleChange.bind(this)}"
+          @dyn-update="${this._handleChange}"
         ></dynalite-single-element>
       </ha-settings-row>
     `;
   }
 
-  private _handleChange(_id: string, value: any) {
-    if (this.changeCallback) this.changeCallback(this.id, value);
+  private _handleChange(ev: CustomEvent) {
+    console.log("xxx row id=%s val=%s", ev.detail.id, ev.detail.value);
+    this.value = ev.detail.value;
+    this.dispatchEvent(dynUpdateEvent(this.id, this.value));
   }
 }
 

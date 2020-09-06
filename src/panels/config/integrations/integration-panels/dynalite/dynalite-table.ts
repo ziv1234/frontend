@@ -65,7 +65,7 @@ class HaDynaliteTable extends LitElement {
                       value=${column.key in this.tableData[element]
                         ? this.tableData[element][column.key]
                         : ""}
-                      .changeCallback="${this._handleChange.bind(this)}"
+                      @dyn-update="${this._handleChange.bind(this)}"
                     ></dynalite-single-element>
                   </td> `
                 )}
@@ -91,12 +91,13 @@ class HaDynaliteTable extends LitElement {
     `;
   }
 
-  private _handleChange(id: string, value: any) {
+  private _handleChange(ev: CustomEvent) {
     const myRegEx = new RegExp(`${this.id}-(.*)-(.*)`);
-    const extracted = myRegEx.exec(id);
+    const extracted = myRegEx.exec(ev.detail.id);
     const targetKey = extracted![1];
     const tableElement = extracted![2];
-    if (value) this.tableData[tableElement][targetKey] = value;
+    if (ev.detail.value)
+      this.tableData[tableElement][targetKey] = ev.detail.value;
     else delete this.tableData[tableElement][targetKey];
   }
 

@@ -81,7 +81,7 @@ class HaDynaliteAreaCards extends LitElement {
                           longDesc=${dynStr(this.hass, `area_${row.name}_long`)}
                           .value=${this.areas[area][row.name] || ""}
                           .options=${row.options ? row.options : []}
-                          .changeCallback="${this._handleChange.bind(this)}"
+                          @dyn-update="${this._handleChange.bind(this)}"
                           .narrow=${this.narrow}
                         ></dynalite-single-row>
                       `
@@ -91,14 +91,12 @@ class HaDynaliteAreaCards extends LitElement {
                       .hass=${this.hass}
                       id="${this.id}-${area}-preset"
                       .presets=${this.areas[area].preset || {}}
-                      .changeCallback="${this._handleChange.bind(this)}"
                     ></dynalite-presets-table>
                     <h4>${dynStr(this.hass, "area_channels")}</h4>
                     <dynalite-channels-table
                       .hass=${this.hass}
                       id="${this.id}-${area}-channel"
                       .channels=${this.areas[area].channel || {}}
-                      .changeCallback="${this._handleChange.bind(this)}"
                     ></dynalite-channels-table>
                     ${this.areas[area].template
                       ? html`
@@ -131,12 +129,12 @@ class HaDynaliteAreaCards extends LitElement {
     `;
   }
 
-  private _handleChange(id: string, value: any) {
+  private _handleChange(ev: CustomEvent) {
     const myRegEx = new RegExp(`${this.id}-(.*)-(.*)`);
-    const extracted = myRegEx.exec(id);
+    const extracted = myRegEx.exec(ev.detail.id);
     const targetArea = extracted![1];
     const targetKey = extracted![2];
-    if (value) this.areas[targetArea][targetKey] = value;
+    if (ev.detail.value) this.areas[targetArea][targetKey] = ev.detail.value;
     else delete this.areas[targetArea][targetKey];
     if (targetKey === "template") this.requestUpdate();
   }

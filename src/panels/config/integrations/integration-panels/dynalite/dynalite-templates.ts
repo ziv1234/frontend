@@ -49,7 +49,7 @@ class HaDynaliteTemplates extends LitElement {
             shortDesc=${dynStr(this.hass, `temp_${this.template}_${param}`)}
             longDesc=${dynStr(this.hass, `temp_${this.template}_${param}_long`)}
             .value=${this.templates[param] || ""}
-            .changeCallback="${this._handleChange.bind(this)}"
+            @dyn-update="${this._handleChange.bind(this)}"
             .narrow=${this.narrow}
           ></dynalite-single-row>
         `
@@ -57,11 +57,11 @@ class HaDynaliteTemplates extends LitElement {
     `;
   }
 
-  private _handleChange(id: string, value: any) {
+  private _handleChange(ev: CustomEvent) {
     const myRegEx = new RegExp(`${this.id}-(.*)`);
-    const extracted = myRegEx.exec(id);
+    const extracted = myRegEx.exec(ev.detail.id);
     const targetKey = extracted![1];
-    if (value) this.templates[targetKey] = value;
+    if (ev.detail.value) this.templates[targetKey] = ev.detail.value;
     else delete this.templates[targetKey];
   }
 }

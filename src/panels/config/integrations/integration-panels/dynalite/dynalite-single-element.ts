@@ -15,6 +15,7 @@ import type { PolymerChangedEvent } from "../../../../../polymer-types";
 import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-switch";
+import { dynUpdateEvent } from "./common";
 
 @customElement("dynalite-single-element")
 class HaDynaliteSingleElement extends LitElement {
@@ -27,11 +28,6 @@ class HaDynaliteSingleElement extends LitElement {
   @property() public percent = "";
 
   @property({ type: Array }) public options: Array<Array<string>> = [];
-
-  @property({ attribute: false }) public changeCallback = function (
-    _id: string,
-    _value: any
-  ) {};
 
   protected render(): TemplateResult {
     if (["string", "number"].includes(this.inputType)) {
@@ -84,17 +80,17 @@ class HaDynaliteSingleElement extends LitElement {
     const target = ev.currentTarget as PaperInputElement;
     const newValue = target.value as string;
     this.value = this.percent ? this._fromPercent(newValue) : newValue;
-    if (this.changeCallback) this.changeCallback(this.id, this.value);
+    this.dispatchEvent(dynUpdateEvent(this.id, this.value));
   }
 
   private _handleSelectionChange(ev: CustomEvent) {
     this.value = ev.detail.item.selector;
-    if (this.changeCallback) this.changeCallback(this.id, this.value);
+    this.dispatchEvent(dynUpdateEvent(this.id, this.value));
   }
 
   private _handleSwitchChange(ev: CustomEvent) {
     this.value = (ev.currentTarget as any).checked;
-    if (this.changeCallback) this.changeCallback(this.id, this.value);
+    this.dispatchEvent(dynUpdateEvent(this.id, this.value));
   }
 
   private _toPercent(value: string) {

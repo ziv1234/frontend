@@ -52,6 +52,12 @@ export async function showDynaliteDeleteConfirmationDialog(
   });
 }
 
+export function dynUpdateEvent(id: string, value: any) {
+  return new CustomEvent("dyn-update", {
+    detail: { id: id, value: value },
+  });
+}
+
 export const allTemplateParams = {
   room: ["room_on", "room_off"],
   time_cover: [
