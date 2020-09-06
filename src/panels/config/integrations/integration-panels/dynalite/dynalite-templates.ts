@@ -9,6 +9,19 @@ import { HomeAssistant } from "../../../../../types";
 import { allTemplateParams, dynStr } from "./common";
 import "./dynalite-single-row";
 
+const _coverClasses = [
+  "awning",
+  "blind",
+  "curtain",
+  "damper",
+  "door",
+  "garage",
+  "gate",
+  "shade",
+  "shutter",
+  "window",
+];
+
 @customElement("dynalite-templates")
 class HaDynaliteTemplates extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -20,19 +33,7 @@ class HaDynaliteTemplates extends LitElement {
   @property() public template = "";
 
   protected render(): TemplateResult {
-    const coverClasses = [
-      "awning",
-      "blind",
-      "curtain",
-      "damper",
-      "door",
-      "garage",
-      "gate",
-      "shade",
-      "shutter",
-      "window",
-    ];
-    const coverClassOptions = coverClasses.map((myClass) => [
+    const coverClassOptions = _coverClasses.map((myClass) => [
       myClass,
       dynStr(this.hass, `cover_class_${myClass}`),
     ]);
