@@ -52,24 +52,27 @@ class HaPanelConfigDynalite extends LitElement {
 
   private _configured = false;
 
+  private _inputRows?: Array<any>;
+
   protected render(): TemplateResult {
     if (!this._configured) return html``;
-    const inputRows = [
-      { name: "name", type: "string" },
-      { name: "host", type: "string" },
-      { name: "port", type: "number" },
-      { name: "fade", type: "number" },
-      {
-        name: "active",
-        type: "list",
-        options: _activeOptions.map((option) => [
-          option,
-          dynStr(this.hass, `active_${option}`),
-        ]),
-      },
-      { name: "autodiscover", type: "boolean" },
-      { name: "polltimer", type: "number" },
-    ];
+    if (!this._inputRows)
+      this._inputRows = [
+        { name: "name", type: "string" },
+        { name: "host", type: "string" },
+        { name: "port", type: "number" },
+        { name: "fade", type: "number" },
+        {
+          name: "active",
+          type: "list",
+          options: _activeOptions.map((option) => [
+            option,
+            dynStr(this.hass, `active_${option}`),
+          ]),
+        },
+        { name: "autodiscover", type: "boolean" },
+        { name: "polltimer", type: "number" },
+      ];
 
     return html`
       <ha-app-layout>
@@ -86,7 +89,7 @@ class HaPanelConfigDynalite extends LitElement {
         <div class="content">
           <ha-card .header=${dynStr(this.hass, "description_system")}>
             <div class="card-content">
-              ${inputRows.map((row) => this._singleRow(row))}
+              ${this._inputRows.map((row) => this._singleRow(row))}
             </div>
             <div class="card-actions">
               <mwc-button @click=${this._publish}>

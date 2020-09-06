@@ -21,10 +21,10 @@ class HaDynaliteChannelsTable extends LitElement {
 
   protected render(): TemplateResult {
     if (!this._typeOptions)
-      this._typeOptions = [
-        ["light", dynStr(this.hass, "channel_type_light")],
-        ["switch", dynStr(this.hass, "channel_type_switch")],
-      ];
+      this._typeOptions = ["light", "switch"].map((channelType) => [
+        channelType,
+        dynStr(this.hass, `channel_type_${channelType}`),
+      ]);
     if (!this._channelsTableConfig)
       this._channelsTableConfig = [
         { header: dynStr(this.hass, "channel_number") },

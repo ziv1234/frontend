@@ -32,12 +32,19 @@ class HaDynaliteTemplates extends LitElement {
 
   @property() public template!: string;
 
+  private _coverClassOptions?: Array<Array<string>>;
+
   protected render(): TemplateResult {
-    const coverClassOptions = _coverClasses.map((myClass) => [
-      myClass,
-      dynStr(this.hass, `cover_class_${myClass}`),
-    ]);
-    coverClassOptions.unshift(["", dynStr(this.hass, "cover_class_default")]);
+    if (!this._coverClassOptions) {
+      this._coverClassOptions = _coverClasses.map((myClass) => [
+        myClass,
+        dynStr(this.hass, `cover_class_${myClass}`),
+      ]);
+      this._coverClassOptions.unshift([
+        "",
+        dynStr(this.hass, "cover_class_default"),
+      ]);
+    }
     const templateParams = allTemplateParams[this.template];
     return html`
       ${templateParams.map(
@@ -45,7 +52,7 @@ class HaDynaliteTemplates extends LitElement {
           <dynalite-single-row
             id="${this.id}-${param}"
             inputType=${param === "class" ? "list" : "number"}
-            .options=${param === "class" ? coverClassOptions : []}
+            .options=${param === "class" ? this._coverClassOptions : []}
             shortDesc=${dynStr(this.hass, `temp_${this.template}_${param}`)}
             longDesc=${dynStr(this.hass, `temp_${this.template}_${param}_long`)}
             .value=${this.templates[param] || ""}
