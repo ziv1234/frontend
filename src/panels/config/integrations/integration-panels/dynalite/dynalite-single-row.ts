@@ -21,7 +21,7 @@ class HaDynaliteSingleRow extends LitElement {
 
   @property() public value?: string;
 
-  @property({ type: Array }) public options: Array<Array<string>> = [];
+  @property({ type: Array }) public options?: Array<Array<string>>;
 
   protected render(): TemplateResult {
     return html`
