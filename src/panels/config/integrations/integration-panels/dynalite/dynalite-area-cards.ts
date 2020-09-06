@@ -84,7 +84,7 @@ class HaDynaliteAreaCards extends LitElement {
                           longDesc=${dynStr(this.hass, `area_${row.name}_long`)}
                           .value=${this.areas[area][row.name] || ""}
                           .options=${row.options ? row.options : []}
-                          @dyn-update="${this._handleChange.bind(this)}"
+                          @dyn-update="${this._handleChange}"
                           .narrow=${this.narrow}
                         ></dynalite-single-row>
                       `

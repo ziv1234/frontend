@@ -199,7 +199,7 @@ class HaPanelConfigDynalite extends LitElement {
         longDesc=${dynStr(this.hass, `${row.name}_long`)}
         .value=${this._params[row.name]}
         .options=${row.options ? row.options : []}
-        @dyn-update="${this._handleChange.bind(this)}"
+        @dyn-update="${this._handleChange}"
         .narrow=${this.narrow}
       ></dynalite-single-row>
     `;

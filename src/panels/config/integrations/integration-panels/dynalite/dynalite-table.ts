@@ -65,7 +65,7 @@ class HaDynaliteTable extends LitElement {
                       value=${column.key in this.tableData[element]
                         ? this.tableData[element][column.key]
                         : ""}
-                      @dyn-update="${this._handleChange.bind(this)}"
+                      @dyn-update="${this._handleChange}"
                     ></dynalite-single-element>
                   </td> `
                 )}

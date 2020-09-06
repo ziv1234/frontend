@@ -49,7 +49,7 @@ class HaDynaliteTemplates extends LitElement {
             shortDesc=${dynStr(this.hass, `temp_${this.template}_${param}`)}
             longDesc=${dynStr(this.hass, `temp_${this.template}_${param}_long`)}
             .value=${this.templates[param] || ""}
-            @dyn-update="${this._handleChange.bind(this)}"
+            @dyn-update="${this._handleChange}"
             .narrow=${this.narrow}
           ></dynalite-single-row>
         `
