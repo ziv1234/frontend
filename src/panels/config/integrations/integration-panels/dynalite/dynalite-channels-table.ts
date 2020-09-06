@@ -13,27 +13,33 @@ import { dynStr } from "./common";
 class HaDynaliteChannelsTable extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
-  @property() public channels = {};
+  @property() public channels!: any;
+
+  private _typeOptions?: Array<Array<string>>;
+
+  private _channelsTableConfig?: Array<any>;
 
   protected render(): TemplateResult {
-    const typeOptions = [
-      ["light", dynStr(this.hass, "channel_type_light")],
-      ["switch", dynStr(this.hass, "channel_type_switch")],
-    ];
-    const channelsTableConfig = [
-      { header: dynStr(this.hass, "channel_number") },
-      {
-        header: dynStr(this.hass, "channel_name"),
-        key: "name",
-        type: "string",
-      },
-      {
-        header: dynStr(this.hass, "channel_type"),
-        key: "type",
-        type: "list",
-        options: typeOptions,
-      },
-    ];
+    if (!this._typeOptions)
+      this._typeOptions = [
+        ["light", dynStr(this.hass, "channel_type_light")],
+        ["switch", dynStr(this.hass, "channel_type_switch")],
+      ];
+    if (!this._channelsTableConfig)
+      this._channelsTableConfig = [
+        { header: dynStr(this.hass, "channel_number") },
+        {
+          header: dynStr(this.hass, "channel_name"),
+          key: "name",
+          type: "string",
+        },
+        {
+          header: dynStr(this.hass, "channel_type"),
+          key: "type",
+          type: "list",
+          options: this._typeOptions,
+        },
+      ];
     const initParams = { type: "light" };
     return html`
       <div>
@@ -41,7 +47,7 @@ class HaDynaliteChannelsTable extends LitElement {
           .hass=${this.hass}
           id="${this.id}-table"
           .tableData=${this.channels}
-          .tableConfig=${channelsTableConfig}
+          .tableConfig=${this._channelsTableConfig}
           tableName="channel"
           .initParams=${initParams}
         >

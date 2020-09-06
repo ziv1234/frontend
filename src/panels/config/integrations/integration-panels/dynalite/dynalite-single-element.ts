@@ -19,15 +19,15 @@ import { dynUpdateEvent } from "./common";
 
 @customElement("dynalite-single-element")
 class HaDynaliteSingleElement extends LitElement {
-  @property() public inputType = "";
+  @property() public inputType!: string;
 
-  @property() public shortDesc = "";
+  @property() public shortDesc?: string;
 
-  @property() public value = "";
+  @property() public value?: string;
 
-  @property() public percent = "";
+  @property() public percent?: string;
 
-  @property({ type: Array }) public options: Array<Array<string>> = [];
+  @property({ type: Array }) public options?: Array<Array<string>>;
 
   protected render(): TemplateResult {
     if (["string", "number"].includes(this.inputType)) {
@@ -36,7 +36,8 @@ class HaDynaliteSingleElement extends LitElement {
           class=${`flex${this.percent ? "flex percent" : ""}`}
           .label=${this.shortDesc}
           type=${this.inputType}
-          value=${this.percent ? this._toPercent(this.value) : this.value}
+          value=${(this.percent ? this._toPercent(this.value!) : this.value) ||
+          ""}
           always-float-label
           placeholder="Default"
           @value-changed=${this._handleInputChange}
@@ -48,14 +49,14 @@ class HaDynaliteSingleElement extends LitElement {
     }
     if (this.inputType === "list") {
       return html`
-        <ha-paper-dropdown-menu label=${this.shortDesc} dynamic-align>
+        <ha-paper-dropdown-menu label=${this.shortDesc || ""} dynamic-align>
           <paper-listbox
             slot="dropdown-content"
-            selected=${this.value}
+            selected=${this.value || ""}
             attr-for-selected="selector"
             @iron-select=${this._handleSelectionChange}
           >
-            ${this.options.map(
+            ${this.options!.map(
               (option) =>
                 html`<paper-item .selector=${option[0]}
                   >${option[1]}</paper-item

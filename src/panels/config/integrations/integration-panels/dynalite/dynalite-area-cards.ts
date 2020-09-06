@@ -34,23 +34,26 @@ class HaDynaliteAreaCards extends LitElement {
 
   @property({ type: Boolean }) public narrow!: boolean;
 
-  @property() public areas: any;
+  @property() public areas!: any;
 
   private _expanded = {};
 
+  private _inputRows?: Array<any>;
+
   protected render(): TemplateResult {
     if (!this.areas) return html``;
-    const templateOptions = allTemplates.map((template) => {
-      return [template, dynStr(this.hass, `area_template_${template}`)];
-    });
-    templateOptions.unshift(["", dynStr(this.hass, "area_template_none")]);
-    const inputRows = [
-      { name: "name", type: "string" },
-      { name: "template", type: "list", options: templateOptions },
-      { name: "fade", type: "number" },
-      { name: "nodefault", type: "boolean" },
-    ];
-
+    if (!this._inputRows) {
+      const templateOptions = allTemplates.map((template) => {
+        return [template, dynStr(this.hass, `area_template_${template}`)];
+      });
+      templateOptions.unshift(["", dynStr(this.hass, "area_template_none")]);
+      this._inputRows = [
+        { name: "name", type: "string" },
+        { name: "template", type: "list", options: templateOptions },
+        { name: "fade", type: "number" },
+        { name: "nodefault", type: "boolean" },
+      ];
+    }
     return html`
       ${Object.keys(this.areas).map(
         (area) => html`
@@ -72,7 +75,7 @@ class HaDynaliteAreaCards extends LitElement {
             </div>
             ${this._expanded[area]
               ? html` <div class="card-content">
-                    ${inputRows.map(
+                    ${this._inputRows!.map(
                       (row) => html`
                         <dynalite-single-row
                           id="${this.id}-${area}-${row.name}"

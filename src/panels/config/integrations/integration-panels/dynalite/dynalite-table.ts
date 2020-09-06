@@ -21,13 +21,13 @@ import "./dynalite-single-element";
 class HaDynaliteTable extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
-  @property() public tableData = {};
+  @property() public tableData!: any;
 
-  @property({ type: Array }) public tableConfig: Array<any> = [];
+  @property({ type: Array }) public tableConfig!: Array<any>;
 
-  @property() public tableName = "";
+  @property() public tableName?: string;
 
-  @property() public initParams: any = {};
+  @property() public initParams?: any;
 
   protected render(): TemplateResult {
     if (Object.keys(this.tableData).length === 0) {
@@ -105,7 +105,7 @@ class HaDynaliteTable extends LitElement {
     showDynaliteAddDialog(
       this.hass,
       this,
-      this.tableName,
+      this.tableName || "",
       this.tableData,
       (element) => {
         const result = this.initParams ? this.initParams : {};
@@ -121,7 +121,7 @@ class HaDynaliteTable extends LitElement {
     showDynaliteDeleteConfirmationDialog(
       this.hass,
       this,
-      this.tableName,
+      this.tableName || "",
       this.tableData,
       tableElement
     );

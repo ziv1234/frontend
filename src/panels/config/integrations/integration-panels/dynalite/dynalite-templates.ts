@@ -28,9 +28,9 @@ class HaDynaliteTemplates extends LitElement {
 
   @property({ type: Boolean }) public narrow!: boolean;
 
-  @property() public templates: any;
+  @property() public templates!: any;
 
-  @property() public template = "";
+  @property() public template!: string;
 
   protected render(): TemplateResult {
     const coverClassOptions = _coverClasses.map((myClass) => [

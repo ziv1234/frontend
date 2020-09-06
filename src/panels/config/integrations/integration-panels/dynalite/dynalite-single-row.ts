@@ -13,13 +13,13 @@ import { dynUpdateEvent } from "./common";
 class HaDynaliteSingleRow extends LitElement {
   @property({ type: Boolean }) public narrow!: boolean;
 
-  @property() public inputType = "";
+  @property() public inputType!: string;
 
-  @property() public shortDesc = "";
+  @property() public shortDesc?: string;
 
-  @property() public longDesc = "";
+  @property() public longDesc?: string;
 
-  @property() public value = "";
+  @property() public value?: string;
 
   @property({ type: Array }) public options: Array<Array<string>> = [];
 
@@ -31,7 +31,7 @@ class HaDynaliteSingleRow extends LitElement {
         <dynalite-single-element
           id="${this.id}-inner"
           inputType=${this.inputType}
-          shortDesc=${this.shortDesc}
+          shortDesc=${this.shortDesc || ""}
           .options=${this.options}
           .value=${this.value}
           @dyn-update="${this._handleChange}"
