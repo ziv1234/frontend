@@ -41,7 +41,6 @@ class HaDynaliteSingleRow extends LitElement {
   }
 
   private _handleChange(ev: CustomEvent) {
-    console.log("xxx row id=%s val=%s", ev.detail.id, ev.detail.value);
     this.value = ev.detail.value;
     this.dispatchEvent(dynUpdateEvent(this.id, this.value));
   }

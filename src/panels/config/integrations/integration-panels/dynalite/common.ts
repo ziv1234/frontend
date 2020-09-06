@@ -54,7 +54,7 @@ export async function showDynaliteDeleteConfirmationDialog(
 
 export function dynUpdateEvent(id: string, value: any) {
   return new CustomEvent("dyn-update", {
-    detail: { id: id, value: value },
+    detail: { id, value },
   });
 }
 
