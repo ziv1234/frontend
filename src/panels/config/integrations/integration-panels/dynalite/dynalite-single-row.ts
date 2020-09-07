@@ -7,8 +7,8 @@ import {
 } from "lit-element";
 import "../../../../../components/ha-settings-row";
 import { HomeAssistant } from "../../../../../types";
-import "./dynalite-single-element";
 import { dynUpdateEvent, dynStr } from "./common";
+import "./dynalite-single-element";
 
 @customElement("dynalite-single-row")
 class HaDynaliteSingleRow extends LitElement {

@@ -16,16 +16,16 @@ import { showConfirmationDialog } from "../../../../../dialogs/generic/show-dial
 import "../../../../../components/ha-card";
 import "../../../../../components/ha-menu-button";
 import "../../../../../layouts/ha-app-layout";
-import "./dynalite-single-row";
-import "./dynalite-presets-table";
-import "./dynalite-templates";
-import "./dynalite-area-cards";
-import { allTemplates, allTemplateParams, dynStr } from "./common";
 import {
   getEntry,
   GetEntryData,
   updateEntry,
 } from "../../../../../data/dynalite";
+import { allTemplates, allTemplateParams, dynStr } from "./common";
+import "./dynalite-single-row";
+import "./dynalite-presets-table";
+import "./dynalite-templates";
+import "./dynalite-area-cards";
 
 const _activeOptions = ["on", "init", "off"];
 

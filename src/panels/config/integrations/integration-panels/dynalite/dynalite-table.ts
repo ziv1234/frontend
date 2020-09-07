@@ -9,7 +9,6 @@ import {
 } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
-import "../../../../../components/ha-icon-button";
 import {
   showDynaliteAddDialog,
   showDynaliteDeleteConfirmationDialog,

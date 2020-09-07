@@ -13,9 +13,6 @@ import {
 } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
 import { haStyle } from "../../../../../resources/styles";
-import "../../../../../components/ha-settings-row";
-import "../../../../../components/ha-paper-dropdown-menu";
-import "../../../../../components/ha-icon-button";
 import "../../../../../components/ha-card";
 import {
   showDynaliteAddDialog,
