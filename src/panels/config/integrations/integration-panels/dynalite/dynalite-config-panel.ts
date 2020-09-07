@@ -28,6 +28,7 @@ import {
 } from "../../../../../data/dynalite";
 
 const _activeOptions = ["on", "init", "off"];
+
 @customElement("dynalite-config-panel")
 class HaPanelConfigDynalite extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
