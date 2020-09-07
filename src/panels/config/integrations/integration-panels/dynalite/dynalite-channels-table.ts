@@ -7,7 +7,6 @@ import {
 } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
 import "./dynalite-table";
-import { dynStr } from "./common";
 
 @customElement("dynalite-channels-table")
 class HaDynaliteChannelsTable extends LitElement {
@@ -23,18 +22,18 @@ class HaDynaliteChannelsTable extends LitElement {
     if (!this._typeOptions)
       this._typeOptions = ["light", "switch"].map((channelType) => [
         channelType,
-        dynStr(this.hass, `channel_type_${channelType}`),
+        `channel_type_${channelType}`,
       ]);
     if (!this._channelsTableConfig)
       this._channelsTableConfig = [
-        { header: dynStr(this.hass, "channel_number") },
+        { header: "channel_number" },
         {
-          header: dynStr(this.hass, "channel_name"),
+          header: "channel_name",
           key: "name",
           type: "string",
         },
         {
-          header: dynStr(this.hass, "channel_type"),
+          header: "channel_type",
           key: "type",
           type: "list",
           options: this._typeOptions,

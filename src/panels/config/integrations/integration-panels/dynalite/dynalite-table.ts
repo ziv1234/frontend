@@ -46,7 +46,9 @@ class HaDynaliteTable extends LitElement {
       <div>
         <table>
           <tr>
-            ${this.tableConfig.map((column) => html`<th>${column.header}</th>`)}
+            ${this.tableConfig.map(
+              (column) => html`<th>${dynStr(this.hass, column.header)}</th>`
+            )}
             <th></th>
             <th></th>
           </tr>
@@ -57,9 +59,10 @@ class HaDynaliteTable extends LitElement {
                 ${this.tableConfig.slice(1).map(
                   (column) => html`<td>
                     <dynalite-single-element
+                      .hass=${this.hass}
                       id="${this.id}-${column.key}-${element}"
                       inputType=${column.type}
-                      shortDesc=${column.header}
+                      desc=${column.header}
                       .options=${column.options}
                       .percent=${column.percent}
                       value=${column.key in this.tableData[element]

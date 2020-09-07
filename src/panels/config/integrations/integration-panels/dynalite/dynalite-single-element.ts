@@ -15,13 +15,16 @@ import type { PolymerChangedEvent } from "../../../../../polymer-types";
 import "../../../../../components/ha-settings-row";
 import "../../../../../components/ha-paper-dropdown-menu";
 import "../../../../../components/ha-switch";
-import { dynUpdateEvent } from "./common";
+import { HomeAssistant } from "../../../../../types";
+import { dynUpdateEvent, dynStr } from "./common";
 
 @customElement("dynalite-single-element")
 class HaDynaliteSingleElement extends LitElement {
+  @property({ attribute: false }) public hass!: HomeAssistant;
+
   @property() public inputType!: string;
 
-  @property() public shortDesc?: string;
+  @property() public desc?: string;
 
   @property() public value?: string;
 
@@ -34,7 +37,7 @@ class HaDynaliteSingleElement extends LitElement {
       return html`
         <paper-input
           class=${`flex${this.percent ? "flex percent" : ""}`}
-          .label=${this.shortDesc}
+          .label=${dynStr(this.hass, this.desc)}
           type=${this.inputType}
           value=${(this.percent ? this._toPercent(this.value!) : this.value) ||
           ""}
@@ -49,7 +52,10 @@ class HaDynaliteSingleElement extends LitElement {
     }
     if (this.inputType === "list") {
       return html`
-        <ha-paper-dropdown-menu label=${this.shortDesc || ""} dynamic-align>
+        <ha-paper-dropdown-menu
+          label=${dynStr(this.hass, this.desc)}
+          dynamic-align
+        >
           <paper-listbox
             slot="dropdown-content"
             selected=${this.value || ""}
@@ -59,7 +65,7 @@ class HaDynaliteSingleElement extends LitElement {
             ${this.options!.map(
               (option) =>
                 html`<paper-item .selector=${option[0]}
-                  >${option[1]}</paper-item
+                  >${dynStr(this.hass, option[1])}</paper-item
                 >`
             )}
           </paper-listbox>

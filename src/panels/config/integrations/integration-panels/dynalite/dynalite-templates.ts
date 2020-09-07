@@ -6,7 +6,7 @@ import {
   TemplateResult,
 } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
-import { allTemplateParams, dynStr } from "./common";
+import { allTemplateParams } from "./common";
 import "./dynalite-single-row";
 
 const _coverClasses = [
@@ -38,23 +38,20 @@ class HaDynaliteTemplates extends LitElement {
     if (!this._coverClassOptions) {
       this._coverClassOptions = _coverClasses.map((myClass) => [
         myClass,
-        dynStr(this.hass, `cover_class_${myClass}`),
+        `cover_class_${myClass}`,
       ]);
-      this._coverClassOptions.unshift([
-        "",
-        dynStr(this.hass, "cover_class_default"),
-      ]);
+      this._coverClassOptions.unshift(["", "cover_class_default"]);
     }
     const templateParams = allTemplateParams[this.template];
     return html`
       ${templateParams.map(
         (param) => html`
           <dynalite-single-row
+            .hass=${this.hass}
             id="${this.id}-${param}"
             inputType=${param === "class" ? "list" : "number"}
             .options=${param === "class" ? this._coverClassOptions : []}
-            shortDesc=${dynStr(this.hass, `temp_${this.template}_${param}`)}
-            longDesc=${dynStr(this.hass, `temp_${this.template}_${param}_long`)}
+            desc="temp_${this.template}_${param}"
             .value=${this.templates[param] || ""}
             @dyn-update="${this._handleChange}"
             .narrow=${this.narrow}

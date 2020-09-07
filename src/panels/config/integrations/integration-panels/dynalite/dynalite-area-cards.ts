@@ -43,10 +43,11 @@ class HaDynaliteAreaCards extends LitElement {
   protected render(): TemplateResult {
     if (!this.areas) return html``;
     if (!this._inputRows) {
-      const templateOptions = allTemplates.map((template) => {
-        return [template, dynStr(this.hass, `area_template_${template}`)];
-      });
-      templateOptions.unshift(["", dynStr(this.hass, "area_template_none")]);
+      const templateOptions = allTemplates.map((template) => [
+        template,
+        `area_template_${template}`,
+      ]);
+      templateOptions.unshift(["", "area_template_none"]);
       this._inputRows = [
         { name: "name", type: "string" },
         { name: "template", type: "list", options: templateOptions },
@@ -58,8 +59,10 @@ class HaDynaliteAreaCards extends LitElement {
       ${Object.keys(this.areas).map(
         (area) => html`
           <ha-card
-            .header="${dynStr(this.hass, "area")} '${this.areas[area]
-              .name}' (${area})"
+            .header="${this.areas[area].name} (${dynStr(
+              this.hass,
+              "area"
+            )} ${area})"
           >
             <div class="shrink-button">
               <mwc-button
@@ -78,10 +81,10 @@ class HaDynaliteAreaCards extends LitElement {
                     ${this._inputRows!.map(
                       (row) => html`
                         <dynalite-single-row
+                          .hass=${this.hass}
                           id="${this.id}-${area}-${row.name}"
                           inputType=${row.type}
-                          shortDesc=${dynStr(this.hass, `area_${row.name}`)}
-                          longDesc=${dynStr(this.hass, `area_${row.name}_long`)}
+                          desc="area_${row.name}"
                           .value=${this.areas[area][row.name] || ""}
                           .options=${row.options ? row.options : []}
                           @dyn-update="${this._handleChange}"

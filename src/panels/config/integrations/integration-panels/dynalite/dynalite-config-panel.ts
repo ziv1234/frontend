@@ -66,10 +66,7 @@ class HaPanelConfigDynalite extends LitElement {
         {
           name: "active",
           type: "list",
-          options: _activeOptions.map((option) => [
-            option,
-            dynStr(this.hass, `active_${option}`),
-          ]),
+          options: _activeOptions.map((option) => [option, `active_${option}`]),
         },
         { name: "autodiscover", type: "boolean" },
         { name: "polltimer", type: "number" },
@@ -197,10 +194,10 @@ class HaPanelConfigDynalite extends LitElement {
   private _singleRow(row: any): TemplateResult {
     return html`
       <dynalite-single-row
+        .hass=${this.hass}
         id=${`dyn-${row.name}`}
         inputType=${row.type}
-        shortDesc=${dynStr(this.hass, row.name)}
-        longDesc=${dynStr(this.hass, `${row.name}_long`)}
+        desc=${row.name}
         .value=${this._params[row.name]}
         .options=${row.options ? row.options : []}
         @dyn-update="${this._handleChange}"

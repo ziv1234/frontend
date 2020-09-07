@@ -7,7 +7,6 @@ import {
 } from "lit-element";
 import { HomeAssistant } from "../../../../../types";
 import "./dynalite-table";
-import { dynStr } from "./common";
 
 @customElement("dynalite-presets-table")
 class HaDynalitePresetsTable extends LitElement {
@@ -20,14 +19,14 @@ class HaDynalitePresetsTable extends LitElement {
   protected render(): TemplateResult {
     if (!this._presetTableConfig)
       this._presetTableConfig = [
-        { header: dynStr(this.hass, "preset_number") },
+        { header: "preset_number" },
         {
-          header: dynStr(this.hass, "preset_name"),
+          header: "preset_name",
           key: "name",
           type: "string",
         },
         {
-          header: dynStr(this.hass, "preset_level"),
+          header: "preset_level",
           key: "level",
           type: "number",
           percent: "true",

@@ -6,18 +6,19 @@ import {
   TemplateResult,
 } from "lit-element";
 import "../../../../../components/ha-settings-row";
+import { HomeAssistant } from "../../../../../types";
 import "./dynalite-single-element";
-import { dynUpdateEvent } from "./common";
+import { dynUpdateEvent, dynStr } from "./common";
 
 @customElement("dynalite-single-row")
 class HaDynaliteSingleRow extends LitElement {
+  @property({ attribute: false }) public hass!: HomeAssistant;
+
   @property({ type: Boolean }) public narrow!: boolean;
 
   @property() public inputType!: string;
 
-  @property() public shortDesc?: string;
-
-  @property() public longDesc?: string;
+  @property() public desc?: string;
 
   @property() public value?: string;
 
@@ -26,12 +27,15 @@ class HaDynaliteSingleRow extends LitElement {
   protected render(): TemplateResult {
     return html`
       <ha-settings-row .narrow=${this.narrow}>
-        <span slot="heading">${this.shortDesc}</span>
-        <span slot="description">${this.longDesc}</span>
+        <span slot="heading">${dynStr(this.hass, this.desc)}</span>
+        <span slot="description"
+          >${dynStr(this.hass, `${this.desc}_long`)}</span
+        >
         <dynalite-single-element
+          .hass=${this.hass}
           id="${this.id}-inner"
           inputType=${this.inputType}
-          shortDesc=${this.shortDesc || ""}
+          .desc=${this.desc}
           .options=${this.options}
           .value=${this.value}
           @dyn-update="${this._handleChange}"
